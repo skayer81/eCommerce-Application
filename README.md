@@ -34,3 +34,23 @@
 - `npm run test` - runs tests with Vitest
 
 - `npm run coverage` - runs tests and displays coverage of implemented tests
+
+## Installation
+
+1. Clone the repo
+
+```sh
+  git clone https://github.com/skayer81/eCommerce-Application
+```
+
+2. Install NPM packages
+
+```sh
+  npm install
+```
+
+3. Start project
+
+```sh
+  npm run dev
+```
