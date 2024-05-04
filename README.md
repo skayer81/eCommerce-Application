@@ -12,3 +12,25 @@
 - [React Hook Form](https://react-hook-form.com/)
 - [React Router](https://reactrouter.com/en/main)
 - [Tanstack Query](https://tanstack.com/query/latest)
+
+## Provided Scripts
+
+- `npm run dev` - start local development server
+
+- `npm run build` - build project in production mode
+
+- `npm run preview` - locally preview the production build
+
+- `npm run lint` - check source code with `ESLint`
+
+- `npm run lint:fix` - automatically fix all auto-fixable errors & warnings with `ESLint`
+
+- `npm run ci:format` - check source code with `Prettier`
+
+- `npm run format` - reformat source code to match `Prettier` settings
+
+- `npm run prepare` - runs automatically after package installation to install Husky hooks
+
+- `npm run test` - runs tests with Vitest
+
+- `npm run coverage` - runs tests and displays coverage of implemented tests
