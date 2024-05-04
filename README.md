@@ -4,7 +4,7 @@
 
 ## Team project by
 - [Sergey](https://github.com/skayer81) - team lead
-- [Alexander](https://github.com/alekseng) - frontend developer
+- [Aleksandr](https://github.com/alekseng) - frontend developer
 - [Olga](https://github.com/gryzun33) - frontend developer
 
 ## Technology stack
