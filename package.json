@@ -10,6 +10,8 @@
     "lint:fix": "eslint . --fix --ext ts,tsx",
     "ci:format": "prettier --check .",
     "format": "prettier --write .",
+    "test": "vitest",
+    "coverage": "vitest run --coverage",
     "preview": "vite preview",
     "prepare": "husky"
   },
@@ -43,7 +45,7 @@
     "typescript": "^5.2.2",
     "validate-branch-name": "^1.3.0",
     "vite": "^5.2.0",
-    "vite-tsconfig-paths": "^4.3.2"
+    "vite-tsconfig-paths": "^4.3.2",
     "vitest": "^1.6.0"
   }
 }
