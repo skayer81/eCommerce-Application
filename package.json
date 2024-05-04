@@ -10,6 +10,8 @@
     "lint:fix": "eslint . --fix --ext ts,tsx",
     "ci:format": "prettier --check .",
     "format": "prettier --write .",
+    "test": "vitest",
+    "coverage": "vitest run --coverage",
     "preview": "vite preview",
     "prepare": "husky"
   },
