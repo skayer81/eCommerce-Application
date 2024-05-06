@@ -41,6 +41,7 @@ module.exports = {
   plugins: ["@typescript-eslint", "react-refresh"],
   root: true,
   rules: {
+    "perfectionist/sort-objects":"off",
     "@typescript-eslint/explicit-function-return-type": [
       "error",
       {
