@@ -42,6 +42,7 @@ module.exports = {
   root: true,
   rules: {
     "perfectionist/sort-objects":"off",
+    '@typescript-eslint/no-misused-promises':'off',
     "@typescript-eslint/explicit-function-return-type": [
       "error",
       {
