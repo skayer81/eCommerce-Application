@@ -1,6 +1,6 @@
 <h1 align="center">Green Shop 🌵</h1>
 
-"Green Shop" is an online store project completed as part of the Rolling Scopes School JavaScript/Front-end Course - RSS2023Q4. This application includes functionality for user authentication, searching and selecting products from a catalog, and adding and removing products from a shopping cart.
+"Green Shop" is an online store project for selling indoor plants, completed as part of the JavaScript/Front-end course of Rolling Scopes School - RSS2023Q4. The application features user registration and authorization, search and selection from an extensive catalog of indoor plants, as well as convenient management of adding and removing goods from the virtual cart.
 
 ## Team project by
 
