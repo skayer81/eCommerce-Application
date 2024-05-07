@@ -7,6 +7,8 @@ export default function MainLayout(): JSX.Element {
     <div>
       <div>
         <Link to="/">Menu</Link>
+        <Link to="/auth/login">Login</Link>
+        <Link to="/auth/register">Sign in</Link>
         <Link to="/cart">Cart</Link>
       </div>
       <div>

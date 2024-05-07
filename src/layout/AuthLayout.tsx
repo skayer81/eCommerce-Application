@@ -6,7 +6,7 @@ export default function AuthLayout(): JSX.Element {
     <div>
       <div>
         <Link to="login">Login</Link>
-        <Link to="register">Register</Link>
+        <Link to="register">Sign in</Link>
       </div>
       <div>
         <Outlet />
