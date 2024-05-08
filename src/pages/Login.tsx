@@ -13,9 +13,14 @@ export default function Login(): JSX.Element {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<MyForm>();
+  } = useForm<MyForm>({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
 
-  const submit: SubmitHandler<MyForm> = (data) => {
+  const submit: SubmitHandler<MyForm> = (data: MyForm) => {
     console.log(data);
   };
 
