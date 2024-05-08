@@ -33,6 +33,7 @@ export const FormInputText = ({
           label={label}
           onChange={onChange}
           size="small"
+          sx={{ mb: 1 }}
           type={type}
           value={value}
           variant="outlined"

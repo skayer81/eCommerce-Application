@@ -10,7 +10,7 @@ export interface RegistrationForm {
   shippingAdress: string;
   shippingCity: string;
   shippingCountry: string;
-  shippingStreet: string;
+  shippingIndex: string;
   surname: string;
   useByDefaultBilling: boolean;
   useByDefaultShipping: boolean;
