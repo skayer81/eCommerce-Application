@@ -1,0 +1,4 @@
+{
+  "pattern": "^^(feat|fix|refactor|docs|chore)/RSS-ECOMM-\\d_\\d{2,}-.*$",
+  "errorMsg": "Branch name validate failed please rename your current branch"
+}
