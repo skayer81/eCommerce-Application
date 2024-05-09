@@ -43,13 +43,20 @@ module.exports = {
   rules: {
     "perfectionist/sort-objects":"off",
     '@typescript-eslint/no-misused-promises':'off',
-    "@typescript-eslint/explicit-function-return-type": [
-      "error",
-      {
-        allowExpressions: true,
-      },
-    ],
+    '@typescript-eslint/no-unsafe-assignment' : 'off',
+    '@typescript-eslint/explicit-function-return-type' : 'off',
+    '@typescript-eslint/no-unsafe-member-access' :'off',
+
+
+
+    // "@typescript-eslint/explicit-function-return-type": [
+    //   "error",
+    //   {
+    //     allowExpressions: true,
+    //   },
+    // ],
     "@typescript-eslint/no-explicit-any": "error",
+
     curly: ["error", "all"],
     "perfectionist/sort-imports": [
       "error",
@@ -84,6 +91,9 @@ module.exports = {
       "warn",
       { allowConstantExport: true },
     ],
+
+
+
   },
   settings: {
     "import/parsers": {

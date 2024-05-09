@@ -3,11 +3,15 @@ import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 
 import { Button, Stack, TextField } from '@mui/material';
 
+import { getAnonymToken, getAuthToken } from '@/API/api';
+// import axios from 'axios';
+
+console.log(getAnonymToken());
+
 interface MyForm {
   email: string;
   password: string;
 }
-
 export default function Login(): JSX.Element {
   const {
     register,
@@ -20,14 +24,15 @@ export default function Login(): JSX.Element {
     },
   });
 
-  const submit: SubmitHandler<MyForm> = (data: MyForm) => {
-    console.log(data);
+  const submit: SubmitHandler<MyForm> = async (data: MyForm) => {
+    // console.log(data);
+    await getAuthToken(data);
   };
 
   const error: SubmitErrorHandler<MyForm> = (data) => {
     console.log(data);
   };
-
+  console.log('dcgf');
   return (
     <form onSubmit={handleSubmit(submit, error)}>
       <Stack spacing={2} width={400}>
