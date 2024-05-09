@@ -101,3 +101,36 @@ export async function loginUser(loginData: LoginData, bearerToken: string) {
     console.error(error);
   }
 }
+
+// РЕГИСТРАЦИЯ ЮЗЕРА
+
+// curl https://api.{region}.commercetools.com/{projectKey}/customers -i \
+// --header 'Authorization: Bearer ${BEARER_TOKEN}' \
+// --header 'Content-Type: application/json' \
+// --data-binary @- << DATA
+// {
+//   "email" : "johndoe@example.com",
+//   "firstName" : "John",
+//   "lastName" : "Doe",
+//   "password" : "secret123"
+// }
+// DATA
+
+// export async function registerUser(registerData: RegisterData, bearerToken: string) {
+//   const requestdata = {
+//     ...
+//   };
+
+//   const headers = {
+//     Authorization: `Bearer ${bearerToken}`,
+//     'Content-Type': 'application/json',
+//   };
+//   try {
+//     const { data } = await axios.post(`${BASE_API_URL}/customers`, JSON.stringify(requestdata), {
+//       headers,
+//     });
+//     console.log('responseregister=', data);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
