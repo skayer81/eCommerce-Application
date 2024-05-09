@@ -82,6 +82,7 @@ module.exports = {
       "warn",
       { allowConstantExport: true },
     ],
+    "perfectionist/sort-objects":"off",
   },
   settings: {
     "import/parsers": {
