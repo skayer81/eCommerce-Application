@@ -27,9 +27,9 @@ export const FormInputText = ({
       name={name}
       render={({ field: { onChange, value } }) => (
         <TextField
-          error={!!errors.surname?.message}
+          error={!!errors[name]?.message}
           fullWidth
-          helperText={errors?.surname?.message}
+          helperText={errors[name]?.message}
           label={label}
           onChange={onChange}
           size="small"
