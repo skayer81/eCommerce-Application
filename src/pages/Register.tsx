@@ -4,7 +4,7 @@ import { Container, Typography } from '@mui/material';
 
 export default function Register(): JSX.Element {
   return (
-    <Container sx={{ bgcolor: '#cfe8fc', height: '100vh' }}>
+    <Container sx={{ bgcolor: '#cc58fc', height: '100vh' }}>
       <Typography>Register</Typography>
     </Container>
   );
