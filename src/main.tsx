@@ -2,7 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-// import ErrorPage from './features/errorPage/ErrorPage';
+import ErrorPage from './features/errorPage/ErrorPage';
 import Layout from './features/layout/Layout';
 import LoginPage from './features/loginPage/LoginPage';
 import MainPage from './features/mainPage/MainPage';
@@ -27,10 +27,10 @@ const router = createBrowserRouter([
       },
     ],
   },
-  // {
-  //   path: '*',
-  //   element: <ErrorPage />,
-  // },
+  {
+    path: '*',
+    element: <ErrorPage />,
+  },
 ]);
 
 createRoot(document.getElementById('root')!).render(
