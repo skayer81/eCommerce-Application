@@ -62,7 +62,7 @@ export default function LoginPage(): JSX.Element {
             Login
           </Typography>
 
-          <form onSubmit={handleSubmit(submit)} style={{ width: '100%' }}>
+          <form onSubmit={(event) => void handleSubmit(submit)(event)} style={{ width: '100%' }}>
             <Stack spacing={3} sx={{ width: '100%' }}>
               <Controller
                 control={control}
