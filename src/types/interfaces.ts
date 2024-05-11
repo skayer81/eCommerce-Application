@@ -16,3 +16,8 @@ export interface RegistrationForm {
   useByDefaultShipping: boolean;
   useShippingAsBilling: boolean;
 }
+
+export interface LoginForm {
+  email: string;
+  password: string;
+}
