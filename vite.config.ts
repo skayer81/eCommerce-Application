@@ -10,4 +10,9 @@ export default defineConfig({
     environment: 'jsdom',
     // setupFiles: ['src/__tests__/setup.ts'],
   },
+  resolve: {
+    alias: {
+      'node-fetch': 'isomorphic-fetch',
+    },
+  },
 });

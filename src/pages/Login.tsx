@@ -13,10 +13,11 @@ import {
   TextField,
 } from '@mui/material';
 
-import { getAnonymToken, getAuthToken } from '@/API/api';
+import { getAnonymToken /* getAuthToken  */ } from '@/API/api';
+// import { authUser } from '@/API/sdktest';
 // import axios from 'axios';
 
-console.log(getAnonymToken());
+// console.log(getAnonymToken());
 
 interface MyForm {
   email: string;
@@ -37,8 +38,9 @@ export default function Login(): JSX.Element {
   const [showPassword, setShowPassword] = useState(false);
 
   const submit: SubmitHandler<MyForm> = async (data: MyForm) => {
-    // console.log(data);
-    await getAuthToken(data);
+    console.log(data);
+    // await authUser(data);
+    await getAnonymToken();
   };
 
   const error: SubmitErrorHandler<MyForm> = (data) => {
