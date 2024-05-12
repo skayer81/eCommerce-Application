@@ -9,6 +9,7 @@ import {
   CssBaseline,
   IconButton,
   InputAdornment,
+  Link,
   Stack,
   TextField,
   Typography,
@@ -134,6 +135,10 @@ export default function LoginPage(): JSX.Element {
               </Button>
             </Stack>
           </form>
+          <Stack direction="row" spacing={1} sx={{ typography: 'body1' }}>
+            <Typography>Not registered yet?</Typography>
+            <Link href="/register">Sign up</Link>
+          </Stack>
         </Stack>
       </Container>
     </>
