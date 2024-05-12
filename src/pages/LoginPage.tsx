@@ -13,6 +13,9 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
+
+import { checkUserEmail } from '@/API/sdktest';
 
 interface MyForm {
   email: string;
@@ -32,10 +35,28 @@ export default function LoginPage(): JSX.Element {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [email, setEmail] = useState('');
 
-  const submit: SubmitHandler<MyForm> = (data: MyForm) => {
-    console.log(data);
+  const checkEmailQuery = useQuery({
+    queryKey: ['email', email],
+    queryFn: () => checkUserEmail(email),
+    enabled: submitted,
+  });
+
+  const submit: SubmitHandler<MyForm> = (userData: MyForm) => {
+    console.log(userData);
+    setSubmitted(true);
+    setEmail(userData.email);
   };
+
+  if (checkEmailQuery.isSuccess) {
+    console.log('querydata=', checkEmailQuery.data);
+  }
+
+  if (checkEmailQuery.isError) {
+    console.log('querydataError=', checkEmailQuery.error);
+  }
 
   return (
     <>

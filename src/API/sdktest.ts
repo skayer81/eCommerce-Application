@@ -4,7 +4,6 @@ import { ClientBuilder } from '@commercetools/sdk-client-v2';
 import {
   authAnonymMiddlewareOptions,
   authUserMiddlewareOptions,
-  /* authMiddlewareOptions, */
   httpMiddlewareOptions,
 } from './BuildClient';
 
@@ -12,9 +11,7 @@ interface MyForm {
   email: string;
   password: string;
 }
-// Create apiRoot from the imported ClientBuilder and include your Project key
 
-// Export the ClientBuilder
 const ctpClient = new ClientBuilder();
 
 let apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({
@@ -24,6 +21,7 @@ let apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({
 export function getAnonymToken() {
   const ctpClient = new ClientBuilder()
     .withClientCredentialsFlow(authAnonymMiddlewareOptions)
+    .withHttpMiddleware(httpMiddlewareOptions)
     .withLoggerMiddleware()
     .build();
 
@@ -34,7 +32,7 @@ export function getAnonymToken() {
   return apiRoot.get().execute();
 }
 
-export function authUser({ email, password }: MyForm) {
+export function getUserToken({ email, password }: MyForm) {
   const ctpClient = new ClientBuilder()
     .withClientCredentialsFlow(authUserMiddlewareOptions(email, password))
     .withHttpMiddleware(httpMiddlewareOptions)
@@ -44,8 +42,6 @@ export function authUser({ email, password }: MyForm) {
   apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({
     projectKey: import.meta.env.VITE_PROJECT_KEY,
   });
-
-  loginUser({ email, password }).then(console.log).catch(console.error);
 }
 
 export function loginUser({ email, password }: MyForm) {
@@ -61,11 +57,13 @@ export function loginUser({ email, password }: MyForm) {
     .execute();
 }
 
-// Retrieve Project information and output the result to the log
-// getProject().then(console.log).catch(console.error);
-
-// Example call to return Project information
-// This code has the same effect as sending a GET request to the commercetools Composable Commerce API without any endpoints.
-// export const getProject = () => {
-//   return apiRoot.get().execute();
-// };
+export function checkUserEmail(email: string) {
+  return apiRoot
+    .customers()
+    .get({
+      queryArgs: {
+        where: [`email="${email}"`],
+      },
+    })
+    .execute();
+}

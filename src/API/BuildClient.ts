@@ -1,10 +1,8 @@
 import {
   type AnonymousAuthMiddlewareOptions,
-  // Import middlewares
-  type AuthMiddlewareOptions, // Required for auth
+  type AuthMiddlewareOptions,
   type HttpMiddlewareOptions,
   type PasswordAuthMiddlewareOptions,
-  // Required for sending HTTP requests
 } from '@commercetools/sdk-client-v2';
 import fetch from 'node-fetch';
 
@@ -29,7 +27,7 @@ export const httpMiddlewareOptions: HttpMiddlewareOptions = {
   fetch,
 };
 
-// anonym
+// authanonym
 export const authAnonymMiddlewareOptions: AnonymousAuthMiddlewareOptions = {
   host: import.meta.env.VITE_AUTH_URL,
   projectKey: `${projectKey}`,
@@ -42,6 +40,7 @@ export const authAnonymMiddlewareOptions: AnonymousAuthMiddlewareOptions = {
   fetch,
 };
 
+// authuser
 export const authUserMiddlewareOptions = (
   email: string,
   password: string,
@@ -61,10 +60,3 @@ export const authUserMiddlewareOptions = (
     fetch,
   };
 };
-
-// export const ctpClient = new ClientBuilder()
-// .withProjectKey(import.meta.env.VITE_PROJECT_KEY) // .withProjectKey() is not required if the projectKey is included in authMiddlewareOptions
-// .withClientCredentialsFlow(authAnonymMiddlewareOptions)
-// .withHttpMiddleware(httpMiddlewareOptions)
-// .withLoggerMiddleware() // Include middleware for logging
-// .build();
