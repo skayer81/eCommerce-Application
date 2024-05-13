@@ -9,10 +9,10 @@ const RulesValidation = {
 
   mail: {
     pattern: {
-      message: 'Please enter a valid address',
+      message: 'Please enter a valid email address',
       value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
     },
-    required: 'Email is required',
+    required: 'Required field',
   },
 
   onlyLetters: {
@@ -47,6 +47,9 @@ const RulesValidation = {
       const uppercase = /(?=.*[A-Z])/;
       const whitespace = new RegExp(/^s+|s+$/g);
       let result = digit.test(value);
+      if (!value) {
+        return 'Required field';
+      }
       if (!result) {
         return 'Password must contain at least 1 number';
       }

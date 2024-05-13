@@ -96,7 +96,7 @@ export default function FormOfRegistration(): JSX.Element {
             <FormInputText
               control={control}
               errors={errors}
-              label="Date Of birth"
+              label="Date of birth"
               name="dateOfBirth"
               rules={RulesValidation.dateOfbirth}
               type="date"
