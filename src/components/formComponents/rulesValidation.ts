@@ -1,8 +1,12 @@
-export const RulesValidation = {
+const RulesValidation = {
   /**
    * mail - валидация почты по паттерну,
    * onlyLetters - минимум 1 латинская буква без спецсимволов и цифр
    */
+  required: {
+    required: 'Required field',
+  },
+
   mail: {
     pattern: {
       message: 'Please enter a valid address',
@@ -65,3 +69,5 @@ export const RulesValidation = {
     },
   },
 };
+
+export default RulesValidation;

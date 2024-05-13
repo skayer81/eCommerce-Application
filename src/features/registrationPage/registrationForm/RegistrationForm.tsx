@@ -11,7 +11,8 @@ import Typography from '@mui/material/Typography';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import { FormInputText } from '@/components/formComponents/FormInputText';
-import { RulesValidation } from '@/components/formComponents/rulesValidation';
+import FormSelect from '@/components/formComponents/FormSelect';
+import RulesValidation from '@/components/formComponents/rulesValidation';
 import { RegistrationForm } from '@/types/interfaces';
 
 export default function FormOfRegistration(): JSX.Element {
@@ -94,14 +95,23 @@ export default function FormOfRegistration(): JSX.Element {
             />
             <Box component="fieldset" sx={{ border: '1px solid black' }}>
               <legend>Shipping address</legend>
-              <FormInputText
+              <FormSelect
+                control={control}
+                errors={errors}
+                id="shippingCountry"
+                label="Country"
+                name="shippingCountry"
+                rules={RulesValidation.required}
+              />
+
+              {/* <FormInputText
                 control={control}
                 errors={errors}
                 label="Сountry"
                 name="shippingCountry"
                 rules={RulesValidation.onlyLetters}
                 type="text"
-              />
+              /> */}
               <FormInputText
                 control={control}
                 errors={errors}
@@ -135,14 +145,22 @@ export default function FormOfRegistration(): JSX.Element {
             </Box>
             <Box component="fieldset" sx={{ border: '1px solid black' }}>
               <legend>Billing address</legend>
-              <FormInputText
+              <FormSelect
+                control={control}
+                errors={errors}
+                id="billingCountry"
+                label="Country"
+                name="billingCountry"
+                rules={RulesValidation.required}
+              />
+              {/* <FormInputText
                 control={control}
                 errors={errors}
                 label="Country"
                 name="billingCountry"
                 rules={RulesValidation.onlyLetters}
                 type="text"
-              />
+              /> */}
               <FormInputText
                 control={control}
                 errors={errors}
