@@ -68,6 +68,20 @@ const RulesValidation = {
       return true;
     },
   },
+
+  dateOfbirth: {
+    validate: (value: string) => {
+      const ENTRY_AGE = 13;
+      const date = new Date(value);
+      const entryDate = date.setFullYear(date.getFullYear() + ENTRY_AGE);
+      //date.setFullYear(date.getFullYear + ENTRY_AGE);
+      if (entryDate > new Date()) {
+        return `it's too early for you to come here`;
+      }
+      //  console.log(date);
+      return true;
+    },
+  },
 };
 
 export default RulesValidation;

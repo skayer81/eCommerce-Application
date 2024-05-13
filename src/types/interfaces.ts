@@ -3,6 +3,7 @@ export interface RegistrationForm {
   billingCity: string;
   billingCountry: string;
   billingIndex: string;
+  dateOfBirth: string;
   email: string;
   login: string;
   name: string;

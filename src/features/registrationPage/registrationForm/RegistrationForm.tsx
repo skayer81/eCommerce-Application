@@ -1,6 +1,6 @@
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { FormControlLabel, TextField } from '@mui/material';
+import { FormControlLabel } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -15,16 +15,21 @@ import FormSelect from '@/components/formComponents/FormSelect';
 import RulesValidation from '@/components/formComponents/rulesValidation';
 import { RegistrationForm } from '@/types/interfaces';
 
+import { defaultValues } from './defaultValues';
+
 export default function FormOfRegistration(): JSX.Element {
   const {
     control,
     formState: { errors },
-  } = useForm<RegistrationForm>({ mode: 'onChange' });
+    handleSubmit,
+  } = useForm<RegistrationForm>({ mode: 'onChange', defaultValues: defaultValues });
 
-  // const rules: RegisterOptions = {
-  //   required: 'Обязательное поле',
-  // };
   const defaultTheme = createTheme();
+
+  const onSubmit: SubmitHandler<RegistrationForm> = (data: RegistrationForm): void => {
+    console.log(data);
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -41,7 +46,12 @@ export default function FormOfRegistration(): JSX.Element {
           <Typography component="h1" variant="h5">
             Registration
           </Typography>
-          <Box component="form" noValidate sx={{ mt: 1 }}>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={(event) => void handleSubmit(onSubmit)(event)}
+            sx={{ mt: 1 }}
+          >
             <FormInputText
               control={control}
               errors={errors}
@@ -83,16 +93,27 @@ export default function FormOfRegistration(): JSX.Element {
               type="email"
             />
 
-            <TextField
+            <FormInputText
+              control={control}
+              errors={errors}
+              label="Date Of birth"
+              name="dateOfBirth"
+              rules={RulesValidation.dateOfbirth}
+              type="date"
+            />
+
+            {/* <TextField
               InputLabelProps={{
                 shrink: true,
               }}
+             // control={control}
+              errors={errors}
               defaultValue="2000-01-01"
               id="date"
               label="Date Of birth"
               name="date"
               type="date"
-            />
+            /> */}
             <Box component="fieldset" sx={{ border: '1px solid black' }}>
               <legend>Shipping address</legend>
               <FormSelect
