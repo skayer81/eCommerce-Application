@@ -2,11 +2,14 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
+import { anonymFlowAuth } from './api/clientService';
 import ErrorPage from './features/errorPage/ErrorPage';
 import Layout from './features/layout/Layout';
 import LoginPage from './features/loginPage/LoginPage';
 import MainPage from './features/mainPage/MainPage';
 import RegistrationPage from './features/registrationPage/RegistrationPage';
+
+anonymFlowAuth();
 
 const router = createBrowserRouter([
   {
