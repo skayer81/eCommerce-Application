@@ -1,6 +1,7 @@
 import type { JSX } from 'react';
 import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Link as LinkRouter } from 'react-router-dom';
 
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
@@ -9,6 +10,7 @@ import {
   CssBaseline,
   IconButton,
   InputAdornment,
+  Link,
   Stack,
   TextField,
   Typography,
@@ -134,6 +136,12 @@ export default function LoginPage(): JSX.Element {
               </Button>
             </Stack>
           </form>
+          <Stack direction="row" spacing={1} sx={{ typography: 'body1' }}>
+            <Typography>Not registered yet?</Typography>
+            <Link component={LinkRouter} to="/register">
+              Sign up
+            </Link>
+          </Stack>
         </Stack>
       </Container>
     </>
