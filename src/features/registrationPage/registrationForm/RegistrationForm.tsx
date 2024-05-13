@@ -101,19 +101,6 @@ export default function FormOfRegistration(): JSX.Element {
               rules={RulesValidation.dateOfbirth}
               type="date"
             />
-
-            {/* <TextField
-              InputLabelProps={{
-                shrink: true,
-              }}
-             // control={control}
-              errors={errors}
-              defaultValue="2000-01-01"
-              id="date"
-              label="Date Of birth"
-              name="date"
-              type="date"
-            /> */}
             <Box component="fieldset" sx={{ border: '1px solid black' }}>
               <legend>Shipping address</legend>
               <FormSelect
@@ -124,15 +111,6 @@ export default function FormOfRegistration(): JSX.Element {
                 name="shippingCountry"
                 rules={RulesValidation.required}
               />
-
-              {/* <FormInputText
-                control={control}
-                errors={errors}
-                label="Сountry"
-                name="shippingCountry"
-                rules={RulesValidation.onlyLetters}
-                type="text"
-              /> */}
               <FormInputText
                 control={control}
                 errors={errors}
@@ -174,14 +152,6 @@ export default function FormOfRegistration(): JSX.Element {
                 name="billingCountry"
                 rules={RulesValidation.required}
               />
-              {/* <FormInputText
-                control={control}
-                errors={errors}
-                label="Country"
-                name="billingCountry"
-                rules={RulesValidation.onlyLetters}
-                type="text"
-              /> */}
               <FormInputText
                 control={control}
                 errors={errors}
