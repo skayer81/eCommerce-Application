@@ -39,7 +39,7 @@ export function anonymFlowAuth(): ByProjectKeyRequestBuilder {
   return apiRoot;
 }
 
-export function getUserToken({ email, password }: LoginForm): ByProjectKeyRequestBuilder {
+export function passwordFlowAuth({ email, password }: LoginForm): ByProjectKeyRequestBuilder {
   const ctpClient = new ClientBuilder()
     .withClientCredentialsFlow(authUserMiddlewareOptions(email, password))
     .withHttpMiddleware(httpMiddlewareOptions)
