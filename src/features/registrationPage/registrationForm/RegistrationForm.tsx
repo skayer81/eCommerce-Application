@@ -1,6 +1,6 @@
-import { RegisterOptions, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { FormControlLabel, TextField } from '@mui/material';
+import { FormControlLabel } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -11,18 +11,25 @@ import Typography from '@mui/material/Typography';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import { FormInputText } from '@/components/formComponents/FormInputText';
+import FormSelect from '@/components/formComponents/FormSelect';
+import RulesValidation from '@/components/formComponents/rulesValidation';
 import { RegistrationForm } from '@/types/interfaces';
+
+import { defaultValues } from './defaultValues';
 
 export default function FormOfRegistration(): JSX.Element {
   const {
     control,
     formState: { errors },
-  } = useForm<RegistrationForm>({ mode: 'onChange' });
+    handleSubmit,
+  } = useForm<RegistrationForm>({ mode: 'onChange', defaultValues: defaultValues });
 
-  const rules: RegisterOptions = {
-    required: 'Обязательное поле',
-  };
   const defaultTheme = createTheme();
+
+  const onSubmit: SubmitHandler<RegistrationForm> = (data: RegistrationForm): void => {
+    console.log(data);
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -37,145 +44,142 @@ export default function FormOfRegistration(): JSX.Element {
         >
           <Avatar sx={{ bgcolor: 'secondary.main', m: 1 }}>{/* <LockOutlinedIcon /> */}</Avatar>
           <Typography component="h1" variant="h5">
-            Регистрация
+            Registration
           </Typography>
-          <Box component="form" noValidate sx={{ mt: 1 }}>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={(event) => void handleSubmit(onSubmit)(event)}
+            sx={{ mt: 1 }}
+          >
             <FormInputText
               control={control}
               errors={errors}
-              label="Логин"
+              label="Login"
               name="login"
-              rules={rules}
+              rules={RulesValidation.onlyLetters}
               type="text"
             />
             <FormInputText
               control={control}
               errors={errors}
-              label="Пароль"
+              label="Password"
               name="password"
-              rules={rules}
+              rules={RulesValidation.password}
               type="password"
             />
             <FormInputText
               control={control}
               errors={errors}
-              label="Имя"
+              label="Name"
               name="name"
-              rules={rules}
+              rules={RulesValidation.onlyLetters}
               type="text"
             />
             <FormInputText
               control={control}
               errors={errors}
-              label="Фамилия"
+              label="Surname"
               name="surname"
-              rules={rules}
+              rules={RulesValidation.onlyLetters}
               type="text"
             />
             <FormInputText
               control={control}
               errors={errors}
-              label="Электронная почта"
+              label="Email"
               name="email"
-              rules={rules}
+              rules={RulesValidation.mail}
               type="email"
             />
 
-            <TextField
-              InputLabelProps={{
-                shrink: true,
-              }}
-              defaultValue="2000-01-01"
-              id="date"
-              label="Дата Рождения"
-              name=""
+            <FormInputText
+              control={control}
+              errors={errors}
+              label="Date of birth"
+              name="dateOfBirth"
+              rules={RulesValidation.dateOfbirth}
               type="date"
             />
             <Box component="fieldset" sx={{ border: '1px solid black' }}>
-              <legend>Адрес доставки </legend>
-              <FormInputText
+              <legend>Shipping address</legend>
+              <FormSelect
                 control={control}
                 errors={errors}
-                label="Страна"
+                id="shippingCountry"
+                label="Country"
                 name="shippingCountry"
-                rules={rules}
-                type="text"
+                rules={RulesValidation.required}
               />
               <FormInputText
                 control={control}
                 errors={errors}
-                label="Город"
+                label="City"
                 name="shippingCity"
-                rules={rules}
+                rules={RulesValidation.onlyLetters}
                 type="text"
               />
               <FormInputText
                 control={control}
                 errors={errors}
-                label="Улица"
+                label="Street"
                 name="shippingAdress"
-                rules={rules}
+                rules={RulesValidation.lettersNumbersAndSpecialCharacter}
                 type="text"
               />
               <FormInputText
                 control={control}
                 errors={errors}
-                label="Индекс"
+                label="Index"
                 name="shippingIndex"
-                rules={rules}
+                rules={RulesValidation.onlyLetters}
                 type="text"
               />
 
               <FormControlLabel
                 control={<Checkbox defaultChecked />}
-                label="Использовать как адрес по умолчанию"
+                label="Use as default address"
               />
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Использовать как адрес выставления счета"
-              />
+              <FormControlLabel control={<Checkbox />} label="Use as billing address" />
             </Box>
             <Box component="fieldset" sx={{ border: '1px solid black' }}>
-              <legend>Aдрес выставления счета </legend>
-              <FormInputText
+              <legend>Billing address</legend>
+              <FormSelect
                 control={control}
                 errors={errors}
-                label="Страна"
+                id="billingCountry"
+                label="Country"
                 name="billingCountry"
-                rules={rules}
-                type="text"
+                rules={RulesValidation.required}
               />
               <FormInputText
                 control={control}
                 errors={errors}
-                label="Город"
+                label="City"
                 name="billingCity"
-                rules={rules}
+                rules={RulesValidation.onlyLetters}
                 type="text"
               />
               <FormInputText
                 control={control}
                 errors={errors}
-                label="Улица"
+                label="Street"
                 name="billingAdress"
-                rules={rules}
+                rules={RulesValidation.lettersNumbersAndSpecialCharacter}
                 type="text"
               />
               <FormInputText
                 control={control}
                 errors={errors}
-                label="Индекс"
+                label="Index"
                 name="billingIndex"
-                rules={rules}
+                rules={RulesValidation.onlyLetters}
                 type="text"
               />
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Использовать как адрес по умолчанию"
-              />
+              <FormControlLabel control={<Checkbox />} label="Use as default address" />
             </Box>
             <Button fullWidth sx={{ mb: 2, mt: 3 }} type="submit" variant="contained">
-              Зарегистрироваться
+              Register
             </Button>
           </Box>
         </Box>
