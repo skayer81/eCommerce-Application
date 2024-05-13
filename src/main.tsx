@@ -6,7 +6,10 @@ import ErrorPage from './features/errorPage/ErrorPage';
 import Layout from './features/layout/Layout';
 import LoginPage from './features/loginPage/LoginPage';
 import MainPage from './features/mainPage/MainPage';
-import RegistrationPage from './features/registrationPage/RegistrationPage';
+import RegistrationPage from './features/reristrationPage/registrationForm/RegistrationPage';
+
+import './assets/fonts/stylesheet.css';
+import './index.css';
 
 const router = createBrowserRouter([
   {
@@ -25,11 +28,11 @@ const router = createBrowserRouter([
         path: '/',
         element: <MainPage />,
       },
+      {
+        path: '*',
+        element: <ErrorPage />,
+      },
     ],
-  },
-  {
-    path: '*',
-    element: <ErrorPage />,
   },
 ]);
 
