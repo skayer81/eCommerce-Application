@@ -17,6 +17,7 @@ import FormSelect from '@/components/formComponents/FormSelect';
 import RulesValidation from '@/components/formComponents/rulesValidation';
 import { RegistrationForm } from '@/types/interfaces';
 
+import registrationFormDataAdapter from './RegistrationFormDataAdapter';
 import { defaultValues } from './defaultValues';
 
 type Props = {
@@ -34,7 +35,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
 
   const onSubmit: SubmitHandler<RegistrationForm> = (data: RegistrationForm): void => {
     //Create the customer and output the Customer ID
-    createCustomer(data.email, data.password)
+    createCustomer(registrationFormDataAdapter(data))
       .then(({ body }) => {
         resultOfSubmit({ error: false, message: 'you have successfully registered' });
         console.log(body);

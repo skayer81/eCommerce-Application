@@ -23,7 +23,7 @@ export interface LoginForm {
   password: string;
 }
 
-type RegistrationAdress = {
+export type RegistrationAdress = {
   city: string;
   country: string;
   postalCode: string;
@@ -35,8 +35,8 @@ export type RegistrationRequestBody = {
   addresses: Array<RegistrationAdress>;
   billingAddresses: Array<number>;
   dateOfBirth: string;
-  defaultBillingAddress: number;
-  defaultShippingAddress: number;
+  defaultBillingAddress?: number;
+  defaultShippingAddress?: number;
   email: string;
   firstName: string;
   lastName: string;
