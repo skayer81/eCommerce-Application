@@ -9,6 +9,9 @@ import LoginPage from './features/loginPage/LoginPage';
 import MainPage from './features/mainPage/MainPage';
 import RegistrationPage from './features/registrationPage/RegistrationPage';
 
+import './assets/fonts/stylesheet.css';
+import './index.css';
+
 anonymFlowAuth();
 
 const router = createBrowserRouter([
@@ -28,11 +31,11 @@ const router = createBrowserRouter([
         path: '/',
         element: <MainPage />,
       },
+      {
+        path: '*',
+        element: <ErrorPage />,
+      },
     ],
-  },
-  {
-    path: '*',
-    element: <ErrorPage />,
   },
 ]);
 
