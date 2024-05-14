@@ -22,3 +22,26 @@ export interface LoginForm {
   email: string;
   password: string;
 }
+
+type RegistrationAdress = {
+  city: string;
+  country: string;
+  postalCode: string;
+  region?: string;
+  streetName: string;
+};
+
+export type RegistrationRequestBody = {
+  addresses: Array<RegistrationAdress>;
+  billingAddresses: Array<number>;
+  dateOfBirth: string;
+  defaultBillingAddress: number;
+  defaultShippingAddress: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  salutation?: string;
+  shippingAddresses?: Array<number>;
+  title: string;
+};
