@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Link as LinkRouter } from 'react-router-dom';
 
+import { HttpErrorType } from '@commercetools/sdk-client-v2';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
   Alert,
@@ -41,8 +42,12 @@ export default function LoginPage(): JSX.Element {
       .then(({ body }): void => {
         console.log('loginresponse=', body);
       })
-      .catch(() => {
-        setError(true);
+      .catch((err: HttpErrorType) => {
+        if (err.status === 400) {
+          setError(true);
+        } else {
+          console.error(error);
+        }
       });
   };
 
