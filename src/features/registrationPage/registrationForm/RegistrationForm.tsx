@@ -35,7 +35,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
     //Create the customer and output the Customer ID
     createCustomer(data.email, data.password)
       .then(({ body }) => {
-        resultOfSubmit({ error: false, message: 'все ок' });
+        resultOfSubmit({ error: false, message: 'you have successfully registered' });
         console.log(body);
       })
       .catch((error: Error) => {
