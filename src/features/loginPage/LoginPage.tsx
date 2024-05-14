@@ -3,8 +3,10 @@ import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Link as LinkRouter } from 'react-router-dom';
 
+import { HttpErrorType } from '@commercetools/sdk-client-v2';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
+  Alert,
   Button,
   Container,
   CssBaseline,
@@ -16,24 +18,37 @@ import {
   Typography,
 } from '@mui/material';
 
+import { loginUser } from '@/api/clientService';
 import { LoginForm } from '@/types/interfaces';
 
 export default function LoginPage(): JSX.Element {
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(false);
+
   const {
     handleSubmit,
     formState: { errors },
     control,
   } = useForm<LoginForm>({
+    mode: 'onChange',
     defaultValues: {
       email: '',
       password: '',
     },
   });
 
-  const [showPassword, setShowPassword] = useState(false);
-
   const submit: SubmitHandler<LoginForm> = (data: LoginForm): void => {
-    console.log(data);
+    loginUser(data)
+      .then(({ body }): void => {
+        console.log('loginresponse=', body);
+      })
+      .catch((err: HttpErrorType) => {
+        if (err.status === 400) {
+          setError(true);
+        } else {
+          console.error(error);
+        }
+      });
   };
 
   return (
@@ -64,7 +79,11 @@ export default function LoginPage(): JSX.Element {
             Login
           </Typography>
 
-          <form onSubmit={(event) => void handleSubmit(submit)(event)} style={{ width: '100%' }}>
+          <form
+            onChange={() => setError(false)}
+            onSubmit={(event) => void handleSubmit(submit)(event)}
+            style={{ width: '100%' }}
+          >
             <Stack spacing={3} sx={{ width: '100%' }}>
               <Controller
                 control={control}
@@ -130,6 +149,11 @@ export default function LoginPage(): JSX.Element {
                   },
                 }}
               />
+              {error && (
+                <Alert onClose={() => setError(false)} severity="error">
+                  User with such email and password was not found
+                </Alert>
+              )}
 
               <Button sx={{ py: '10px' }} type="submit" variant="contained">
                 Login
