@@ -1,5 +1,6 @@
 import {
   ByProjectKeyRequestBuilder,
+  ClientResponse,
   createApiBuilderFromCtpClient,
 } from '@commercetools/platform-sdk';
 import { Client, ClientBuilder } from '@commercetools/sdk-client-v2';
@@ -55,7 +56,7 @@ export async function getProject(): Promise<void> {
   return apiRoot.get().execute().then(console.log).catch(console.error);
 }
 
-export async function loginUser({ email, password }: LoginForm): Promise<void> {
+export async function loginUser({ email, password }: LoginForm): Promise<ClientResponse> {
   return apiRoot
     .me()
     .login()
@@ -65,9 +66,9 @@ export async function loginUser({ email, password }: LoginForm): Promise<void> {
         password,
       },
     })
-    .execute()
-    .then(console.log)
-    .catch(console.error);
+    .execute();
+  // .then(console.log)
+  // .catch(console.error);
 }
 
 export async function checkUserEmail(email: string): Promise<void> {
