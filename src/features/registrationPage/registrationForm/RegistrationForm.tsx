@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import { createCustomer } from '@/api/clientService';
+import ButtonToAnotherPage from '@/components/formComponents/ButtonToAnotherPage';
 import { FormInputText } from '@/components/formComponents/FormInputText';
 import FormSelect from '@/components/formComponents/FormSelect';
 import RulesValidation from '@/components/formComponents/rulesValidation';
@@ -65,6 +66,11 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
           <Typography component="h1" variant="h5">
             Registration
           </Typography>
+          <ButtonToAnotherPage
+            addressPage="/login"
+            textOnButton="Sign in"
+            title="Already have an account?"
+          />
           <Box
             component="form"
             noValidate
