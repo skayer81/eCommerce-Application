@@ -1,4 +1,4 @@
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 import { FormControlLabel } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
@@ -161,12 +161,26 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
                 rules={RulesValidation.onlyLetters}
                 type="text"
               />
-
-              <FormControlLabel
-                control={<Checkbox defaultChecked />}
-                label="Use as default address"
+              <Controller
+                control={control}
+                name="useByDefaultShipping"
+                render={({ field }) => (
+                  <FormControlLabel
+                    control={<Checkbox {...field} color="primary" />}
+                    label="Use as default address"
+                  />
+                )}
               />
-              <FormControlLabel control={<Checkbox />} label="Use as billing address" />
+              <Controller
+                control={control}
+                name="useShippingAsBilling"
+                render={({ field }) => (
+                  <FormControlLabel
+                    control={<Checkbox {...field} color="primary" />}
+                    label="Use as billing address"
+                  />
+                )}
+              />
             </Box>
             <Box component="fieldset" sx={{ border: '1px solid black' }}>
               <legend>Billing address</legend>
@@ -202,7 +216,16 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
                 rules={RulesValidation.onlyLetters}
                 type="text"
               />
-              <FormControlLabel control={<Checkbox />} label="Use as default address" />
+              <Controller
+                control={control}
+                name="useByDefaultBilling"
+                render={({ field }) => (
+                  <FormControlLabel
+                    control={<Checkbox {...field} color="primary" />}
+                    label="Use as default address"
+                  />
+                )}
+              />
             </Box>
             <Button fullWidth sx={{ mb: 2, mt: 3 }} type="submit" variant="contained">
               Register
