@@ -5,7 +5,7 @@ import {
 } from '@commercetools/platform-sdk';
 import { Client, ClientBuilder } from '@commercetools/sdk-client-v2';
 
-import { LoginForm } from '@/types/interfaces';
+import { LoginForm, RegistrationRequestBody } from '@/types/interfaces';
 
 import {
   authAnonymMiddlewareOptions,
@@ -84,15 +84,11 @@ export async function checkUserEmail(email: string): Promise<void> {
     .catch(console.error);
 }
 
-export function createCustomer(email: string, password: string): Promise<ClientResponse> {
+export function createCustomer(body: RegistrationRequestBody): Promise<ClientResponse> {
   return apiRoot
     .customers()
     .post({
-      // The CustomerDraft is the object within the body
-      body: {
-        email: email, //'sdk@example.com',
-        password: password, //'examplePassword',
-      },
+      body: body,
     })
     .execute();
 }
