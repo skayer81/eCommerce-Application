@@ -10,7 +10,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
-import { createCustomer } from '@/api/clientService';
+import { createCustomer, loginUser, passwordFlowAuth } from '@/api/clientService';
 import ButtonToAnotherPage from '@/components/formComponents/ButtonToAnotherPage';
 import { FormInputText } from '@/components/formComponents/FormInputText';
 import FormSelect from '@/components/formComponents/FormSelect';
@@ -35,9 +35,13 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
   const onSubmit: SubmitHandler<RegistrationForm> = (data: RegistrationForm): void => {
     //Create the customer and output the Customer ID
     createCustomer(data.email, data.password)
-      .then(({ body }) => {
-        resultOfSubmit({ error: false, message: 'you have successfully registered' });
-        console.log(body);
+      .then(() => {
+        passwordFlowAuth({ email: data.email, password: data.password });
+        loginUser({ email: data.email, password: data.password })
+          .then(() => {
+            resultOfSubmit({ error: false, message: 'you have successfully registered' });
+          })
+          .catch(() => {});
       })
       .catch((error: Error) => {
         let message = String(error.message);
