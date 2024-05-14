@@ -10,6 +10,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
+import { createCustomer } from '@/api/clientService';
 import { FormInputText } from '@/components/formComponents/FormInputText';
 import FormSelect from '@/components/formComponents/FormSelect';
 import RulesValidation from '@/components/formComponents/rulesValidation';
@@ -17,7 +18,11 @@ import { RegistrationForm } from '@/types/interfaces';
 
 import { defaultValues } from './defaultValues';
 
-export default function FormOfRegistration(): JSX.Element {
+type Props = {
+  resultOfSubmit: void;
+};
+
+export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Element {
   const {
     control,
     formState: { errors },
@@ -27,7 +32,21 @@ export default function FormOfRegistration(): JSX.Element {
   const defaultTheme = createTheme();
 
   const onSubmit: SubmitHandler<RegistrationForm> = (data: RegistrationForm): void => {
-    console.log(data);
+    //Create the customer and output the Customer ID
+    createCustomer(data.email, data.password)
+      .then(({ body }) => {
+        resultOfSubmit({ error: false, message: 'you have successfully registered' });
+        console.log(body);
+      })
+      .catch((error: Error) => {
+        let message = String(error.message);
+        if (!message) {
+          message = '';
+        }
+        resultOfSubmit({ error: true, message: message });
+        console.log(error);
+      });
+    // console.log(data);
   };
 
   return (
