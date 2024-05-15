@@ -30,7 +30,7 @@ function getApiRoot(ctpClient: Client): ByProjectKeyRequestBuilder {
 
 export function anonymFlowAuth(): ByProjectKeyRequestBuilder {
   const ctpClient = new ClientBuilder()
-    .withClientCredentialsFlow(authAnonymMiddlewareOptions)
+    .withAnonymousSessionFlow(authAnonymMiddlewareOptions)
     .withHttpMiddleware(httpMiddlewareOptions)
     .withLoggerMiddleware()
     .build();
@@ -42,7 +42,7 @@ export function anonymFlowAuth(): ByProjectKeyRequestBuilder {
 
 export function passwordFlowAuth({ email, password }: LoginForm): ByProjectKeyRequestBuilder {
   const ctpClient = new ClientBuilder()
-    .withClientCredentialsFlow(authUserMiddlewareOptions(email, password))
+    .withPasswordFlow(authUserMiddlewareOptions(email, password))
     .withHttpMiddleware(httpMiddlewareOptions)
     .withLoggerMiddleware()
     .build();
@@ -52,8 +52,8 @@ export function passwordFlowAuth({ email, password }: LoginForm): ByProjectKeyRe
   return apiRoot;
 }
 
-export async function getProject(): Promise<void> {
-  return apiRoot.get().execute().then(console.log).catch(console.error);
+export async function getProject(root: ByProjectKeyRequestBuilder): Promise<void> {
+  return root.get().execute().then(console.log).catch(console.error);
 }
 
 export async function loginUser({ email, password }: LoginForm): Promise<ClientResponse> {
