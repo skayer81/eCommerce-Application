@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Link as LinkRouter, useNavigate } from 'react-router-dom';
 
+import { ClientResponse, CustomerSignInResult } from '@commercetools/platform-sdk';
 import { HttpErrorType } from '@commercetools/sdk-client-v2';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
@@ -19,11 +20,13 @@ import {
 } from '@mui/material';
 
 import { loginUser, passwordFlowAuth } from '@/api/clientService';
+import { useUserStore } from '@/stores/userStore';
 import { LoginForm } from '@/types/interfaces';
 export default function LoginPage(): JSX.Element {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
   const navigation = useNavigate();
+  const { loginUserInStore } = useUserStore();
 
   const {
     handleSubmit,
@@ -39,9 +42,11 @@ export default function LoginPage(): JSX.Element {
 
   const submit: SubmitHandler<LoginForm> = (data: LoginForm): void => {
     loginUser(data)
-      .then(({ body }): LoginForm => {
+      .then(({ body }: ClientResponse<CustomerSignInResult>): LoginForm => {
         console.log('loginresponse=', body);
+        console.log('customerid=', body.customer.id);
         navigation('/');
+        loginUserInStore(body.customer.id);
         return data;
       })
       .then((data) => {
