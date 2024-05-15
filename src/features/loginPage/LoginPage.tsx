@@ -1,7 +1,7 @@
 import type { JSX } from 'react';
 import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Link as LinkRouter } from 'react-router-dom';
+import { Link as LinkRouter, useNavigate } from 'react-router-dom';
 
 import { HttpErrorType } from '@commercetools/sdk-client-v2';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
@@ -24,6 +24,7 @@ import { LoginForm } from '@/types/interfaces';
 export default function LoginPage(): JSX.Element {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
+  const navigation = useNavigate();
 
   const {
     handleSubmit,
@@ -41,6 +42,7 @@ export default function LoginPage(): JSX.Element {
     loginUser(data)
       .then(({ body }): void => {
         console.log('loginresponse=', body);
+        navigation('/');
       })
       .catch((err: HttpErrorType) => {
         if (err.status === 400) {
