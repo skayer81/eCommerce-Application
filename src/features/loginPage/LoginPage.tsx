@@ -1,8 +1,9 @@
 import type { JSX } from 'react';
 import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Link as LinkRouter } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
+import { ClientResponse, CustomerSignInResult } from '@commercetools/platform-sdk';
 import { HttpErrorType } from '@commercetools/sdk-client-v2';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
@@ -12,18 +13,20 @@ import {
   CssBaseline,
   IconButton,
   InputAdornment,
-  Link,
   Stack,
   TextField,
   Typography,
 } from '@mui/material';
 
-import { loginUser } from '@/api/clientService';
+import { loginUser, passwordFlowAuth } from '@/api/clientService';
+import ButtonToAnotherPage from '@/components/formComponents/ButtonToAnotherPage';
+import { useUserStore } from '@/stores/userStore';
 import { LoginForm } from '@/types/interfaces';
-
 export default function LoginPage(): JSX.Element {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
+  const navigation = useNavigate();
+  const { loginUserInStore } = useUserStore();
 
   const {
     handleSubmit,
@@ -39,8 +42,12 @@ export default function LoginPage(): JSX.Element {
 
   const submit: SubmitHandler<LoginForm> = (data: LoginForm): void => {
     loginUser(data)
-      .then(({ body }): void => {
+      .then(({ body }: ClientResponse<CustomerSignInResult>): void => {
         console.log('loginresponse=', body);
+        console.log('customerid=', body.customer.id);
+        navigation('/');
+        loginUserInStore(body.customer.id);
+        passwordFlowAuth(data);
       })
       .catch((err: HttpErrorType) => {
         if (err.status === 400) {
@@ -160,12 +167,11 @@ export default function LoginPage(): JSX.Element {
               </Button>
             </Stack>
           </form>
-          <Stack direction="row" spacing={1} sx={{ typography: 'body1' }}>
-            <Typography>Not registered yet?</Typography>
-            <Link component={LinkRouter} to="/register">
-              Sign up
-            </Link>
-          </Stack>
+          <ButtonToAnotherPage
+            addressPage="/register"
+            textOnButton="Sign up"
+            title="Not registered yet?"
+          />
         </Stack>
       </Container>
     </>
