@@ -18,9 +18,8 @@ import {
   Typography,
 } from '@mui/material';
 
-import { loginUser } from '@/api/clientService';
+import { loginUser, passwordFlowAuth } from '@/api/clientService';
 import { LoginForm } from '@/types/interfaces';
-
 export default function LoginPage(): JSX.Element {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
@@ -40,9 +39,13 @@ export default function LoginPage(): JSX.Element {
 
   const submit: SubmitHandler<LoginForm> = (data: LoginForm): void => {
     loginUser(data)
-      .then(({ body }): void => {
+      .then(({ body }): LoginForm => {
         console.log('loginresponse=', body);
         navigation('/');
+        return data;
+      })
+      .then((data) => {
+        passwordFlowAuth(data);
       })
       .catch((err: HttpErrorType) => {
         if (err.status === 400) {
