@@ -1,7 +1,7 @@
 import type { JSX } from 'react';
 import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Link as LinkRouter, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { ClientResponse, CustomerSignInResult } from '@commercetools/platform-sdk';
 import { HttpErrorType } from '@commercetools/sdk-client-v2';
@@ -13,13 +13,13 @@ import {
   CssBaseline,
   IconButton,
   InputAdornment,
-  Link,
   Stack,
   TextField,
   Typography,
 } from '@mui/material';
 
 import { loginUser, passwordFlowAuth } from '@/api/clientService';
+import ButtonToAnotherPage from '@/components/formComponents/ButtonToAnotherPage';
 import { useUserStore } from '@/stores/userStore';
 import { LoginForm } from '@/types/interfaces';
 export default function LoginPage(): JSX.Element {
@@ -167,12 +167,11 @@ export default function LoginPage(): JSX.Element {
               </Button>
             </Stack>
           </form>
-          <Stack direction="row" spacing={1} sx={{ typography: 'body1' }}>
-            <Typography>Not registered yet?</Typography>
-            <Link component={LinkRouter} to="/register">
-              Sign up
-            </Link>
-          </Stack>
+          <ButtonToAnotherPage
+            addressPage="/register"
+            textOnButton="Sign up"
+            title="Not registered yet?"
+          />
         </Stack>
       </Container>
     </>
