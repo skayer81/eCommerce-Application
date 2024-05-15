@@ -1,12 +1,18 @@
 import type { JSX } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
+
+import AuthPanel from '@/components/authPanel/AuthPanel';
+import NoAuthPanel from '@/components/noAuthPanel/NoAuthPanel';
+import { useUserStore } from '@/stores/userStore';
 
 import logo from '../../assets/icons/Logo.svg';
-import { button, buttons, header, li, main, ul } from './Styles';
+import { buttons, header, li, main, ul } from './Styles';
 
 export default function Layout(): JSX.Element {
+  const { isLogin } = useUserStore();
+
   return (
     <>
       <Box component="header" sx={header}>
@@ -21,12 +27,7 @@ export default function Layout(): JSX.Element {
           </Stack>
         </Box>
         <Box component="div" sx={buttons}>
-          <Button color="success" sx={button} variant="contained">
-            <Link to="/login">Login</Link>
-          </Button>
-          <Button color="success" sx={button} variant="contained">
-            <Link to="/register">Sign up</Link>
-          </Button>
+          {isLogin ? <AuthPanel /> : <NoAuthPanel />}
         </Box>
       </Box>
       <Box component="main" sx={main}>
