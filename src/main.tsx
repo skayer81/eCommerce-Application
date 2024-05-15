@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import { anonymFlowAuth } from './api/clientService';
-import RequireAuth from './components/requireAuth/RequireAuth';
+import RequireMain from './components/requireAuth/RequireMain';
 import ErrorPage from './features/errorPage/ErrorPage';
 import Layout from './features/layout/Layout';
 import LoginPage from './features/loginPage/LoginPage';
@@ -23,14 +23,18 @@ const router = createBrowserRouter([
       {
         path: '/login',
         element: (
-          <RequireAuth>
+          <RequireMain>
             <LoginPage />
-          </RequireAuth>
+          </RequireMain>
         ),
       },
       {
         path: '/register',
-        element: <RegistrationPage />,
+        element: (
+          <RequireMain>
+            <RegistrationPage />
+          </RequireMain>
+        ),
       },
       {
         path: '/',
