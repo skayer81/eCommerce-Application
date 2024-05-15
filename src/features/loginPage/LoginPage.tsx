@@ -42,14 +42,11 @@ export default function LoginPage(): JSX.Element {
 
   const submit: SubmitHandler<LoginForm> = (data: LoginForm): void => {
     loginUser(data)
-      .then(({ body }: ClientResponse<CustomerSignInResult>): LoginForm => {
+      .then(({ body }: ClientResponse<CustomerSignInResult>): void => {
         console.log('loginresponse=', body);
         console.log('customerid=', body.customer.id);
         navigation('/');
         loginUserInStore(body.customer.id);
-        return data;
-      })
-      .then((data) => {
         passwordFlowAuth(data);
       })
       .catch((err: HttpErrorType) => {
