@@ -33,9 +33,9 @@ const FormSelect = ({ control, errors, label, name, rules, id }: FormInputProps)
             value={value}
             variant="outlined"
           >
-            <MenuItem value={'Country1'}>Country1</MenuItem>
-            <MenuItem value={'Country2'}>Country2</MenuItem>
-            <MenuItem value={'Country3'}>Country3</MenuItem>
+            <MenuItem value={'RU'}>Russia</MenuItem>
+            <MenuItem value={'CN'}>China</MenuItem>
+            <MenuItem value={'ZA'}>South Africa</MenuItem>
           </Select>
         </>
       )}
