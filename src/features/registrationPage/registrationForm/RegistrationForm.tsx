@@ -36,10 +36,10 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
     //Create the customer and output the Customer ID
     createCustomer(data.email, data.password)
       .then(() => {
-        passwordFlowAuth({ email: data.email, password: data.password });
         loginUser({ email: data.email, password: data.password })
           .then(() => {
             resultOfSubmit({ error: false, message: 'you have successfully registered' });
+            passwordFlowAuth({ email: data.email, password: data.password });
           })
           .catch(() => {});
       })
