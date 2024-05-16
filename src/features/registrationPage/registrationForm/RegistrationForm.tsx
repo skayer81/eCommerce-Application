@@ -35,7 +35,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
 
   const onSubmit: SubmitHandler<RegistrationForm> = (data: RegistrationForm): void => {
     //Create the customer and output the Customer ID
-     createCustomer(registrationFormDataAdapter(data))
+    createCustomer(registrationFormDataAdapter(data))
       .then(() => {
         loginUser({ email: data.email, password: data.password })
           .then(() => {
