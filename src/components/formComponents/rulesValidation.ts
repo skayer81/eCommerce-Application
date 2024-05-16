@@ -97,7 +97,7 @@ const RulesValidation: RulesValidationType = {
     required: 'Required field',
   },
 
-  postCodeUS: {
+  postCodeZA: {
     pattern: {
       message: 'The postal code value must be in the format: XXXXX',
       value: /^[0-9]{5}$/,
