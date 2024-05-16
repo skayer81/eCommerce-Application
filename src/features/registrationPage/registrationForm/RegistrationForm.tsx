@@ -22,7 +22,7 @@ import registrationFormDataAdapter from './RegistrationFormDataAdapter';
 import { defaultValues } from './defaultValues';
 
 type Props = {
-  resultOfSubmit: void;
+  resultOfSubmit: (result: { error: boolean; message: string }) => void;
 };
 
 export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Element {
