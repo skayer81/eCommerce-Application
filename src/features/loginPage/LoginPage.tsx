@@ -150,9 +150,9 @@ export default function LoginPage(): JSX.Element {
                     message: 'Password must be at least 8 characters long',
                   },
                   pattern: {
-                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])\S+$/,
+                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)\S+$/,
                     message:
-                      'Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character',
+                      'Password must contain at least one uppercase letter, one lowercase letter, one digit',
                   },
                 }}
               />
