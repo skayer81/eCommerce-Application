@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { Controller, RegisterOptions, SubmitHandler, useForm } from 'react-hook-form';
 
 import { FormControlLabel } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
@@ -36,9 +36,24 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
 
   const checkboxUseAsBilling = watch('useShippingAsBilling');
   const shippingCountry = watch('shippingCountry');
+  const billingCountry = watch('billingCountry');
   const shippingAdress = watch('shippingAdress');
   const shippingIndex = watch('shippingIndex');
   const shippingCity = watch('shippingCity');
+
+  const [shippingIndexRules, setShippingIndexRules] = useState(RulesValidation.postCodeRU);
+
+  useEffect(() => {
+    const newRulesValidation: RegisterOptions = RulesValidation[`postCode${shippingCountry}`];
+    setShippingIndexRules(newRulesValidation);
+  }, [shippingCountry]);
+
+  const [billingIndexRules, setBillingIndexRules] = useState(RulesValidation.postCodeRU);
+
+  useEffect(() => {
+    const newRulesValidation: RegisterOptions = RulesValidation[`postCode${billingCountry}`];
+    setBillingIndexRules(newRulesValidation);
+  }, [billingCountry]);
 
   useEffect(() => {
     if (checkboxUseAsBilling) {
@@ -183,7 +198,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
               errors={errors}
               label="Index"
               name="shippingIndex"
-              rules={RulesValidation.onlyLetters}
+              rules={shippingIndexRules}
               type="text"
             />
             <Controller
@@ -238,7 +253,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
               errors={errors}
               label="Index"
               name="billingIndex"
-              rules={RulesValidation.onlyLetters}
+              rules={billingIndexRules}
               type="text"
             />
             <Controller
