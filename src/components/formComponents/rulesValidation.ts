@@ -83,6 +83,29 @@ const RulesValidation = {
       return true;
     },
   },
+  postCodeRU: {
+    pattern: {
+      message: 'The postal code value must be in the format: XXXXXX',
+      value: /^[0-9]{6}$/,
+    },
+    required: 'Required field',
+  },
+
+  postCodeUS: {
+    pattern: {
+      message: 'The postal code value must be in the format: XXXXX',
+      value: /^[0-9]{5}$/,
+    },
+    required: 'Required field',
+  },
+
+  postCodeCN: {
+    pattern: {
+      message: 'The postal code value must be in the format: XXX-XXX',
+      value: /^[0-9]{3}-[0-9]{3}$/,
+    },
+    required: 'Required field',
+  },
 };
 
 export default RulesValidation;

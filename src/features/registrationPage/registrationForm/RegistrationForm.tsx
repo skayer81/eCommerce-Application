@@ -40,17 +40,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
   const shippingIndex = watch('shippingIndex');
   const shippingCity = watch('shippingCity');
 
-  // const onChange = (event: ChangeEvent<HTMLInputElement>): void => {
-  //   if (event.target.checked) {
-  //     setValue("billingCountry", shippingCountry);
-  //     setValue("billingAdress", shippingAdress);
-  //     setValue("billingIndex", shippingIndex);
-  //     setValue("billingCity", shippingCity);
-  //   }
-  // };
-
   useEffect(() => {
-    //   console.log(checkboxUseAsBilling)
     if (checkboxUseAsBilling) {
       setValue('billingCountry', shippingCountry);
       setValue('billingAdress', shippingAdress);
@@ -66,33 +56,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
     shippingCountry,
   ]);
 
-  // useEffect(() => {
-  //   console.log(checkboxUseAsBilling)
-  //   if (checkboxUseAsBilling) {
-  //     setValue("billingCountry", shippingCountry);
-  //   }
-  // }, [shippingCountry, checkboxUseAsBilling, setValue]);
-
-  // useEffect(() => {
-  //   if (checkboxUseAsBilling) {
-  //     setValue("billingAdress", shippingAdress);
-  //   }
-  // }, [shippingAdress, checkboxUseAsBilling, setValue]);
-
-  // useEffect(() => {
-  //   if (checkboxUseAsBilling) {
-  //     setValue("billingIndex", shippingIndex);
-  //   }
-  // }, [shippingIndex, checkboxUseAsBilling, setValue]);
-
-  // useEffect(() => {
-  //   if (checkboxUseAsBilling) {
-  //     setValue("billingCity", shippingCity);
-  //   }
-  // }, [shippingCity, checkboxUseAsBilling, setValue]);
-
   const onSubmit: SubmitHandler<RegistrationForm> = (data: RegistrationForm): void => {
-    //Create the customer and output the Customer ID
     createCustomer(registrationFormDataAdapter(data))
       .then(() => {
         loginUser({ email: data.email, password: data.password })
