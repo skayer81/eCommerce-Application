@@ -1,4 +1,10 @@
-const RulesValidation = {
+import { RegisterOptions } from 'react-hook-form';
+
+type RulesValidationType = {
+  [key in string]: RegisterOptions;
+};
+
+const RulesValidation: RulesValidationType = {
   /**
    * mail - валидация почты по паттерну,
    * onlyLetters - минимум 1 латинская буква без спецсимволов и цифр
