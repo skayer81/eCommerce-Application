@@ -17,26 +17,14 @@ const style = {
 };
 
 type Props = {
-  handleClose: void;
+  handleClose: () => void;
   message: string;
-
-  open: string;
+  open: boolean;
 };
 
 export default function ModalMessage({ message, handleClose, open }: Props): JSX.Element {
-  // const [open, setOpen] = React.useState(false);
-  // const handleOpen = () => setOpen(true);
-  // const handleClose = () => setOpen(false);
-  // const messageText = 'блаблабла'
-
   return (
-    <Modal
-      onClose={handleClose}
-      open={open}
-
-      // aria-labelledby="modal-modal-title"
-      // aria-describedby="modal-modal-description"
-    >
+    <Modal onClose={handleClose} open={open}>
       <Box sx={style}>
         <Typography component="h2" id="modal-modal-title" variant="h6">
           message window

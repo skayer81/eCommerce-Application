@@ -15,7 +15,7 @@ export default function RegistrationPage(): JSX.Element {
     setOpen(false);
     navigation('/');
   };
-  const [message, setMessage] = useState();
+  const [message, setMessage] = useState('');
 
   const resultOfSubmit = (result: { error: boolean; message: string }): void => {
     console.log('result', result.error, result.message);

@@ -83,8 +83,8 @@ const RulesValidation: RulesValidationType = {
       const ENTRY_AGE = 13;
       const date = new Date(value);
       const entryDate = date.setFullYear(date.getFullYear() + ENTRY_AGE);
-      if (entryDate > new Date()) {
-        return `it's too early for you to come here`;
+      if (entryDate > new Date().getTime()) {
+        return `it's too early for you to come here2`;
       }
       return true;
     },
