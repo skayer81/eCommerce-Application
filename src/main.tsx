@@ -29,7 +29,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: '/register',
+        path: '/registration',
         element: (
           <RequireMain>
             <RegistrationPage />
