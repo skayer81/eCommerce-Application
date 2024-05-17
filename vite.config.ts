@@ -15,4 +15,7 @@ export default defineConfig({
       'node-fetch': 'isomorphic-fetch',
     },
   },
+  build: {
+    chunkSizeWarningLimit: 700,
+  },
 });
