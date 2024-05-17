@@ -78,10 +78,10 @@ module.exports = {
         type: "natural",
       },
     ],
-    // "react-refresh/only-export-components": [
-    //   "warn",
-    //   { allowConstantExport: true },
-    // ],
+    "react-refresh/only-export-components": [
+      "warn",
+      { allowConstantExport: true },
+    ],
     "perfectionist/sort-objects":"off",
   },
   settings: {

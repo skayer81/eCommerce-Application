@@ -1,18 +1,17 @@
-import React, { lazy } from 'react';
+import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import { anonymFlowAuth } from './api/clientService';
 import RequireMain from './components/requireMain/RequireMain';
+import { ErrorPageLazy as ErrorPage } from './features/errorPage/ErrorPageLazy.tsx';
 import Layout from './features/layout/Layout';
+import { LoginPageLazy as LoginPage } from './features/loginPage/LoginPageLazy.tsx';
+import { MainPageLazy as MainPage } from './features/mainPage/MainPageLazy.tsx';
+import { RegistrationPageLazy as RegistrationPage } from './features/registrationPage/RegistrationPageLazy.tsx';
 
 import './assets/fonts/stylesheet.css';
 import './index.css';
-
-const LoginPage = lazy(() => import('./features/loginPage/LoginPage'));
-const RegistrationPage = lazy(() => import('./features/registrationPage/RegistrationPage'));
-const MainPage = lazy(() => import('./features/mainPage/MainPage'));
-const ErrorPage = lazy(() => import('./features/errorPage/ErrorPage'));
 
 anonymFlowAuth();
 
