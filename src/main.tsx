@@ -4,11 +4,11 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import { anonymFlowAuth } from './api/clientService';
 import RequireMain from './components/requireMain/RequireMain';
-import ErrorPage from './features/errorPage/ErrorPage';
+import { ErrorPageLazy as ErrorPage } from './features/errorPage/ErrorPageLazy.tsx';
 import Layout from './features/layout/Layout';
-import LoginPage from './features/loginPage/LoginPage';
-import MainPage from './features/mainPage/MainPage';
-import RegistrationPage from './features/registrationPage/RegistrationPage';
+import { LoginPageLazy as LoginPage } from './features/loginPage/LoginPageLazy.tsx';
+import { MainPageLazy as MainPage } from './features/mainPage/MainPageLazy.tsx';
+import { RegistrationPageLazy as RegistrationPage } from './features/registrationPage/RegistrationPageLazy.tsx';
 
 import './assets/fonts/stylesheet.css';
 import './index.css';
@@ -29,7 +29,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: '/register',
+        path: '/registration',
         element: (
           <RequireMain>
             <RegistrationPage />

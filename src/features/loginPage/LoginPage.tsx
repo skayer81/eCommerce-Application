@@ -168,7 +168,7 @@ export default function LoginPage(): JSX.Element {
             </Stack>
           </form>
           <ButtonToAnotherPage
-            addressPage="/register"
+            addressPage="/registration"
             textOnButton="Sign up"
             title="Not registered yet?"
           />

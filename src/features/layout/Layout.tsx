@@ -1,4 +1,5 @@
 import type { JSX } from 'react';
+import { Suspense } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 
 import { Box, Stack, Typography } from '@mui/material';
@@ -31,7 +32,9 @@ export default function Layout(): JSX.Element {
         </Box>
       </Box>
       <Box component="main" sx={main}>
-        <Outlet />
+        <Suspense fallback={<Typography>Loading...</Typography>}>
+          <Outlet />
+        </Suspense>
       </Box>
     </>
   );

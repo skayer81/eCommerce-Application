@@ -11,7 +11,7 @@ export default function NoAuthPanel(): JSX.Element {
         <Link to="/login">Login</Link>
       </Button>
       <Button color="success" sx={button} variant="contained">
-        <Link to="/register">Sign up</Link>
+        <Link to="/registration">Sign up</Link>
       </Button>
     </>
   );
