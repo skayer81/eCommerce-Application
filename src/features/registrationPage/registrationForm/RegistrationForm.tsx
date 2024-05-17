@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { Controller, RegisterOptions, SubmitHandler, useForm } from 'react-hook-form';
 
 import { FormControlLabel } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
@@ -36,21 +36,26 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
 
   const checkboxUseAsBilling = watch('useShippingAsBilling');
   const shippingCountry = watch('shippingCountry');
+  const billingCountry = watch('billingCountry');
   const shippingAdress = watch('shippingAdress');
   const shippingIndex = watch('shippingIndex');
   const shippingCity = watch('shippingCity');
 
-  // const onChange = (event: ChangeEvent<HTMLInputElement>): void => {
-  //   if (event.target.checked) {
-  //     setValue("billingCountry", shippingCountry);
-  //     setValue("billingAdress", shippingAdress);
-  //     setValue("billingIndex", shippingIndex);
-  //     setValue("billingCity", shippingCity);
-  //   }
-  // };
+  const [shippingIndexRules, setShippingIndexRules] = useState(RulesValidation.postCodeRU);
 
   useEffect(() => {
-    //   console.log(checkboxUseAsBilling)
+    const newRulesValidation: RegisterOptions = RulesValidation[`postCode${shippingCountry}`];
+    setShippingIndexRules(newRulesValidation);
+  }, [shippingCountry]);
+
+  const [billingIndexRules, setBillingIndexRules] = useState(RulesValidation.postCodeRU);
+
+  useEffect(() => {
+    const newRulesValidation: RegisterOptions = RulesValidation[`postCode${billingCountry}`];
+    setBillingIndexRules(newRulesValidation);
+  }, [billingCountry]);
+
+  useEffect(() => {
     if (checkboxUseAsBilling) {
       setValue('billingCountry', shippingCountry);
       setValue('billingAdress', shippingAdress);
@@ -66,33 +71,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
     shippingCountry,
   ]);
 
-  // useEffect(() => {
-  //   console.log(checkboxUseAsBilling)
-  //   if (checkboxUseAsBilling) {
-  //     setValue("billingCountry", shippingCountry);
-  //   }
-  // }, [shippingCountry, checkboxUseAsBilling, setValue]);
-
-  // useEffect(() => {
-  //   if (checkboxUseAsBilling) {
-  //     setValue("billingAdress", shippingAdress);
-  //   }
-  // }, [shippingAdress, checkboxUseAsBilling, setValue]);
-
-  // useEffect(() => {
-  //   if (checkboxUseAsBilling) {
-  //     setValue("billingIndex", shippingIndex);
-  //   }
-  // }, [shippingIndex, checkboxUseAsBilling, setValue]);
-
-  // useEffect(() => {
-  //   if (checkboxUseAsBilling) {
-  //     setValue("billingCity", shippingCity);
-  //   }
-  // }, [shippingCity, checkboxUseAsBilling, setValue]);
-
   const onSubmit: SubmitHandler<RegistrationForm> = (data: RegistrationForm): void => {
-    //Create the customer and output the Customer ID
     createCustomer(registrationFormDataAdapter(data))
       .then(() => {
         loginUser({ email: data.email, password: data.password })
@@ -219,7 +198,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
               errors={errors}
               label="Index"
               name="shippingIndex"
-              rules={RulesValidation.onlyLetters}
+              rules={shippingIndexRules}
               type="text"
             />
             <Controller
@@ -274,7 +253,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
               errors={errors}
               label="Index"
               name="billingIndex"
-              rules={RulesValidation.onlyLetters}
+              rules={billingIndexRules}
               type="text"
             />
             <Controller

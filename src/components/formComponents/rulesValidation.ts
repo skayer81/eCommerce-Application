@@ -1,4 +1,10 @@
-const RulesValidation = {
+import { RegisterOptions } from 'react-hook-form';
+
+type RulesValidationType = {
+  [key in string]: RegisterOptions;
+};
+
+const RulesValidation: RulesValidationType = {
   /**
    * mail - валидация почты по паттерну,
    * onlyLetters - минимум 1 латинская буква без спецсимволов и цифр
@@ -82,6 +88,29 @@ const RulesValidation = {
       }
       return true;
     },
+  },
+  postCodeRU: {
+    pattern: {
+      message: 'The postal code value must be in the format: XXXXXX',
+      value: /^[0-9]{6}$/,
+    },
+    required: 'Required field',
+  },
+
+  postCodeZA: {
+    pattern: {
+      message: 'The postal code value must be in the format: XXXXX',
+      value: /^[0-9]{5}$/,
+    },
+    required: 'Required field',
+  },
+
+  postCodeCN: {
+    pattern: {
+      message: 'The postal code value must be in the format: XXX-XXX',
+      value: /^[0-9]{3}-[0-9]{3}$/,
+    },
+    required: 'Required field',
   },
 };
 
