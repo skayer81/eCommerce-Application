@@ -3,8 +3,11 @@ import {
   AuthMiddlewareOptions,
   HttpMiddlewareOptions,
   PasswordAuthMiddlewareOptions,
+  RefreshAuthMiddlewareOptions,
 } from '@commercetools/sdk-client-v2';
 import fetch from 'node-fetch';
+
+import { LocalStorageTokenCache, anonymTokenCache, passwordTokenCache } from './TokenCache';
 
 const PROJECT_KEY = import.meta.env.VITE_PROJECT_KEY;
 const SCOPES = [import.meta.env.VITE_SCOPES];
@@ -45,6 +48,7 @@ export const authAnonymMiddlewareOptions: AnonymousAuthMiddlewareOptions = {
   scopes: SCOPES,
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   fetch,
+  tokenCache: anonymTokenCache,
 };
 
 // authuser
@@ -64,6 +68,26 @@ export const authUserMiddlewareOptions = (
       },
     },
     scopes: SCOPES,
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    fetch,
+    tokenCache: passwordTokenCache,
+  };
+};
+
+// refresh
+export const refreshMiddlewareOptions = (
+  token: string,
+  tokenCache: LocalStorageTokenCache,
+): RefreshAuthMiddlewareOptions => {
+  return {
+    host: AUTH_URL,
+    projectKey: PROJECT_KEY,
+    credentials: {
+      clientId: CLIENT_ID,
+      clientSecret: CLIENT_SECRET,
+    },
+    refreshToken: token,
+    tokenCache: tokenCache,
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     fetch,
   };

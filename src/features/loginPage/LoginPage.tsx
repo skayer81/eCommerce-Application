@@ -18,7 +18,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import { loginUser, passwordFlowAuth } from '@/api/clientService';
+import { getCustomer, loginUser, passwordFlowAuth } from '@/api/clientService';
 import ButtonToAnotherPage from '@/components/formComponents/ButtonToAnotherPage';
 import { useUserStore } from '@/stores/userStore';
 import { LoginForm } from '@/types/interfaces';
@@ -42,12 +42,16 @@ export default function LoginPage(): JSX.Element {
 
   const submit: SubmitHandler<LoginForm> = (data: LoginForm): void => {
     loginUser(data)
-      .then(({ body }: ClientResponse<CustomerSignInResult>): void => {
+      .then(({ body }: ClientResponse<CustomerSignInResult>): LoginForm => {
         console.log('loginresponse=', body);
         console.log('customerid=', body.customer.id);
         navigation('/');
         loginUserInStore(body.customer.id);
-        passwordFlowAuth(data);
+        return data;
+      })
+      .then((data) => {
+        const root = passwordFlowAuth(data);
+        return getCustomer(root);
       })
       .catch((err: HttpErrorType) => {
         if (err.status === 400) {

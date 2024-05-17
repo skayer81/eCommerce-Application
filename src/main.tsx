@@ -2,7 +2,8 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import { anonymFlowAuth } from './api/clientService';
+import { passwordTokenCache } from './api/TokenCache';
+import { anonymFlowAuth, getCustomer, refreshFlowAuth } from './api/clientService';
 import RequireMain from './components/requireMain/RequireMain';
 import ErrorPage from './features/errorPage/ErrorPage';
 import Layout from './features/layout/Layout';
@@ -13,7 +14,26 @@ import RegistrationPage from './features/registrationPage/RegistrationPage';
 import './assets/fonts/stylesheet.css';
 import './index.css';
 
-anonymFlowAuth();
+export interface LoginState {
+  state: {
+    isLogin: boolean;
+    userId: string;
+  };
+  version: number;
+}
+
+const state: LoginState = JSON.parse(localStorage.getItem('green-shop')!) as LoginState;
+const isLogin = state.state.isLogin;
+
+if (isLogin) {
+  const { refreshToken } = passwordTokenCache.get();
+  if (refreshToken) {
+    const root = refreshFlowAuth(refreshToken, passwordTokenCache);
+    await getCustomer(root);
+  }
+} else {
+  anonymFlowAuth();
+}
 
 const router = createBrowserRouter([
   {

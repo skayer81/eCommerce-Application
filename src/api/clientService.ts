@@ -12,7 +12,9 @@ import {
   authMiddlewareOptions,
   authUserMiddlewareOptions,
   httpMiddlewareOptions,
+  refreshMiddlewareOptions,
 } from './BuildClient';
+import { LocalStorageTokenCache } from './TokenCache';
 
 const ctpClient = new ClientBuilder()
   .withClientCredentialsFlow(authMiddlewareOptions)
@@ -52,8 +54,27 @@ export function passwordFlowAuth({ email, password }: LoginForm): ByProjectKeyRe
   return apiRoot;
 }
 
+export function refreshFlowAuth(
+  token: string,
+  tokenCache: LocalStorageTokenCache,
+): ByProjectKeyRequestBuilder {
+  const ctpClient = new ClientBuilder()
+    .withRefreshTokenFlow(refreshMiddlewareOptions(token, tokenCache))
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .withLoggerMiddleware()
+    .build();
+
+  apiRoot = getApiRoot(ctpClient);
+
+  return apiRoot;
+}
+
 export async function getProject(root: ByProjectKeyRequestBuilder): Promise<void> {
   return root.get().execute().then(console.log).catch(console.error);
+}
+
+export async function getCustomer(root: ByProjectKeyRequestBuilder): Promise<void> {
+  return root.me().get().execute().then(console.log).catch(console.error);
 }
 
 export async function loginUser({ email, password }: LoginForm): Promise<ClientResponse> {
