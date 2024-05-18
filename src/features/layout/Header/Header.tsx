@@ -10,7 +10,6 @@ import {
   List,
   ListItemButton,
   ListItemText,
-  Stack,
   Typography,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
@@ -104,11 +103,11 @@ export default function Header(): JSX.Element {
         {!isMobile ? (
           <>
             <Box component="nav">
-              <Stack component="ul" sx={ul}>
+              <List component="ul" sx={ul}>
                 <Typography component="li" sx={li}>
                   <Link to="/">Main</Link>
                 </Typography>
-              </Stack>
+              </List>
             </Box>
             <Box component="div" sx={buttons}>
               {isLogin ? <AuthPanel /> : <NoAuthPanel />}
