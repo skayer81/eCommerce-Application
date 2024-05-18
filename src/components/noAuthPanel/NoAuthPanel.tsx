@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 import { Button } from '@mui/material';
 
-import { button } from '@/features/layout/Styles';
+import { button } from '@/features/layout/Header/Styles';
 
 export default function NoAuthPanel(): JSX.Element {
   return (
