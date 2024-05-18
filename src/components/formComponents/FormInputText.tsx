@@ -7,7 +7,7 @@ import { RegistrationForm } from '@/types/interfaces';
 type FormInputProps = {
   control: Control<RegistrationForm>;
   errors: FieldErrors<RegistrationForm>;
-  isDisabled: boolean;
+  isDisabled?: boolean;
   label: string;
   name: keyof RegistrationForm;
   rules: RegisterOptions;
@@ -29,7 +29,7 @@ export const FormInputText = ({
       name={name}
       render={({ field: { onChange, value } }) => (
         <TextField
-          disabled={isDisabled}
+          disabled={isDisabled != undefined ? isDisabled : false}
           error={!!errors[name]?.message}
           fullWidth
           helperText={errors[name]?.message}

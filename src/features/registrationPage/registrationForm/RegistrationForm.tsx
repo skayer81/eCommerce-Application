@@ -47,6 +47,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
   const shippingCity = watch('shippingCity');
 
   const [shippingIndexRules, setShippingIndexRules] = useState(RulesValidation.postCodeRU);
+  const [isBillingAdressDisabled, SetIsBillingAdressDisabled] = useState(false);
 
   useEffect(() => {
     const newRulesValidation: RegisterOptions = RulesValidation[`postCode${shippingCountry}`];
@@ -67,6 +68,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
       setValue('billingIndex', shippingIndex);
       setValue('billingCity', shippingCity);
     }
+    SetIsBillingAdressDisabled(checkboxUseAsBilling);
   }, [
     checkboxUseAsBilling,
     setValue,
@@ -252,6 +254,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
               <FormInputText
                 control={control}
                 errors={errors}
+                isDisabled={isBillingAdressDisabled}
                 label="City"
                 name="billingCity"
                 rules={RulesValidation.onlyLetters}
@@ -260,6 +263,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
               <FormInputText
                 control={control}
                 errors={errors}
+                isDisabled={isBillingAdressDisabled}
                 label="Street"
                 name="billingAdress"
                 rules={RulesValidation.lettersNumbersAndSpecialCharacter}
@@ -268,6 +272,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
               <FormInputText
                 control={control}
                 errors={errors}
+                isDisabled={isBillingAdressDisabled}
                 label="Index"
                 name="billingIndex"
                 rules={billingIndexRules}
