@@ -3,6 +3,7 @@ const main = {
   flexDirection: 'column',
   alignItems: 'center',
   pt: '30px',
+  mt: '50px',
 };
 
 const imgContainer = {
@@ -15,12 +16,13 @@ const imgContainer = {
   alignItems: 'center',
   justifyContent: 'center',
   maxWidth: '780px',
+  mb: '20px',
 };
 
 const title = {
   fontFamily: 'Cera Pro',
-  fontWeight: '700',
-  fontSize: '30px',
+  fontWeight: '500',
+  fontSize: '20px',
   lineHeight: '100%',
   color: '#3D3D3D',
   mb: 1,
