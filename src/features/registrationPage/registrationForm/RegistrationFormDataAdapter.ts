@@ -22,7 +22,7 @@ function registrationFormDataAdapter(data: RegistrationForm): RegistrationReques
   const result: RegistrationRequestBody = {
     addresses: [billingAddress, shippingAddress],
     billingAddresses: [INDEX_BILLING_ADRESS],
-    dateOfBirth: data.dateOfBirth,
+    dateOfBirth: data.dateOfBirth === null ? '' : data.dateOfBirth.format('YYYY-MM-DD'),
     email: data.email,
     firstName: data.name,
     lastName: data.surname,
