@@ -247,6 +247,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
                 control={control}
                 errors={errors}
                 id="billingCountry"
+                isDisabled={isBillingAdressDisabled}
                 label="Country"
                 name="billingCountry"
                 rules={RulesValidation.required}
