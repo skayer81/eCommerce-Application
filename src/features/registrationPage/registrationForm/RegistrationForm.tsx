@@ -22,7 +22,7 @@ import registrationFormDataAdapter from './RegistrationFormDataAdapter';
 import { defaultValues } from './defaultValues';
 
 type Props = {
-  resultOfSubmit: (result: { error: boolean; message: string }) => void;
+  resultOfSubmit: (result: { hasError: boolean; message: string }) => void;
 };
 
 export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Element {
@@ -76,7 +76,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
       .then(() => {
         loginUser({ email: data.email, password: data.password })
           .then(() => {
-            resultOfSubmit({ error: false, message: 'you have successfully registered' });
+            resultOfSubmit({ hasError: false, message: 'you have successfully registered' });
             passwordFlowAuth({ email: data.email, password: data.password });
           })
           .catch(() => {});
@@ -86,7 +86,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
         if (!message) {
           message = '';
         }
-        resultOfSubmit({ error: true, message: message });
+        resultOfSubmit({ hasError: true, message: message });
         console.log(error);
       });
     // console.log(data);
