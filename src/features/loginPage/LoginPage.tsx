@@ -6,9 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import { ClientResponse, CustomerSignInResult } from '@commercetools/platform-sdk';
 import { HttpErrorType } from '@commercetools/sdk-client-v2';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { LoadingButton } from '@mui/lab';
 import {
   Alert,
-  Button,
   Container,
   CssBaseline,
   IconButton,
@@ -23,8 +23,10 @@ import ButtonToAnotherPage from '@/components/formComponents/ButtonToAnotherPage
 import { useUserStore } from '@/stores/userStore';
 import { LoginForm } from '@/types/interfaces';
 export default function LoginPage(): JSX.Element {
+  console.log('loginform');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigate();
   const { loginUserInStore } = useUserStore();
 
@@ -41,13 +43,13 @@ export default function LoginPage(): JSX.Element {
   });
 
   const submit: SubmitHandler<LoginForm> = (data: LoginForm): void => {
+    setLoading(true);
     loginUser(data)
       .then(({ body }: ClientResponse<CustomerSignInResult>): void => {
-        console.log('loginresponse=', body);
-        console.log('customerid=', body.customer.id);
         navigation('/');
         loginUserInStore(body.customer.id);
         passwordFlowAuth(data);
+        setLoading(false);
       })
       .catch((err: HttpErrorType) => {
         if (err.status === 400) {
@@ -162,9 +164,14 @@ export default function LoginPage(): JSX.Element {
                 </Alert>
               )}
 
-              <Button sx={{ py: '10px' }} type="submit" variant="contained">
-                Login
-              </Button>
+              <LoadingButton
+                loading={loading}
+                sx={{ py: '10px' }}
+                type="submit"
+                variant="contained"
+              >
+                <span style={{ fontSize: 'inherit' }}>Login</span>
+              </LoadingButton>
             </Stack>
           </form>
           <ButtonToAnotherPage
