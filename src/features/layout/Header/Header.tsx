@@ -110,7 +110,8 @@ export default function Header(): JSX.Element {
               </List>
             </Box>
             <Box component="div" sx={buttons}>
-              {isLogin ? <AuthPanel /> : <NoAuthPanel />}
+              <NoAuthPanel />
+              {isLogin ? <AuthPanel /> : ''}
             </Box>
           </>
         ) : (
