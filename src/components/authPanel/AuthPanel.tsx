@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
 
 import { anonymFlowAuth } from '@/api/clientService';
-import { button } from '@/features/layout/Styles';
+import { button } from '@/features/layout/Header/Styles';
 import { useUserStore } from '@/stores/userStore';
 
 export default function NoAuthPanel(): JSX.Element {
