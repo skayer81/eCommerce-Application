@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Controller, RegisterOptions, SubmitHandler, useForm } from 'react-hook-form';
 
-// import { useUserStore } from '@/stores/userStore';
 import { ClientResponse, CustomerSignInResult } from '@commercetools/platform-sdk';
 import { LoadingButton } from '@mui/lab';
 import { FormControlLabel } from '@mui/material';
@@ -26,10 +25,8 @@ import { RegistrationForm } from '@/types/interfaces';
 import registrationFormDataAdapter from './RegistrationFormDataAdapter';
 import { defaultValues } from './defaultValues';
 
-// import dayjs, { Dayjs } from 'dayjs';
-
 type Props = {
-  resultOfSubmit: (result: { hasError: boolean; message: string }) => void;
+  resultOfSubmit: (result: { hasError: boolean; message: string }, id?: string) => void;
 };
 
 export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Element {
@@ -41,7 +38,6 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
     watch,
   } = useForm<RegistrationForm>({ mode: 'onChange', defaultValues });
   const [loading, setLoading] = useState(false);
-  // const { loginUserInStore } = useUserStore();
 
   const checkboxUseAsBilling = watch('useShippingAsBilling');
   const shippingCountry = watch('shippingCountry');
@@ -89,8 +85,10 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
         return loginUser({ email: data.email, password: data.password });
       })
       .then(({ body }: ClientResponse<CustomerSignInResult>) => {
-        // loginUserInStore(body.customer.id);
-        resultOfSubmit({ hasError: false, message: 'You have successfully registered' });
+        resultOfSubmit(
+          { hasError: false, message: 'You have successfully registered' },
+          body.customer.id,
+        );
         passwordFlowAuth({ email: data.email, password: data.password });
         console.log(body);
         setLoading(false);
@@ -104,7 +102,6 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
         resultOfSubmit({ hasError: true, message: message });
         console.log(error);
       });
-    // console.log(data);
   };
 
   return (
