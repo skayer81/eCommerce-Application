@@ -8,12 +8,21 @@ type FormInputProps = {
   control: Control<RegistrationForm>;
   errors: FieldErrors<RegistrationForm>;
   id: string;
+  isDisabled?: boolean;
   label: string;
   name: keyof RegistrationForm;
   rules: RegisterOptions;
 };
 
-const FormSelect = ({ control, errors, label, name, rules, id }: FormInputProps): JSX.Element => {
+const FormSelect = ({
+  control,
+  errors,
+  isDisabled,
+  label,
+  name,
+  rules,
+  id,
+}: FormInputProps): JSX.Element => {
   return (
     <Controller
       control={control}
@@ -22,6 +31,7 @@ const FormSelect = ({ control, errors, label, name, rules, id }: FormInputProps)
         <>
           <InputLabel id={id}>{label}</InputLabel>
           <Select
+            disabled={isDisabled != undefined ? isDisabled : false}
             error={!!errors[name]?.message}
             fullWidth
             id={id}
