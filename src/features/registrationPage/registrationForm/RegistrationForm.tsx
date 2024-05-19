@@ -33,7 +33,6 @@ type Props = {
 };
 
 export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Element {
-  console.log('regform');
   const {
     control,
     formState: { errors },

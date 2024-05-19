@@ -23,7 +23,6 @@ import ButtonToAnotherPage from '@/components/formComponents/ButtonToAnotherPage
 import { useUserStore } from '@/stores/userStore';
 import { LoginForm } from '@/types/interfaces';
 export default function LoginPage(): JSX.Element {
-  console.log('loginform');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
