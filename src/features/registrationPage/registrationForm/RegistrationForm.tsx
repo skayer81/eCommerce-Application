@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Controller, RegisterOptions, SubmitHandler, useForm } from 'react-hook-form';
 
+// import { useUserStore } from '@/stores/userStore';
+import { ClientResponse, CustomerSignInResult } from '@commercetools/platform-sdk';
+import { LoadingButton } from '@mui/lab';
 import { FormControlLabel } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -38,6 +40,8 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
     setValue,
     watch,
   } = useForm<RegistrationForm>({ mode: 'onChange', defaultValues });
+  const [loading, setLoading] = useState(false);
+  // const { loginUserInStore } = useUserStore();
 
   const checkboxUseAsBilling = watch('useShippingAsBilling');
   const shippingCountry = watch('shippingCountry');
@@ -79,16 +83,20 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
   ]);
 
   const onSubmit: SubmitHandler<RegistrationForm> = (data: RegistrationForm): void => {
+    setLoading(true);
     createCustomer(registrationFormDataAdapter(data))
       .then(() => {
-        loginUser({ email: data.email, password: data.password })
-          .then(() => {
-            resultOfSubmit({ hasError: false, message: 'you have successfully registered' });
-            passwordFlowAuth({ email: data.email, password: data.password });
-          })
-          .catch(() => {});
+        return loginUser({ email: data.email, password: data.password });
+      })
+      .then(({ body }: ClientResponse<CustomerSignInResult>) => {
+        // loginUserInStore(body.customer.id);
+        resultOfSubmit({ hasError: false, message: 'You have successfully registered' });
+        passwordFlowAuth({ email: data.email, password: data.password });
+        console.log(body);
+        setLoading(false);
       })
       .catch((error: Error) => {
+        setLoading(false);
         let message = String(error.message);
         if (!message) {
           message = '';
@@ -117,7 +125,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
           </Typography>
           <ButtonToAnotherPage
             addressPage="/login"
-            textOnButton="Sign in"
+            textOnButton="Log in"
             title="Already have an account?"
           />
           <Box
@@ -290,9 +298,16 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
                 )}
               />
             </Box>
-            <Button fullWidth sx={{ mb: 2, mt: 3 }} type="submit" variant="contained">
-              Register
-            </Button>
+
+            <LoadingButton
+              fullWidth
+              loading={loading}
+              sx={{ mb: 2, mt: 3 }}
+              type="submit"
+              variant="contained"
+            >
+              <span style={{ fontSize: 'inherit' }}>Register</span>
+            </LoadingButton>
           </Box>
         </Box>
       </Container>
