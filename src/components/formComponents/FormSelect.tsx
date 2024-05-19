@@ -1,6 +1,6 @@
 import { Control, Controller, FieldErrors, RegisterOptions } from 'react-hook-form';
 
-import { InputLabel, MenuItem, Select } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 import { RegistrationForm } from '@/types/interfaces';
 
@@ -28,7 +28,7 @@ const FormSelect = ({
       control={control}
       name={name}
       render={({ field: { onChange, value } }) => (
-        <>
+        <FormControl fullWidth size="small">
           <InputLabel id={id}>{label}</InputLabel>
           <Select
             disabled={isDisabled != undefined ? isDisabled : false}
@@ -38,16 +38,14 @@ const FormSelect = ({
             label={label}
             labelId={id}
             onChange={onChange}
-            size="small"
             sx={{ mb: 1 }}
             value={value}
-            variant="outlined"
           >
             <MenuItem value={'RU'}>Russia</MenuItem>
             <MenuItem value={'CN'}>China</MenuItem>
             <MenuItem value={'ZA'}>South Africa</MenuItem>
           </Select>
-        </>
+        </FormControl>
       )}
       rules={rules}
     />
