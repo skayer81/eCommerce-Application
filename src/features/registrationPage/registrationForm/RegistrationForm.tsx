@@ -9,7 +9,10 @@ import Checkbox from '@mui/material/Checkbox';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
-// import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import 'dayjs/locale/de';
 
 import { createCustomer, loginUser, passwordFlowAuth } from '@/api/clientService';
 import ButtonToAnotherPage from '@/components/formComponents/ButtonToAnotherPage';
@@ -21,8 +24,10 @@ import { RegistrationForm } from '@/types/interfaces';
 import registrationFormDataAdapter from './RegistrationFormDataAdapter';
 import { defaultValues } from './defaultValues';
 
+// import dayjs, { Dayjs } from 'dayjs';
+
 type Props = {
-  resultOfSubmit: (result: { error: boolean; message: string }) => void;
+  resultOfSubmit: (result: { hasError: boolean; message: string }) => void;
 };
 
 export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Element {
@@ -32,7 +37,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
     handleSubmit,
     setValue,
     watch,
-  } = useForm<RegistrationForm>({ mode: 'onChange', defaultValues: defaultValues });
+  } = useForm<RegistrationForm>({ mode: 'onChange', defaultValues });
 
   const checkboxUseAsBilling = watch('useShippingAsBilling');
   const shippingCountry = watch('shippingCountry');
@@ -76,7 +81,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
       .then(() => {
         loginUser({ email: data.email, password: data.password })
           .then(() => {
-            resultOfSubmit({ error: false, message: 'you have successfully registered' });
+            resultOfSubmit({ hasError: false, message: 'you have successfully registered' });
             passwordFlowAuth({ email: data.email, password: data.password });
           })
           .catch(() => {});
@@ -86,192 +91,205 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
         if (!message) {
           message = '';
         }
-        resultOfSubmit({ error: true, message: message });
+        resultOfSubmit({ hasError: true, message: message });
         console.log(error);
       });
     // console.log(data);
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <Box
-        sx={{
-          alignItems: 'center',
-          display: 'flex',
-          flexDirection: 'column',
-          marginTop: 8,
-        }}
-      >
-        <Avatar sx={{ bgcolor: 'secondary.main', m: 1 }}>{/* <LockOutlinedIcon /> */}</Avatar>
-        <Typography component="h1" variant="h5">
-          Registration
-        </Typography>
-        <ButtonToAnotherPage
-          addressPage="/login"
-          textOnButton="Sign in"
-          title="Already have an account?"
-        />
+    <LocalizationProvider adapterLocale="de" dateAdapter={AdapterDayjs}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
         <Box
-          component="form"
-          noValidate
-          onSubmit={(event) => void handleSubmit(onSubmit)(event)}
-          sx={{ mt: 1 }}
+          sx={{
+            alignItems: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            marginTop: 8,
+          }}
         >
-          <FormInputText
-            control={control}
-            errors={errors}
-            label="Login"
-            name="login"
-            rules={RulesValidation.onlyLetters}
-            type="text"
+          <Avatar sx={{ bgcolor: 'secondary.main', m: 1 }}>{/* <LockOutlinedIcon /> */}</Avatar>
+          <Typography component="h1" variant="h5">
+            Registration
+          </Typography>
+          <ButtonToAnotherPage
+            addressPage="/login"
+            textOnButton="Sign in"
+            title="Already have an account?"
           />
-          <FormInputText
-            control={control}
-            errors={errors}
-            label="Password"
-            name="password"
-            rules={RulesValidation.password}
-            type="password"
-          />
-          <FormInputText
-            control={control}
-            errors={errors}
-            label="Name"
-            name="name"
-            rules={RulesValidation.onlyLetters}
-            type="text"
-          />
-          <FormInputText
-            control={control}
-            errors={errors}
-            label="Surname"
-            name="surname"
-            rules={RulesValidation.onlyLetters}
-            type="text"
-          />
-          <FormInputText
-            control={control}
-            errors={errors}
-            label="Email"
-            name="email"
-            rules={RulesValidation.mail}
-            type="email"
-          />
-
-          <FormInputText
-            control={control}
-            errors={errors}
-            label="Date of birth"
-            name="dateOfBirth"
-            rules={RulesValidation.dateOfbirth}
-            type="date"
-          />
-          <Box component="fieldset" sx={{ border: '1px solid black' }}>
-            <legend>Shipping address</legend>
-            <FormSelect
-              control={control}
-              errors={errors}
-              id="shippingCountry"
-              label="Country"
-              name="shippingCountry"
-              rules={RulesValidation.required}
-            />
+          <Box
+            component="form"
+            noValidate
+            onSubmit={(event) => void handleSubmit(onSubmit)(event)}
+            sx={{ mt: 1 }}
+          >
             <FormInputText
               control={control}
               errors={errors}
-              label="City"
-              name="shippingCity"
+              label="Login"
+              name="login"
               rules={RulesValidation.onlyLetters}
               type="text"
             />
             <FormInputText
               control={control}
               errors={errors}
-              label="Street"
-              name="shippingAdress"
-              rules={RulesValidation.lettersNumbersAndSpecialCharacter}
-              type="text"
+              label="Password"
+              name="password"
+              rules={RulesValidation.password}
+              type="password"
             />
             <FormInputText
               control={control}
               errors={errors}
-              label="Index"
-              name="shippingIndex"
-              rules={shippingIndexRules}
-              type="text"
-            />
-            <Controller
-              control={control}
-              name="useByDefaultShipping"
-              render={({ field }) => (
-                <FormControlLabel
-                  control={<Checkbox {...field} color="primary" />}
-                  label="Use as default address"
-                />
-              )}
-            />
-            <Controller
-              control={control}
-              name="useShippingAsBilling"
-              render={({ field }) => (
-                <FormControlLabel
-                  control={<Checkbox {...field} color="primary" />} // onChange={onChange}
-                  label="Use as billing address"
-                />
-              )}
-            />
-          </Box>
-          <Box component="fieldset" sx={{ border: '1px solid black' }}>
-            <legend>Billing address</legend>
-            <FormSelect
-              control={control}
-              errors={errors}
-              id="billingCountry"
-              label="Country"
-              name="billingCountry"
-              rules={RulesValidation.required}
-            />
-            <FormInputText
-              control={control}
-              errors={errors}
-              label="City"
-              name="billingCity"
+              label="Name"
+              name="name"
               rules={RulesValidation.onlyLetters}
               type="text"
             />
             <FormInputText
               control={control}
               errors={errors}
-              label="Street"
-              name="billingAdress"
-              rules={RulesValidation.lettersNumbersAndSpecialCharacter}
+              label="Surname"
+              name="surname"
+              rules={RulesValidation.onlyLetters}
               type="text"
             />
             <FormInputText
               control={control}
               errors={errors}
-              label="Index"
-              name="billingIndex"
-              rules={billingIndexRules}
-              type="text"
+              label="Email"
+              name="email"
+              rules={RulesValidation.mail}
+              type="email"
             />
             <Controller
               control={control}
-              name="useByDefaultBilling"
-              render={({ field }) => (
-                <FormControlLabel
-                  control={<Checkbox {...field} color="primary" />}
-                  label="Use as default address"
+              name="dateOfBirth"
+              render={({ field: { onChange, value } }) => (
+                <DatePicker
+                  label="Date Of Birth"
+                  onChange={onChange}
+                  slotProps={{
+                    textField: {
+                      size: 'small',
+                      fullWidth: true,
+                      error: !!errors['dateOfBirth']?.message,
+                      helperText: errors['dateOfBirth']?.message,
+                    },
+                  }}
+                  value={value}
                 />
               )}
+              rules={RulesValidation.dateOfbirth}
             />
+            <Box component="fieldset" sx={{ border: '1px solid black' }}>
+              <legend>Shipping address</legend>
+              <FormSelect
+                control={control}
+                errors={errors}
+                id="shippingCountry"
+                label="Country"
+                name="shippingCountry"
+                rules={RulesValidation.required}
+              />
+              <FormInputText
+                control={control}
+                errors={errors}
+                label="City"
+                name="shippingCity"
+                rules={RulesValidation.onlyLetters}
+                type="text"
+              />
+              <FormInputText
+                control={control}
+                errors={errors}
+                label="Street"
+                name="shippingAdress"
+                rules={RulesValidation.lettersNumbersAndSpecialCharacter}
+                type="text"
+              />
+              <FormInputText
+                control={control}
+                errors={errors}
+                label="Index"
+                name="shippingIndex"
+                rules={shippingIndexRules}
+                type="text"
+              />
+              <Controller
+                control={control}
+                name="useByDefaultShipping"
+                render={({ field }) => (
+                  <FormControlLabel
+                    control={<Checkbox {...field} color="primary" />}
+                    label="Use as default address"
+                  />
+                )}
+              />
+              <Controller
+                control={control}
+                name="useShippingAsBilling"
+                render={({ field }) => (
+                  <FormControlLabel
+                    control={<Checkbox {...field} color="primary" />} // onChange={onChange}
+                    label="Use as billing address"
+                  />
+                )}
+              />
+            </Box>
+            <Box component="fieldset" sx={{ border: '1px solid black' }}>
+              <legend>Billing address</legend>
+              <FormSelect
+                control={control}
+                errors={errors}
+                id="billingCountry"
+                label="Country"
+                name="billingCountry"
+                rules={RulesValidation.required}
+              />
+              <FormInputText
+                control={control}
+                errors={errors}
+                label="City"
+                name="billingCity"
+                rules={RulesValidation.onlyLetters}
+                type="text"
+              />
+              <FormInputText
+                control={control}
+                errors={errors}
+                label="Street"
+                name="billingAdress"
+                rules={RulesValidation.lettersNumbersAndSpecialCharacter}
+                type="text"
+              />
+              <FormInputText
+                control={control}
+                errors={errors}
+                label="Index"
+                name="billingIndex"
+                rules={billingIndexRules}
+                type="text"
+              />
+              <Controller
+                control={control}
+                name="useByDefaultBilling"
+                render={({ field }) => (
+                  <FormControlLabel
+                    control={<Checkbox {...field} color="primary" />}
+                    label="Use as default address"
+                  />
+                )}
+              />
+            </Box>
+            <Button fullWidth sx={{ mb: 2, mt: 3 }} type="submit" variant="contained">
+              Register
+            </Button>
           </Box>
-          <Button fullWidth sx={{ mb: 2, mt: 3 }} type="submit" variant="contained">
-            Register
-          </Button>
         </Box>
-      </Box>
-    </Container>
+      </Container>
+    </LocalizationProvider>
   );
 }

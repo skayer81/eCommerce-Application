@@ -1,9 +1,10 @@
+import { Dayjs } from 'dayjs';
 export interface RegistrationForm {
   billingAdress: string;
   billingCity: string;
   billingCountry: string;
   billingIndex: string;
-  dateOfBirth: string;
+  dateOfBirth: Dayjs | null; //string;
   email: string;
   login: string;
   name: string;

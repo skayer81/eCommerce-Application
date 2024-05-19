@@ -18,19 +18,20 @@ const style = {
 
 type Props = {
   handleClose: () => void;
+  hasError: boolean;
   message: string;
   open: boolean;
 };
 
-export default function ModalMessage({ message, handleClose, open }: Props): JSX.Element {
+export default function ModalMessage({ message, handleClose, open, hasError }: Props): JSX.Element {
   return (
     <Modal onClose={handleClose} open={open}>
       <Box sx={style}>
         <Typography component="h2" id="modal-modal-title" variant="h6">
-          message window
+          {hasError ? 'Error' : 'congratulations'}
         </Typography>
         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          {message}
+          {`${message} ${hasError ? 'click to continue' : ''}`}
         </Typography>
       </Box>
     </Modal>

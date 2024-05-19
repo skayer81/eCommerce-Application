@@ -5,7 +5,7 @@ export const defaultValues: RegistrationForm = {
   billingCity: '',
   billingCountry: 'RU',
   billingIndex: '',
-  dateOfBirth: '',
+  dateOfBirth: null,
   email: '',
   login: '',
   name: '',

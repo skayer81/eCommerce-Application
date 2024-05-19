@@ -1,5 +1,7 @@
 import { RegisterOptions } from 'react-hook-form';
 
+import { Dayjs } from 'dayjs';
+
 type RulesValidationType = {
   [key in string]: RegisterOptions;
 };
@@ -79,15 +81,16 @@ const RulesValidation: RulesValidationType = {
   },
 
   dateOfbirth: {
-    validate: (value: string) => {
+    validate: (value: Dayjs) => {
       const ENTRY_AGE = 13;
-      const date = new Date(value);
+      const date = new Date(value.toString());
       const entryDate = date.setFullYear(date.getFullYear() + ENTRY_AGE);
       if (entryDate > new Date().getTime()) {
-        return `it's too early for you to come here2`;
+        return `it's too early for you to come here`;
       }
       return true;
     },
+    required: 'Required field',
   },
   postCodeRU: {
     pattern: {
