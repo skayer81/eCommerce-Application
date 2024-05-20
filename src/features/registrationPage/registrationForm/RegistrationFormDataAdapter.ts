@@ -20,7 +20,7 @@ function registrationFormDataAdapter(data: RegistrationForm): RegistrationReques
   };
 
   const result: RegistrationRequestBody = {
-    addresses: [billingAddress, shippingAddress],
+    addresses: data.useShippingAsBilling ? [billingAddress] : [billingAddress, shippingAddress],
     billingAddresses: [INDEX_BILLING_ADRESS],
     dateOfBirth: data.dateOfBirth === null ? '' : data.dateOfBirth.format('YYYY-MM-DD'),
     email: data.email,
@@ -28,7 +28,7 @@ function registrationFormDataAdapter(data: RegistrationForm): RegistrationReques
     lastName: data.surname,
     password: data.password,
     salutation: '',
-    shippingAddresses: [INDEX_SHIPPING_ADRESS],
+    shippingAddresses: data.useShippingAsBilling ? [INDEX_BILLING_ADRESS] : [INDEX_SHIPPING_ADRESS],
     title: '',
   };
 
@@ -36,7 +36,11 @@ function registrationFormDataAdapter(data: RegistrationForm): RegistrationReques
     result.defaultBillingAddress = INDEX_BILLING_ADRESS;
   }
   if (data.useByDefaultShipping) {
-    result.defaultShippingAddress = INDEX_SHIPPING_ADRESS;
+    if (data.useShippingAsBilling) {
+      result.defaultShippingAddress = INDEX_BILLING_ADRESS;
+    } else {
+      result.defaultShippingAddress = INDEX_SHIPPING_ADRESS;
+    }
   }
   return result;
 }
