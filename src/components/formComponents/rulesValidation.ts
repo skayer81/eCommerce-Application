@@ -53,11 +53,18 @@ const RulesValidation: RulesValidationType = {
       const digit = /(?=.*[0-9])/;
       const lowercase = /(?=.*[a-z])/;
       const uppercase = /(?=.*[A-Z])/;
-      const whitespace = new RegExp(/^s+|s+$/g);
-      let result = digit.test(value);
+
+      if (value.trimStart().length != value.length) {
+        return 'Password must not contain spaces at the beginning';
+      }
+      if (value.trimEnd().length != value.length) {
+        return 'Password must not contain spaces at the end';
+      }
+
       if (!value) {
         return 'Required field';
       }
+      let result = digit.test(value);
       if (!result) {
         return 'Password must contain at least 1 number';
       }
@@ -69,10 +76,10 @@ const RulesValidation: RulesValidationType = {
       if (!result) {
         return 'Password must contain at least 1 uppercase letter';
       }
-      result = whitespace.test(value);
-      if (result) {
-        return 'Password must not contain leading or trailing whitespace';
-      }
+      // result = whitespace.test(value);
+      // if (result) {
+      //   return 'Password must not contain leading or trailing whitespace';
+      // }
       if (value.length < minLength) {
         return 'Password must be at least 8 characters long';
       }
