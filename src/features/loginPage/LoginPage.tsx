@@ -49,7 +49,7 @@ export default function LoginPage(): JSX.Element {
         navigation('/');
         loginUserInStore(body.customer.id);
         passwordFlowAuth(data);
-        setLoading(false);
+        // setLoading(false);
       })
       .catch((err: HttpErrorType) => {
         if (err.status === 400) {
@@ -57,6 +57,9 @@ export default function LoginPage(): JSX.Element {
         } else {
           console.error(error);
         }
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
