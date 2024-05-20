@@ -63,10 +63,10 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
 
   useEffect(() => {
     if (checkboxUseAsBilling) {
-      setValue('billingCountry', shippingCountry);
-      setValue('billingAdress', shippingAdress);
-      setValue('billingIndex', shippingIndex);
-      setValue('billingCity', shippingCity);
+      setValue('billingCountry', shippingCountry, { shouldValidate: true });
+      setValue('billingAdress', shippingAdress, { shouldValidate: true });
+      setValue('billingIndex', shippingIndex, { shouldValidate: true });
+      setValue('billingCity', shippingCity, { shouldValidate: true });
     }
     SetIsBillingAdressDisabled(checkboxUseAsBilling);
   }, [

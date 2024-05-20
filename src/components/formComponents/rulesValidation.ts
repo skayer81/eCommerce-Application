@@ -53,11 +53,18 @@ const RulesValidation: RulesValidationType = {
       const digit = /(?=.*[0-9])/;
       const lowercase = /(?=.*[a-z])/;
       const uppercase = /(?=.*[A-Z])/;
-      const whitespace = new RegExp(/^s+|s+$/g);
-      let result = digit.test(value);
+
+      if (value.trimStart().length != value.length) {
+        return 'Password must not contain spaces at the beginning';
+      }
+      if (value.trimEnd().length != value.length) {
+        return 'Password must not contain spaces at the end';
+      }
+
       if (!value) {
         return 'Required field';
       }
+      let result = digit.test(value);
       if (!result) {
         return 'Password must contain at least 1 number';
       }
@@ -69,10 +76,10 @@ const RulesValidation: RulesValidationType = {
       if (!result) {
         return 'Password must contain at least 1 uppercase letter';
       }
-      result = whitespace.test(value);
-      if (result) {
-        return 'Password must not contain leading or trailing whitespace';
-      }
+      // result = whitespace.test(value);
+      // if (result) {
+      //   return 'Password must not contain leading or trailing whitespace';
+      // }
       if (value.length < minLength) {
         return 'Password must be at least 8 characters long';
       }
@@ -86,7 +93,7 @@ const RulesValidation: RulesValidationType = {
       const date = new Date(value.toString());
       const entryDate = date.setFullYear(date.getFullYear() + ENTRY_AGE);
       if (entryDate > new Date().getTime()) {
-        return `it's too early for you to come here`;
+        return `It's too early for you to come here, come back when you're 13 years old`;
       }
       return true;
     },
@@ -94,7 +101,7 @@ const RulesValidation: RulesValidationType = {
   },
   postCodeRU: {
     pattern: {
-      message: 'The postal code value must be in the format: XXXXXX',
+      message: 'The postal code value must be in the format: NNNNNN',
       value: /^[0-9]{6}$/,
     },
     required: 'Required field',
@@ -112,6 +119,22 @@ const RulesValidation: RulesValidationType = {
     pattern: {
       message: 'The postal code value must be in the format: XXX-XXX',
       value: /^[0-9]{3}-[0-9]{3}$/,
+    },
+    required: 'Required field',
+  },
+
+  postCodeJP: {
+    pattern: {
+      message: 'The postal code value must be in the format: NNN-NNNN',
+      value: /^\d{3}-\d{4}$/,
+    },
+    required: 'Required field',
+  },
+
+  postCodeSE: {
+    pattern: {
+      message: 'The postal code value must be in the format: NNN NN',
+      value: /^\d{3}[ ]?\d{2}$/,
     },
     required: 'Required field',
   },
