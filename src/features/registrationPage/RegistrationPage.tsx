@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Container } from '@mui/material';
 
 import ModalMessage from '@/components/modalMessage/modalMessage';
+import { useUserStore } from '@/stores/userStore';
 
 import FormOfRegistration from './registrationForm/RegistrationForm';
 
@@ -17,13 +18,18 @@ export default function RegistrationPage(): JSX.Element {
   const handleClose = (): void => setOpen(false);
 
   const [message, setMessage] = useState('');
+  const { loginUserInStore } = useUserStore();
 
-  const resultOfSubmit = (result: { hasError: boolean; message: string }): void => {
+  const resultOfSubmit = (result: { hasError: boolean; message: string }, id?: string): void => {
     setHasRegFormError(result.hasError);
     setMessage(result.message);
     handleOpen();
     if (!result.hasError) {
       setTimeout(() => {
+        if (typeof id === 'string') {
+          loginUserInStore(id);
+        }
+
         handleClose();
         navigation('/');
       }, DELAY_CLOSE_MESSAGES);
