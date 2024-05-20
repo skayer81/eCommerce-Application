@@ -20,6 +20,7 @@ import {
 
 import { loginUser, passwordFlowAuth } from '@/api/clientService';
 import ButtonToAnotherPage from '@/components/formComponents/ButtonToAnotherPage';
+import RulesValidation from '@/components/formComponents/rulesValidation';
 import { useUserStore } from '@/stores/userStore';
 import { LoginForm } from '@/types/interfaces';
 export default function LoginPage(): JSX.Element {
@@ -107,13 +108,7 @@ export default function LoginPage(): JSX.Element {
                     variant="outlined"
                   />
                 )}
-                rules={{
-                  required: 'Email is required',
-                  pattern: {
-                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                    message: 'Please enter a valid email address',
-                  },
-                }}
+                rules={RulesValidation.mail}
               />
 
               <Controller
@@ -144,18 +139,7 @@ export default function LoginPage(): JSX.Element {
                     variant="outlined"
                   />
                 )}
-                rules={{
-                  required: 'Password is required',
-                  minLength: {
-                    value: 8,
-                    message: 'Password must be at least 8 characters long',
-                  },
-                  pattern: {
-                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)\S+$/,
-                    message:
-                      'Password must contain at least one uppercase letter, one lowercase letter, one digit',
-                  },
-                }}
+                rules={RulesValidation.password}
               />
               {error && (
                 <Alert onClose={() => setError(false)} severity="error">
