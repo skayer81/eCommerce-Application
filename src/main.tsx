@@ -4,10 +4,13 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import { anonymFlowAuth } from './api/clientService';
 import RequireMain from './components/requireMain/RequireMain';
+import AboutPage from './features/aboutPage/AboutPage.tsx';
+import CartPage from './features/cartPage/CartPage.tsx';
 import { ErrorPageLazy as ErrorPage } from './features/errorPage/ErrorPageLazy.tsx';
 import Layout from './features/layout/Layout';
 import { LoginPageLazy as LoginPage } from './features/loginPage/LoginPageLazy.tsx';
 import { MainPageLazy as MainPage } from './features/mainPage/MainPageLazy.tsx';
+import ProfilePage from './features/profilePage/ProfilePage.tsx';
 import { RegistrationPageLazy as RegistrationPage } from './features/registrationPage/RegistrationPageLazy.tsx';
 
 import './assets/fonts/stylesheet.css';
@@ -39,6 +42,18 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <MainPage />,
+      },
+      {
+        path: '/profile',
+        element: <ProfilePage />,
+      },
+      {
+        path: '/cart',
+        element: <CartPage />,
+      },
+      {
+        path: '/about',
+        element: <AboutPage />,
       },
       {
         path: '*',

@@ -1,15 +1,29 @@
 const main = {
   boxSizing: 'border-box',
-  display: 'flex',
+  display: 'grid',
+  gridTemplateAreas: `"top top"
+  "left right"`,
   justifyContent: 'space-between',
   pt: '30px',
 };
 
+const topEl = {
+  gridArea: 'top',
+  display: 'flex',
+  height: 'max-content',
+};
+
+const linkList = {
+  flexWrap: 'wrap',
+  gap: '16px',
+  mb: '16px',
+};
+
 const left = {
+  gridArea: 'left',
   boxSizing: 'border-box',
   display: 'flex',
   flexDirection: 'column',
-  width: 620,
   height: 'max-content',
 };
 
@@ -108,6 +122,7 @@ const description = {
 };
 
 const right = {
+  gridArea: 'right',
   '> img': {
     maxWidth: '380px',
     width: '100%',
@@ -122,4 +137,4 @@ const right = {
   height: '100%',
 };
 
-export { accent, description, left, main, right, subtitle, title };
+export { accent, description, left, linkList, main, right, subtitle, title, topEl };
