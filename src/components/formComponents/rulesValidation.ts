@@ -101,7 +101,7 @@ const RulesValidation: RulesValidationType = {
   },
   postCodeRU: {
     pattern: {
-      message: 'The postal code value must be in the format: XXXXXX',
+      message: 'The postal code value must be in the format: NNNNNN',
       value: /^[0-9]{6}$/,
     },
     required: 'Required field',
@@ -119,6 +119,22 @@ const RulesValidation: RulesValidationType = {
     pattern: {
       message: 'The postal code value must be in the format: XXX-XXX',
       value: /^[0-9]{3}-[0-9]{3}$/,
+    },
+    required: 'Required field',
+  },
+
+  postCodeJP: {
+    pattern: {
+      message: 'The postal code value must be in the format: NNN-NNNN',
+      value: /^\d{3}-\d{4}$/,
+    },
+    required: 'Required field',
+  },
+
+  postCodeSE: {
+    pattern: {
+      message: 'The postal code value must be in the format: NNN NN',
+      value: /^\d{3}[ ]?\d{2}$/,
     },
     required: 'Required field',
   },

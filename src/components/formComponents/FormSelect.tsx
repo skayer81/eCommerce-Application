@@ -42,8 +42,8 @@ const FormSelect = ({
             value={value}
           >
             <MenuItem value={'RU'}>Russia</MenuItem>
-            <MenuItem value={'CN'}>China</MenuItem>
-            <MenuItem value={'ZA'}>South Africa</MenuItem>
+            <MenuItem value={'JP'}>Japan</MenuItem>
+            <MenuItem value={'SE'}>Sweden</MenuItem>
           </Select>
         </FormControl>
       )}
