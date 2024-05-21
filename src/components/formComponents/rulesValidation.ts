@@ -41,7 +41,7 @@ const RulesValidation: RulesValidationType = {
       value: 1,
     },
     pattern: {
-      message: 'The field must contain only Latin letters and special character',
+      message: 'The field must contain only Latin letters, numbers and special character',
       value: /^[A-Za-z0-9 !"#$%&'()*+,-./:_`]+$/,
     },
     required: 'Required field',
@@ -70,16 +70,12 @@ const RulesValidation: RulesValidationType = {
       }
       result = lowercase.test(value);
       if (!result) {
-        return 'Password must contain at least 1 lowercase letter';
+        return 'Password must contain at least 1 lowercase  Latin letter';
       }
       result = uppercase.test(value);
       if (!result) {
-        return 'Password must contain at least 1 uppercase letter';
+        return 'Password must contain at least 1 uppercase Latin letter';
       }
-      // result = whitespace.test(value);
-      // if (result) {
-      //   return 'Password must not contain leading or trailing whitespace';
-      // }
       if (value.length < minLength) {
         return 'Password must be at least 8 characters long';
       }
@@ -93,7 +89,7 @@ const RulesValidation: RulesValidationType = {
       const date = new Date(value.toString());
       const entryDate = date.setFullYear(date.getFullYear() + ENTRY_AGE);
       if (entryDate > new Date().getTime()) {
-        return `It's too early for you to come here, come back when you're 13 years old`;
+        return `It's too early for you to come here, come back when you're ${ENTRY_AGE} years old`;
       }
       return true;
     },
