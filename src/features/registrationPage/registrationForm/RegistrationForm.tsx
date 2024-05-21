@@ -15,7 +15,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import 'dayjs/locale/de';
 
-import { createCustomer, loginUser, passwordFlowAuth } from '@/api/clientService';
+import { createCustomer, getProject, loginUser, passwordFlowAuth } from '@/api/clientService';
 import ButtonToAnotherPage from '@/components/formComponents/ButtonToAnotherPage';
 import { FormInputText } from '@/components/formComponents/FormInputText';
 import FormSelect from '@/components/formComponents/FormSelect';
@@ -85,13 +85,13 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
         return loginUser({ email: data.email, password: data.password });
       })
       .then(({ body }: ClientResponse<CustomerSignInResult>) => {
+        setLoading(false);
         resultOfSubmit(
           { hasError: false, message: 'You have successfully registered' },
           body.customer.id,
         );
-        passwordFlowAuth({ email: data.email, password: data.password });
-        console.log(body);
-        setLoading(false);
+        const root = passwordFlowAuth({ email: data.email, password: data.password });
+        return getProject(root);
       })
       .catch((error: Error) => {
         setLoading(false);
