@@ -18,7 +18,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import { loginUser, passwordFlowAuth } from '@/api/clientService';
+import { getProject, loginUser, passwordFlowAuth } from '@/api/clientService';
 import ButtonToAnotherPage from '@/components/formComponents/ButtonToAnotherPage';
 import RulesValidation from '@/components/formComponents/rulesValidation';
 import { useUserStore } from '@/stores/userStore';
@@ -45,11 +45,11 @@ export default function LoginPage(): JSX.Element {
   const submit: SubmitHandler<LoginForm> = (data: LoginForm): void => {
     setLoading(true);
     loginUser(data)
-      .then(({ body }: ClientResponse<CustomerSignInResult>): void => {
+      .then(({ body }: ClientResponse<CustomerSignInResult>) => {
         navigation('/');
         loginUserInStore(body.customer.id);
-        passwordFlowAuth(data);
-        setLoading(false);
+        const root = passwordFlowAuth(data);
+        return getProject(root);
       })
       .catch((err: HttpErrorType) => {
         if (err.status === 400) {
@@ -57,6 +57,9 @@ export default function LoginPage(): JSX.Element {
         } else {
           console.error(error);
         }
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
