@@ -95,10 +95,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
       })
       .catch((error: Error) => {
         setLoading(false);
-        let message = String(error.message);
-        if (!message) {
-          message = '';
-        }
+        const message = String(error.message) ?? '';
         resultOfSubmit({ hasError: true, message: message });
         console.log(error);
       });

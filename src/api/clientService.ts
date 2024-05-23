@@ -67,8 +67,6 @@ export async function loginUser({ email, password }: LoginForm): Promise<ClientR
       },
     })
     .execute();
-  // .then(console.log)
-  // .catch(console.error);
 }
 
 export async function checkUserEmail(email: string): Promise<void> {

@@ -31,7 +31,7 @@ const FormSelect = ({
         <FormControl fullWidth size="small">
           <InputLabel id={id}>{label}</InputLabel>
           <Select
-            disabled={isDisabled != undefined ? isDisabled : false}
+            disabled={!!isDisabled}
             error={!!errors[name]?.message}
             fullWidth
             id={id}
