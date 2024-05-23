@@ -29,7 +29,7 @@ export const FormInputText = ({
       name={name}
       render={({ field: { onChange, value } }) => (
         <TextField
-          disabled={isDisabled != undefined ? isDisabled : false}
+          disabled={!!isDisabled}
           error={!!errors[name]?.message}
           fullWidth
           helperText={errors[name]?.message}

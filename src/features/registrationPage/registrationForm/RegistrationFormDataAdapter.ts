@@ -36,11 +36,9 @@ function registrationFormDataAdapter(data: RegistrationForm): RegistrationReques
     result.defaultBillingAddress = INDEX_BILLING_ADRESS;
   }
   if (data.useByDefaultShipping) {
-    if (data.useShippingAsBilling) {
-      result.defaultShippingAddress = INDEX_BILLING_ADRESS;
-    } else {
-      result.defaultShippingAddress = INDEX_SHIPPING_ADRESS;
-    }
+    result.defaultShippingAddress = data.useShippingAsBilling
+      ? INDEX_BILLING_ADRESS
+      : INDEX_SHIPPING_ADRESS;
   }
   return result;
 }

@@ -5,6 +5,7 @@ import {
 } from '@commercetools/platform-sdk';
 import { Client, ClientBuilder } from '@commercetools/sdk-client-v2';
 
+import { PROJECT_KEY } from '@/config/clientConfig';
 import { LoginForm, RegistrationRequestBody } from '@/types/interfaces';
 
 import {
@@ -24,7 +25,7 @@ let apiRoot = getApiRoot(ctpClient);
 
 function getApiRoot(ctpClient: Client): ByProjectKeyRequestBuilder {
   return createApiBuilderFromCtpClient(ctpClient).withProjectKey({
-    projectKey: import.meta.env.VITE_PROJECT_KEY,
+    projectKey: PROJECT_KEY,
   });
 }
 
@@ -67,8 +68,6 @@ export async function loginUser({ email, password }: LoginForm): Promise<ClientR
       },
     })
     .execute();
-  // .then(console.log)
-  // .catch(console.error);
 }
 
 export async function checkUserEmail(email: string): Promise<void> {
