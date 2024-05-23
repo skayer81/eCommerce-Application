@@ -3,17 +3,17 @@ import { MemoryRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import ButtonToAnotherPage from './ButtonToAnotherPage';
+import ErrorPage from './ErrorPage';
 
 describe('ButtonToAnotherPage', () => {
   it('should render', () => {
     render(
       <MemoryRouter>
-        <ButtonToAnotherPage addressPage="./" textOnButton={'registration'} title={'title'} />
+        <ErrorPage />
       </MemoryRouter>,
     );
 
-    const textOnButton = screen.getByText('registration');
-    expect(textOnButton).toBeInTheDocument();
+    const text = screen.getByText('Page not found');
+    expect(text).toBeInTheDocument();
   });
 });
