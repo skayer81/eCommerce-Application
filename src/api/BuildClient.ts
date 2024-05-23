@@ -6,12 +6,14 @@ import {
 } from '@commercetools/sdk-client-v2';
 import fetch from 'node-fetch';
 
-const PROJECT_KEY = import.meta.env.VITE_PROJECT_KEY;
-const SCOPES = [import.meta.env.VITE_SCOPES];
-const API_URL = import.meta.env.VITE_API_URL;
-const AUTH_URL = import.meta.env.VITE_AUTH_URL;
-const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
-const CLIENT_SECRET = import.meta.env.VITE_CLIENT_SECRET;
+import {
+  API_URL,
+  AUTH_URL,
+  CLIENT_ID,
+  CLIENT_SECRET,
+  PROJECT_KEY,
+  SCOPES,
+} from '../config/clientConfig.ts';
 
 // Configure authMiddlewareOptions
 export const authMiddlewareOptions: AuthMiddlewareOptions = {
