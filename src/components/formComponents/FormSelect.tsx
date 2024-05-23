@@ -4,6 +4,8 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 import { RegistrationForm } from '@/types/interfaces';
 
+import postalCodesMap from './postalCodes';
+
 type FormInputProps = {
   control: Control<RegistrationForm>;
   errors: FieldErrors<RegistrationForm>;
@@ -41,9 +43,13 @@ const FormSelect = ({
             sx={{ mb: 1 }}
             value={value}
           >
-            <MenuItem value={'RU'}>Russia</MenuItem>
-            <MenuItem value={'JP'}>Japan</MenuItem>
-            <MenuItem value={'SE'}>Sweden</MenuItem>
+            {postalCodesMap.map((elem, index) => {
+              return (
+                <MenuItem key={index} value={elem.code}>
+                  {elem.name}
+                </MenuItem>
+              );
+            })}
           </Select>
         </FormControl>
       )}
