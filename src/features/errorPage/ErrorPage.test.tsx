@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 
 import ErrorPage from './ErrorPage';
 
-describe('ButtonToAnotherPage', () => {
+describe('ErrorPage', () => {
   it('should render', () => {
     render(
       <MemoryRouter>

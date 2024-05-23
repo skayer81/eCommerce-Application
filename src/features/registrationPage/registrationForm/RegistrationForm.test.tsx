@@ -7,7 +7,7 @@ import FormOfRegistration from './RegistrationForm';
 
 const resultOfSubmit = (): void => {};
 
-describe('ButtonToAnotherPage', () => {
+describe('FormOfRegistration', () => {
   it('should render', () => {
     render(
       <MemoryRouter>

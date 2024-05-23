@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 
 import NoAuthPanel from './NoAuthPanel';
 
-describe('ButtonToAnotherPage', () => {
+describe('NoAuthPanel', () => {
   it('should render', () => {
     render(
       <MemoryRouter>

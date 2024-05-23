@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 
 import RegistrationPage from './RegistrationPage';
 
-describe('ButtonToAnotherPage', () => {
+describe('RegistrationPage', () => {
   it('should render', () => {
     render(
       <MemoryRouter>
