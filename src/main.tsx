@@ -2,8 +2,12 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import { anonymFlowAuth } from './api/clientService';
+import { TokenStore } from '@commercetools/sdk-client-v2';
+
+import { anonymFlowAuth, getCustomer, refreshFlowAuth } from './api/clientService';
+import { tokenCache } from './api/tokenCache.ts';
 import RequireMain from './components/requireMain/RequireMain';
+import { PROJECT_KEY } from './config/clientConfig.ts';
 import AboutPage from './features/aboutPage/AboutPage.tsx';
 import CartPage from './features/cartPage/CartPage.tsx';
 import { ErrorPageLazy as ErrorPage } from './features/errorPage/ErrorPageLazy.tsx';
@@ -16,7 +20,18 @@ import { RegistrationPageLazy as RegistrationPage } from './features/registratio
 import './assets/fonts/stylesheet.css';
 import './index.css';
 
-anonymFlowAuth();
+const tokenData = localStorage.getItem(PROJECT_KEY);
+if (tokenData) {
+  const tokenStore = JSON.parse(tokenData) as TokenStore;
+  if (tokenStore.refreshToken) {
+    console.log('time=', tokenStore.expirationTime);
+    console.log('refreshtoken=', tokenStore.refreshToken);
+    const root = refreshFlowAuth(tokenStore.refreshToken, tokenCache);
+    await getCustomer(root);
+  }
+} else {
+  anonymFlowAuth();
+}
 
 const router = createBrowserRouter([
   {
