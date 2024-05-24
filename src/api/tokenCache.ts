@@ -5,7 +5,6 @@ export class LocalStorageTokenCache implements TokenCache {
   private tokenKey = PROJECT_KEY;
 
   deleteToken(): void {
-    console.log('delete');
     localStorage.removeItem(this.tokenKey);
     document.cookie = `${this.tokenKey}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
   }
@@ -15,11 +14,7 @@ export class LocalStorageTokenCache implements TokenCache {
   }
 
   set(tokenData: TokenStore): void {
-    console.log('tokenstore=', tokenData);
-    // const newTokenData: TokenStore = { ...tokenData, expirationTime: Date.now() + 60 * 1000 };
-
     localStorage.setItem(this.tokenKey, JSON.stringify(tokenData));
-
     document.cookie = `${this.tokenKey}=${tokenData.token}; expires=${new Date(tokenData.expirationTime).toUTCString()}; path=/`;
   }
 }
