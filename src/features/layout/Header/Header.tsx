@@ -16,13 +16,16 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { anonymFlowAuth } from '@/api/clientService';
-import { tokenCache } from '@/api/tokenCache';
 import AuthPanel from '@/components/authPanel/AuthPanel';
 import NoAuthPanel from '@/components/noAuthPanel/NoAuthPanel';
 import { useUserStore } from '@/stores/userStore';
 
 import logo from '../../../assets/icons/Logo.svg';
 import { buttons, header, li, ul } from './Styles';
+// import { PROJECT_KEY } from '@/config/clientConfig';
+// import { deleteCookie } from '@/utils/helpers/cookies';
+// import { TokenCache } from '@commercetools/sdk-client-v2';
+import { tokenCache } from '@/api/tokenCache';
 
 export default function Header(): JSX.Element {
   const theme = useTheme();
@@ -42,9 +45,13 @@ export default function Header(): JSX.Element {
   };
 
   const logout = (): void => {
+    console.log('logout');
     logoutUserInStore();
     anonymFlowAuth();
     tokenCache.deleteToken();
+
+    // localStorage.removeItem(PROJECT_KEY);
+    // deleteCookie(PROJECT_KEY);
   };
 
   const menuItems = [
@@ -113,7 +120,7 @@ export default function Header(): JSX.Element {
             </Box>
             <Box component="div" sx={buttons}>
               <NoAuthPanel />
-              {isLogin ? <AuthPanel /> : ''}
+              {isLogin ? <AuthPanel logout={logout} /> : ''}
             </Box>
           </>
         ) : (

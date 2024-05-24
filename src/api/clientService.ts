@@ -12,6 +12,7 @@ import {
   authAnonymMiddlewareOptions,
   authMiddlewareOptions,
   authUserMiddlewareOptions,
+  existingTokenMiddlewareoptions,
   httpMiddlewareOptions,
   refreshMiddlewareOptions,
 } from './BuildClient';
@@ -61,6 +62,18 @@ export function refreshFlowAuth(
 ): ByProjectKeyRequestBuilder {
   const ctpClient = new ClientBuilder()
     .withRefreshTokenFlow(refreshMiddlewareOptions(token, tokenCache))
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .withLoggerMiddleware()
+    .build();
+
+  apiRoot = getApiRoot(ctpClient);
+
+  return apiRoot;
+}
+
+export function existingFlowAuth(token: string): ByProjectKeyRequestBuilder {
+  const ctpClient = new ClientBuilder()
+    .withExistingTokenFlow(token, existingTokenMiddlewareoptions)
     .withHttpMiddleware(httpMiddlewareOptions)
     .withLoggerMiddleware()
     .build();

@@ -1,6 +1,7 @@
 import {
   AnonymousAuthMiddlewareOptions,
   AuthMiddlewareOptions,
+  ExistingTokenMiddlewareOptions,
   HttpMiddlewareOptions,
   PasswordAuthMiddlewareOptions,
   RefreshAuthMiddlewareOptions,
@@ -90,4 +91,8 @@ export const refreshMiddlewareOptions = (
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     fetch,
   };
+};
+
+export const existingTokenMiddlewareoptions: ExistingTokenMiddlewareOptions = {
+  force: true,
 };

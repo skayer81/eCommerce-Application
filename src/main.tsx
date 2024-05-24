@@ -2,10 +2,13 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import { TokenStore } from '@commercetools/sdk-client-v2';
-
-import { anonymFlowAuth, getCustomer, refreshFlowAuth } from './api/clientService';
-import { tokenCache } from './api/tokenCache.ts';
+import {
+  anonymFlowAuth,
+  /*  refreshFlowAuth, */
+  existingFlowAuth,
+  getCustomer,
+} from './api/clientService';
+// import { tokenCache } from './api/tokenCache.ts';
 import RequireMain from './components/requireMain/RequireMain';
 import { PROJECT_KEY } from './config/clientConfig.ts';
 import AboutPage from './features/aboutPage/AboutPage.tsx';
@@ -16,20 +19,45 @@ import { LoginPageLazy as LoginPage } from './features/loginPage/LoginPageLazy.t
 import { MainPageLazy as MainPage } from './features/mainPage/MainPageLazy.tsx';
 import ProfilePage from './features/profilePage/ProfilePage.tsx';
 import { RegistrationPageLazy as RegistrationPage } from './features/registrationPage/RegistrationPageLazy.tsx';
+// import { TokenStore } from '@commercetools/sdk-client-v2';
+import { getCookie } from './utils/helpers/cookies.ts';
 
 import './assets/fonts/stylesheet.css';
 import './index.css';
 
-const tokenData = localStorage.getItem(PROJECT_KEY);
-if (tokenData) {
-  const tokenStore = JSON.parse(tokenData) as TokenStore;
-  if (tokenStore.refreshToken) {
-    console.log('time=', tokenStore.expirationTime);
-    console.log('refreshtoken=', tokenStore.refreshToken);
-    const root = refreshFlowAuth(tokenStore.refreshToken, tokenCache);
-    await getCustomer(root);
-  }
+// const tokenData = localStorage.getItem(PROJECT_KEY);
+
+// refreshflow
+// if (tokenData) {
+//   const tokenStore = JSON.parse(tokenData) as TokenStore;
+//   if (tokenStore.refreshToken) {
+//     console.log('time=', tokenStore.expirationTime);
+//     console.log('refreshtoken=', tokenStore.refreshToken);
+//     const root = refreshFlowAuth(tokenStore.refreshToken, tokenCache);
+//     await getCustomer(root);
+//   }
+// } else {
+//   anonymFlowAuth();
+// }
+
+// existingflow
+// if (tokenData) {
+//   const tokenStore = JSON.parse(tokenData) as TokenStore;
+//   const accessToken = 'Bearer ' + tokenStore.token;
+//   const root = existingFlowAuth(accessToken);
+//   await getCustomer(root);
+// } else {
+//   anonymFlowAuth();
+// }
+
+const token = getCookie(PROJECT_KEY);
+if (token !== null) {
+  console.log(`Значение куки 'myCookie': ${token}`);
+  const accessToken = 'Bearer ' + token;
+  const root = existingFlowAuth(accessToken);
+  await getCustomer(root);
 } else {
+  console.log("Куки 'myCookie' не существует.");
   anonymFlowAuth();
 }
 
