@@ -6,6 +6,7 @@ import { anonymFlowAuth } from './api/clientService';
 import RequireMain from './components/requireMain/RequireMain';
 import AboutPage from './features/aboutPage/AboutPage.tsx';
 import CartPage from './features/cartPage/CartPage.tsx';
+import { CatalogPageLazy as CatalogPage } from './features/catalogPage/CatalogPageLazy.tsx';
 import { ErrorPageLazy as ErrorPage } from './features/errorPage/ErrorPageLazy.tsx';
 import Layout from './features/layout/Layout';
 import { LoginPageLazy as LoginPage } from './features/loginPage/LoginPageLazy.tsx';
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <MainPage />,
+      },
+      {
+        path: '/catalog',
+        element: <CatalogPage />,
       },
       {
         path: '/profile',
