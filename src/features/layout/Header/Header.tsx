@@ -2,7 +2,7 @@ import type { JSX } from 'react';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-import MenuIcon from '@mui/icons-material/Menu';
+import { Close, Menu } from '@mui/icons-material';
 import {
   Box,
   Drawer,
@@ -49,51 +49,65 @@ export default function Header(): JSX.Element {
 
   const menuItems = [
     { text: 'Main', path: '/' },
-    { text: 'Login', path: '/login' },
-    { text: 'Sign up', path: '/registration' },
+    { text: 'Catalog', path: '/catalog' },
   ];
 
   const DrawerList = (
-    <Box
-      onClick={toggleDrawer(false)}
-      role="presentation"
-      sx={{
-        width: '100vw',
-        height: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      <List
+    <>
+      <IconButton
+        onClick={toggleDrawer(false)}
+        style={{ top: '10px', right: '10px', position: 'absolute' }}
+      >
+        <Close />
+      </IconButton>
+      <Box
+        role="presentation"
         sx={{
+          width: '100vw',
+          height: '100vh',
           display: 'flex',
-          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
-        {menuItems.map((item, index) => (
-          <ListItemButton
-            component={Link}
-            key={index}
-            sx={{
-              color: location.pathname === item.path ? '#2e7d32' : 'inherit',
-            }}
-            to={item.path}
-          >
-            <ListItemText primary={item.text} primaryTypographyProps={{ fontSize: '25px' }} />
-          </ListItemButton>
-        ))}
-        {isLogin ? (
-          <ListItemButton component={Link} onClick={logout} to="/">
-            <ListItemText primary={'Logout'} primaryTypographyProps={{ fontSize: '25px' }} />
-          </ListItemButton>
-        ) : (
-          ''
-        )}
-      </List>
-    </Box>
+        <List
+          onClick={toggleDrawer(false)}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          {menuItems.map((item, index) => (
+            <ListItemButton
+              component={Link}
+              key={index}
+              sx={{
+                color: location.pathname === item.path ? '#2e7d32' : 'inherit',
+              }}
+              to={item.path}
+            >
+              <ListItemText primary={item.text} primaryTypographyProps={{ fontSize: '25px' }} />
+            </ListItemButton>
+          ))}
+          {isLogin ? (
+            <ListItemButton component={Link} onClick={logout} to="/">
+              <ListItemText primary={'Logout'} primaryTypographyProps={{ fontSize: '25px' }} />
+            </ListItemButton>
+          ) : (
+            <>
+              <ListItemButton component={Link} to="/login">
+                <ListItemText primary={'Log in'} primaryTypographyProps={{ fontSize: '25px' }} />
+              </ListItemButton>
+              <ListItemButton component={Link} to="/registration">
+                <ListItemText primary={'Sign up'} primaryTypographyProps={{ fontSize: '25px' }} />
+              </ListItemButton>
+            </>
+          )}
+        </List>
+      </Box>
+    </>
   );
 
   return (
@@ -109,6 +123,9 @@ export default function Header(): JSX.Element {
                 <Typography component="li" sx={li}>
                   <Link to="/">Main</Link>
                 </Typography>
+                <Typography component="li" sx={li}>
+                  <Link to="/catalog">Catalog</Link>
+                </Typography>
               </List>
             </Box>
             <Box component="div" sx={buttons}>
@@ -118,7 +135,7 @@ export default function Header(): JSX.Element {
           </>
         ) : (
           <IconButton aria-label="menu" color="inherit" edge="end" onClick={toggleDrawer(true)}>
-            <MenuIcon sx={{ fontSize: '40px' }} />
+            <Menu sx={{ fontSize: '40px' }} />
           </IconButton>
         )}
         <Drawer anchor="right" onClose={toggleDrawer(false)} open={drawerOpen}>
