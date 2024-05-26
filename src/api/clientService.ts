@@ -12,8 +12,11 @@ import {
   authAnonymMiddlewareOptions,
   authMiddlewareOptions,
   authUserMiddlewareOptions,
+  existingTokenMiddlewareoptions,
   httpMiddlewareOptions,
+  refreshMiddlewareOptions,
 } from './BuildClient';
+import { LocalStorageTokenCache } from './tokenCache';
 
 const ctpClient = new ClientBuilder()
   .withClientCredentialsFlow(authMiddlewareOptions)
@@ -44,6 +47,33 @@ export function anonymFlowAuth(): ByProjectKeyRequestBuilder {
 export function passwordFlowAuth({ email, password }: LoginForm): ByProjectKeyRequestBuilder {
   const ctpClient = new ClientBuilder()
     .withPasswordFlow(authUserMiddlewareOptions(email, password))
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .withLoggerMiddleware()
+    .build();
+
+  apiRoot = getApiRoot(ctpClient);
+
+  return apiRoot;
+}
+
+export function refreshFlowAuth(
+  token: string,
+  tokenCache: LocalStorageTokenCache,
+): ByProjectKeyRequestBuilder {
+  const ctpClient = new ClientBuilder()
+    .withRefreshTokenFlow(refreshMiddlewareOptions(token, tokenCache))
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .withLoggerMiddleware()
+    .build();
+
+  apiRoot = getApiRoot(ctpClient);
+
+  return apiRoot;
+}
+
+export function existingFlowAuth(token: string): ByProjectKeyRequestBuilder {
+  const ctpClient = new ClientBuilder()
+    .withExistingTokenFlow(token, existingTokenMiddlewareoptions)
     .withHttpMiddleware(httpMiddlewareOptions)
     .withLoggerMiddleware()
     .build();
@@ -90,4 +120,8 @@ export function createCustomer(body: RegistrationRequestBody): Promise<ClientRes
       body: body,
     })
     .execute();
+}
+
+export async function getCustomer(root: ByProjectKeyRequestBuilder): Promise<void> {
+  return root.me().get().execute().then(console.log).catch(console.error);
 }

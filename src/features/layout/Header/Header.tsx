@@ -16,6 +16,7 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { anonymFlowAuth } from '@/api/clientService';
+import { tokenCache } from '@/api/tokenCache';
 import AuthPanel from '@/components/authPanel/AuthPanel';
 import NoAuthPanel from '@/components/noAuthPanel/NoAuthPanel';
 import { useUserStore } from '@/stores/userStore';
@@ -43,6 +44,7 @@ export default function Header(): JSX.Element {
   const logout = (): void => {
     logoutUserInStore();
     anonymFlowAuth();
+    tokenCache.deleteToken();
   };
 
   const menuItems = [
@@ -127,7 +129,8 @@ export default function Header(): JSX.Element {
               </List>
             </Box>
             <Box component="div" sx={buttons}>
-              {isLogin ? <AuthPanel /> : <NoAuthPanel />}
+              <NoAuthPanel />
+              {isLogin ? <AuthPanel logout={logout} /> : ''}
             </Box>
           </>
         ) : (
