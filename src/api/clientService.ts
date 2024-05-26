@@ -125,3 +125,7 @@ export function createCustomer(body: RegistrationRequestBody): Promise<ClientRes
 export async function getCustomer(root: ByProjectKeyRequestBuilder): Promise<void> {
   return root.me().get().execute().then(console.log).catch(console.error);
 }
+
+export function geypPoductByID(key: string): Promise<ClientResponse> {
+  return apiRoot.products().withKey({ key: key }).get().execute();
+}
