@@ -139,3 +139,10 @@ export async function getMainCategories(): Promise<ClientResponse> {
     .get({ queryArgs: { where: ['parent(id is not defined)'] } })
     .execute();
 }
+
+export async function getSubCategories(categoryId: string): Promise<ClientResponse> {
+  return apiRoot
+    .categories()
+    .get({ queryArgs: { where: [`parent(id="${categoryId}")`] } })
+    .execute();
+}

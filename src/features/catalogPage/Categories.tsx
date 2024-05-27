@@ -9,7 +9,8 @@ import {
 } from '@mui/material';
 import { useQuery /* useQueryClient  */ } from '@tanstack/react-query';
 
-import { getMainCategories } from '@/api/clientService';
+import { getMainCategories, getSubCategories } from '@/api/clientService';
+// import { Link } from 'react-router-dom';
 // import { useState } from 'react';
 
 // import ExpandLess from '@mui/icons-material/ExpandLess';
@@ -28,8 +29,8 @@ function Categories(): JSX.Element {
     queryFn: getMainCategories,
   });
 
-  // const getSubcategories = (categoryId) => {
-  //   return useQuery(['subcategories', categoryId], () => fetchSubcategories(categoryId), {
+  // const getSubcategories = (categoryId:string) => {
+  //   return useQuery<ClientResponse<CategoryPagedQueryResponse>>(['subcategories', categoryId], () => getSubcategories(categoryId), {
   //     enabled: !!categoryId,
   //   });
   // };
@@ -43,10 +44,7 @@ function Categories(): JSX.Element {
     return (
       <List>
         {categories.body.results.map((category) => (
-          <CategoryItem
-            category={category} /* getSubcategories={getSubcategories} */
-            key={category.id}
-          />
+          <CategoryItem category={category} key={category.id} />
         ))}
       </List>
     );
@@ -60,42 +58,43 @@ type CategoryProps = {
 };
 
 function CategoryItem({ category }: CategoryProps): JSX.Element {
-  // const {
-  //   data: subcategories,
-  //   isLoading: isLoadingSubcategories,
-  //   error: errorSubcategories,
-  // } = getSubcategories(category.id);
+  const {
+    data: subcategories,
+    error: errorSubcategories,
+    isSuccess,
+  } = useQuery<ClientResponse<CategoryPagedQueryResponse>>({
+    queryKey: ['subcategories', category.id],
+    queryFn: () => getSubCategories(category.id),
+  });
 
-  return (
-    // <ListItem>
-    //   <Typography variant="h6">{category.name}</Typography>
-    //   {isLoadingSubcategories && <CircularProgress size={20} />}
-    //   {errorSubcategories && (
-    //     <Typography>Error fetching subcategories: {errorSubcategories.message}</Typography>
-    //   )}
-    //   {subcategories && (
-    //     <List>
-    //       {subcategories.map((subcategory) => (
-    //         <ListItem key={subcategory.id}>
-    //           <Typography variant="body2">{subcategory.name}</Typography>
-    //         </ListItem>
-    //       ))}
-    //     </List>
-    //   )}
-    // </ListItem>
-    <>
-      <ListItemButton sx={{ height: '50px' }}>
-        <ListItemText primary={category.name.en} />
-      </ListItemButton>
-      <Collapse in={true} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4, height: '30px' }}>
-            <ListItemText primary="Starred" />
-          </ListItemButton>
-        </List>
-      </Collapse>
-    </>
-  );
+  if (errorSubcategories) {
+    return <Typography>Error fetching categories: {errorSubcategories.message}</Typography>;
+  }
+
+  if (isSuccess) {
+    return (
+      <>
+        <ListItemButton sx={{ height: '50px' }}>
+          <ListItemText primary={category.name.en} />
+        </ListItemButton>
+        <Collapse in={true} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            {subcategories.body.results.map((subcategory) => (
+              <ListItemButton key={subcategory.id} sx={{ pl: 4, height: '30px' }}>
+                <ListItemText primary={subcategory.name.en} />
+              </ListItemButton>
+            ))}
+
+            <ListItemButton sx={{ pl: 4, height: '30px' }}>
+              <ListItemText primary="Starred" />
+            </ListItemButton>
+          </List>
+        </Collapse>
+      </>
+    );
+  }
+
+  return <CircularProgress />;
 }
 
 export default Categories;

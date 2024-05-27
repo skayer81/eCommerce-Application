@@ -34,11 +34,12 @@ function CatalogPage(): JSX.Element {
       <Grid container spacing={2}>
         {/* Первая колонка */}
         <Grid item xs={2}>
-          <Paper>
-            <Typography variant="h6">Первая колонка</Typography>
-            <Typography>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Typography>
+          <Paper sx={{ pt: '10px' }}>
+            <Typography align="center" variant="h6">
+              Categories
+            </Typography>
+            <Categories />
           </Paper>
-          <Categories />
         </Grid>
         {/* Вторая колонка */}
         <Grid item xs={10}>
