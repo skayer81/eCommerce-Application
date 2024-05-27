@@ -125,3 +125,10 @@ export function createCustomer(body: RegistrationRequestBody): Promise<ClientRes
 export async function getCustomer(root: ByProjectKeyRequestBuilder): Promise<void> {
   return root.me().get().execute().then(console.log).catch(console.error);
 }
+
+export async function getProducts(): Promise<ClientResponse> {
+  return apiRoot
+    .productProjections()
+    .get({ queryArgs: { limit: 20 } })
+    .execute();
+}
