@@ -129,6 +129,13 @@ export async function getCustomer(root: ByProjectKeyRequestBuilder): Promise<voi
 export async function getProducts(): Promise<ClientResponse> {
   return apiRoot
     .productProjections()
-    .get({ queryArgs: { limit: 20 } })
+    .get({ queryArgs: { limit: 50 } })
+    .execute();
+}
+
+export async function getMainCategories(): Promise<ClientResponse> {
+  return apiRoot
+    .categories()
+    .get({ queryArgs: { where: ['parent(id is not defined)'] } })
     .execute();
 }

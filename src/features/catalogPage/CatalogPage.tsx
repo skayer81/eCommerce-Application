@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getProducts } from '@/api/clientService';
 import ErrorAlert from '@/components/errorAlert/ErrorAlert';
 
+import Categories from './Categories';
 import ProductCard from './ProductCard';
 
 function CatalogPage(): JSX.Element {
@@ -37,6 +38,7 @@ function CatalogPage(): JSX.Element {
             <Typography variant="h6">Первая колонка</Typography>
             <Typography>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Typography>
           </Paper>
+          <Categories />
         </Grid>
         {/* Вторая колонка */}
         <Grid item xs={10}>
