@@ -5,7 +5,6 @@ import {
 } from '@commercetools/platform-sdk';
 import { Grid, Paper, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
-// import { useState } from 'react';
 
 import { getProducts } from '@/api/clientService';
 import ErrorAlert from '@/components/errorAlert/ErrorAlert';
