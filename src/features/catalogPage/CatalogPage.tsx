@@ -10,6 +10,7 @@ import { getProducts } from '@/api/clientService';
 import ErrorAlert from '@/components/errorAlert/ErrorAlert';
 import { useCatalogStore } from '@/stores/catalogStore';
 
+import CatalogBreadcrumbs from './CatalogBreadCrumbs';
 import Categories from './Categories';
 import ProductCard from './ProductCard';
 
@@ -46,7 +47,9 @@ function CatalogPage(): JSX.Element {
         <Grid item xs={10}>
           <Grid container direction="column" spacing={2}>
             {/* Первый ряд второй колонки */}
+
             <Grid item>
+              <CatalogBreadcrumbs />
               <Paper>
                 <Typography variant="h6">Вторая колонка - Ряд 1</Typography>
                 <Typography>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Typography>
