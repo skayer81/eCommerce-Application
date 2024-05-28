@@ -126,10 +126,23 @@ export async function getCustomer(root: ByProjectKeyRequestBuilder): Promise<voi
   return root.me().get().execute().then(console.log).catch(console.error);
 }
 
-export async function getProducts(): Promise<ClientResponse> {
+export async function getProducts(categoryId = ''): Promise<ClientResponse> {
+  // const whereCondition = categoryId ? `categories.id subtree("${categoryId}")` : undefined;
+  // const queryArgs = {
+  // limit: 50,
+  // where: categoryId ? `categories(id="${categoryId}")` : undefined,
+  // where: whereCondition,
+  // };
+
   return apiRoot
     .productProjections()
-    .get({ queryArgs: { limit: 50 } })
+    .search()
+    .get({
+      queryArgs: {
+        'filter.query': categoryId ? `categories.id:subtree("${categoryId}")` : undefined,
+        limit: 50, // Установите желаемый limit
+      },
+    })
     .execute();
 }
 
