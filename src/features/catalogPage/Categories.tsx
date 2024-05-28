@@ -24,9 +24,10 @@ function Categories(): JSX.Element {
     /*  isLoading: isLoadingCategories, */
     error: errorCategories,
     isSuccess,
-  } = useQuery<ClientResponse<CategoryPagedQueryResponse>>({
+  } = useQuery({
     queryKey: ['categories'],
     queryFn: getMainCategories,
+    select: (data: ClientResponse<CategoryPagedQueryResponse>) => data.body.results,
   });
 
   // const getSubcategories = (categoryId:string) => {
@@ -40,10 +41,10 @@ function Categories(): JSX.Element {
   }
 
   if (isSuccess) {
-    console.log('categories=', categories.body.results);
+    console.log('categories=', categories);
     return (
       <List>
-        {categories.body.results.map((category) => (
+        {categories.map((category) => (
           <CategoryItem category={category} key={category.id} />
         ))}
       </List>
@@ -62,9 +63,10 @@ function CategoryItem({ category }: CategoryProps): JSX.Element {
     data: subcategories,
     error: errorSubcategories,
     isSuccess,
-  } = useQuery<ClientResponse<CategoryPagedQueryResponse>>({
+  } = useQuery({
     queryKey: ['subcategories', category.id],
     queryFn: () => getSubCategories(category.id),
+    select: (data: ClientResponse<CategoryPagedQueryResponse>) => data.body.results,
   });
 
   if (errorSubcategories) {
@@ -79,7 +81,7 @@ function CategoryItem({ category }: CategoryProps): JSX.Element {
         </ListItemButton>
         <Collapse in={true} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            {subcategories.body.results.map((subcategory) => (
+            {subcategories.map((subcategory) => (
               <ListItemButton key={subcategory.id} sx={{ pl: 4, height: '30px' }}>
                 <ListItemText primary={subcategory.name.en} />
               </ListItemButton>
