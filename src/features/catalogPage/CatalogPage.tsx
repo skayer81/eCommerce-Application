@@ -13,15 +13,14 @@ import Categories from './Categories';
 import ProductCard from './ProductCard';
 
 function CatalogPage(): JSX.Element {
-  const { data, isSuccess, isError, error } = useQuery<
-    ClientResponse<ProductProjectionPagedQueryResponse>
-  >({
+  const { data, isSuccess, isError, error } = useQuery({
     queryKey: ['products'],
     queryFn: getProducts,
+    select: (data: ClientResponse<ProductProjectionPagedQueryResponse>) => data.body.results,
   });
 
   if (isSuccess) {
-    console.log('products=', data.body.results);
+    console.log('products=', data);
   }
 
   if (isError) {
@@ -54,7 +53,7 @@ function CatalogPage(): JSX.Element {
             {/* Второй ряд второй колонки */}
             <Grid item>
               <Grid container spacing={2}>
-                {data?.body.results.map((item: ProductProjection) => (
+                {data?.map((item: ProductProjection) => (
                   <ProductCard
                     description={item.metaDescription?.en}
                     imageUrl={item.masterVariant.images?.[0].url}
