@@ -39,6 +39,7 @@ type CategoryProps = {
 
 function CategoryItem({ category }: CategoryProps): JSX.Element {
   const setCategoryId = useCatalogStore((state) => state.setCategoryId);
+  const categoryId = useCatalogStore((state) => state.categoryId);
   const {
     data: subcategories,
     error: errorSubcategories,
@@ -56,7 +57,11 @@ function CategoryItem({ category }: CategoryProps): JSX.Element {
   if (isSuccess) {
     return (
       <>
-        <ListItemButton onClick={() => setCategoryId(category.id)} sx={{ height: '50px' }}>
+        <ListItemButton
+          onClick={() => setCategoryId(category.id)}
+          selected={categoryId === category.id}
+          sx={{ height: '50px' }}
+        >
           <ListItemText primary={category.name.en} />
         </ListItemButton>
         <Collapse in={true} timeout="auto" unmountOnExit>
@@ -65,6 +70,7 @@ function CategoryItem({ category }: CategoryProps): JSX.Element {
               <ListItemButton
                 key={subcategory.id}
                 onClick={() => setCategoryId(subcategory.id)}
+                selected={categoryId === subcategory.id}
                 sx={{ pl: 4, height: '30px' }}
               >
                 <ListItemText primary={subcategory.name.en} />
