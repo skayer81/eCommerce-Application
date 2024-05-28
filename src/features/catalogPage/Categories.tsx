@@ -38,7 +38,7 @@ type CategoryProps = {
 };
 
 function CategoryItem({ category }: CategoryProps): JSX.Element {
-  const setCategoryId = useCatalogStore((state) => state.setCategoryId);
+  const setCategory = useCatalogStore((state) => state.setCategory);
   const categoryId = useCatalogStore((state) => state.categoryId);
   const {
     data: subcategories,
@@ -58,7 +58,7 @@ function CategoryItem({ category }: CategoryProps): JSX.Element {
     return (
       <>
         <ListItemButton
-          onClick={() => setCategoryId(category.id)}
+          onClick={() => setCategory({ categoryId: category.id, parentId: '' })}
           selected={categoryId === category.id}
           sx={{ height: '50px' }}
         >
@@ -72,7 +72,7 @@ function CategoryItem({ category }: CategoryProps): JSX.Element {
             {subcategories.map((subcategory) => (
               <ListItemButton
                 key={subcategory.id}
-                onClick={() => setCategoryId(subcategory.id)}
+                onClick={() => setCategory({ categoryId: subcategory.id, parentId: category.id })}
                 selected={categoryId === subcategory.id}
                 sx={{ pl: 4, height: '30px' }}
               >
