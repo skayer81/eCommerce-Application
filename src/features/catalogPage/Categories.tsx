@@ -62,7 +62,10 @@ function CategoryItem({ category }: CategoryProps): JSX.Element {
           selected={categoryId === category.id}
           sx={{ height: '50px' }}
         >
-          <ListItemText primary={category.name.en} />
+          <ListItemText
+            primary={category.name.en}
+            primaryTypographyProps={{ fontWeight: 'bold' }}
+          />
         </ListItemButton>
         <Collapse in={true} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
