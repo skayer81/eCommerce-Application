@@ -7,6 +7,7 @@ import { Client, ClientBuilder } from '@commercetools/sdk-client-v2';
 
 import { PROJECT_KEY } from '@/config/clientConfig';
 import { LoginForm, RegistrationRequestBody } from '@/types/interfaces';
+import PRODUCTS_LIMIT from '@/utils/constants';
 
 import {
   authAnonymMiddlewareOptions,
@@ -133,7 +134,7 @@ export async function getProducts(categoryId = ''): Promise<ClientResponse> {
     .get({
       queryArgs: {
         'filter.query': categoryId ? `categories.id:subtree("${categoryId}")` : undefined,
-        limit: 50,
+        limit: PRODUCTS_LIMIT,
       },
     })
     .execute();
@@ -155,4 +156,8 @@ export async function getSubCategories(categoryId: string): Promise<ClientRespon
 
 export async function getCategoryById(categoryId: string): Promise<ClientResponse> {
   return apiRoot.categories().withId({ ID: categoryId }).get().execute();
+}
+
+export async function getDiscountById(id: string): Promise<ClientResponse> {
+  return apiRoot.productDiscounts().withId({ ID: id }).get().execute();
 }
