@@ -129,6 +129,6 @@ export async function getCustomer(root: ByProjectKeyRequestBuilder): Promise<voi
 export async function getProducts(): Promise<ClientResponse> {
   return apiRoot
     .productProjections()
-    .get({ queryArgs: { limit: 20 } })
+    .get({ queryArgs: { limit: 50 } })
     .execute();
 }

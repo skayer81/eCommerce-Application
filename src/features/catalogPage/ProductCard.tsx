@@ -2,12 +2,22 @@ import { Card, CardActions, CardContent, CardMedia, Grid, Typography } from '@mu
 
 interface ProductCardProps {
   description?: string;
+  discount?: number;
   imageUrl?: string;
   name: string;
   price?: number;
 }
 
-function ProductCard({ name, imageUrl, description, price }: ProductCardProps): JSX.Element {
+function ProductCard({
+  name,
+  imageUrl,
+  description,
+  price,
+  discount,
+}: ProductCardProps): JSX.Element {
+  const finalPrice = discount ? discount : price;
+  const formattedPrice = finalPrice ? (finalPrice / 1000).toFixed(2) + '$' : '';
+  const priceBeforeDiscount = price ? (price / 1000).toFixed(2) + '$' : '';
   return (
     <Grid item md={3} sm={6} xs={12}>
       <Card sx={{ cursor: 'pointer', maxHeight: '450px' }}>
@@ -37,7 +47,17 @@ function ProductCard({ name, imageUrl, description, price }: ProductCardProps): 
           </Typography>
         </CardContent>
         <CardActions>
-          <Typography variant="h5">{price ? (price / 1000).toFixed(2) + '$' : ''}</Typography>
+          <Typography sx={{ color: discount ? 'red' : 'inherit' }} variant="h5">
+            {formattedPrice}
+          </Typography>
+          {discount && (
+            <Typography
+              sx={{ textDecoration: 'line-through', ml: '10px', color: 'grey' }}
+              variant="h6"
+            >
+              {priceBeforeDiscount}
+            </Typography>
+          )}
         </CardActions>
       </Card>
     </Grid>
