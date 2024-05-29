@@ -132,3 +132,7 @@ export async function getProducts(): Promise<ClientResponse> {
     .get({ queryArgs: { limit: 50 } })
     .execute();
 }
+
+export async function getDiscountById(id: string): Promise<ClientResponse> {
+  return apiRoot.productDiscounts().withId({ ID: id }).get().execute();
+}
