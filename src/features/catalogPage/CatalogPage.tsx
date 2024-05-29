@@ -9,7 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getProducts } from '@/api/clientService';
 import ErrorAlert from '@/components/errorAlert/ErrorAlert';
 
-import ProductCard from './ProductCard';
+import ProductCard from './ProductCard/ProductCard';
 
 function CatalogPage(): JSX.Element {
   const { data, isSuccess, isError, error } = useQuery<
