@@ -127,20 +127,13 @@ export async function getCustomer(root: ByProjectKeyRequestBuilder): Promise<voi
 }
 
 export async function getProducts(categoryId = ''): Promise<ClientResponse> {
-  // const whereCondition = categoryId ? `categories.id subtree("${categoryId}")` : undefined;
-  // const queryArgs = {
-  // limit: 50,
-  // where: categoryId ? `categories(id="${categoryId}")` : undefined,
-  // where: whereCondition,
-  // };
-
   return apiRoot
     .productProjections()
     .search()
     .get({
       queryArgs: {
         'filter.query': categoryId ? `categories.id:subtree("${categoryId}")` : undefined,
-        limit: 50, // Установите желаемый limit
+        limit: 50,
       },
     })
     .execute();
@@ -158,4 +151,8 @@ export async function getSubCategories(categoryId: string): Promise<ClientRespon
     .categories()
     .get({ queryArgs: { where: [`parent(id="${categoryId}")`] } })
     .execute();
+}
+
+export async function getCategoryById(categoryId: string): Promise<ClientResponse> {
+  return apiRoot.categories().withId({ ID: categoryId }).get().execute();
 }
