@@ -54,6 +54,8 @@ function CatalogPage(): JSX.Element {
                 {data?.body.results.map((item: ProductProjection) => (
                   <ProductCard
                     description={item.metaDescription?.en}
+                    discount={item.masterVariant.prices?.[0].discounted?.value.centAmount}
+                    discountId={item.masterVariant.prices?.[0].discounted?.discount.id}
                     imageUrl={item.masterVariant.images?.[0].url}
                     key={item.key}
                     name={item.name.en}

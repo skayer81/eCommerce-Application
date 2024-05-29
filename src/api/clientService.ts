@@ -7,6 +7,7 @@ import { Client, ClientBuilder } from '@commercetools/sdk-client-v2';
 
 import { PROJECT_KEY } from '@/config/clientConfig';
 import { LoginForm, RegistrationRequestBody } from '@/types/interfaces';
+import PRODUCTS_LIMIT from '@/utils/constants';
 
 import {
   authAnonymMiddlewareOptions,
@@ -129,6 +130,10 @@ export async function getCustomer(root: ByProjectKeyRequestBuilder): Promise<voi
 export async function getProducts(): Promise<ClientResponse> {
   return apiRoot
     .productProjections()
-    .get({ queryArgs: { limit: 20 } })
+    .get({ queryArgs: { limit: PRODUCTS_LIMIT } })
     .execute();
+}
+
+export async function getDiscountById(id: string): Promise<ClientResponse> {
+  return apiRoot.productDiscounts().withId({ ID: id }).get().execute();
 }
