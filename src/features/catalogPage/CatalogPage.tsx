@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { getProducts } from '@/api/clientService';
 import ErrorAlert from '@/components/errorAlert/ErrorAlert';
+import Loader from '@/components/loader/Loader';
 import { useCatalogStore } from '@/stores/catalogStore';
 
 import CatalogBreadcrumbs from './CatalogBreadCrumbs';
@@ -16,14 +17,14 @@ import ProductCard from './ProductCard';
 
 function CatalogPage(): JSX.Element {
   const categoryId = useCatalogStore((state) => state.categoryId);
-  const { data, isSuccess, isError, error } = useQuery({
+  const { data, isError, error, isLoading } = useQuery({
     queryKey: ['products', categoryId],
     queryFn: () => getProducts(categoryId),
     select: (data: ClientResponse<ProductProjectionPagedQueryResponse>) => data.body.results,
   });
 
-  if (isSuccess) {
-    console.log('products=', data);
+  if (isLoading) {
+    return <Loader />;
   }
 
   if (isError) {

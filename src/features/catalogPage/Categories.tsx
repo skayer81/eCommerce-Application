@@ -1,5 +1,5 @@
 import { Category, CategoryPagedQueryResponse, ClientResponse } from '@commercetools/platform-sdk';
-import { Collapse, List, ListItemButton, ListItemText, Typography } from '@mui/material';
+import { Collapse, Divider, List, ListItemButton, ListItemText, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 
 import { getMainCategories, getSubCategories } from '@/api/clientService';
@@ -57,6 +57,7 @@ function CategoryItem({ category }: CategoryProps): JSX.Element {
   if (isSuccess) {
     return (
       <>
+        <Divider />
         <ListItemButton
           onClick={() => setCategory({ categoryId: category.id, parentId: '' })}
           selected={categoryId === category.id}
@@ -67,6 +68,7 @@ function CategoryItem({ category }: CategoryProps): JSX.Element {
             primaryTypographyProps={{ fontWeight: 'bold' }}
           />
         </ListItemButton>
+        <Divider />
         <Collapse in={true} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {subcategories.map((subcategory) => (
