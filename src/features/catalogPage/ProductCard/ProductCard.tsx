@@ -13,6 +13,8 @@ import { useQuery } from '@tanstack/react-query';
 
 import { getDiscountById } from '@/api/clientService';
 
+import { boxStyle, cardStyle, chipStyle, descriptionStyle, startPriceStyle } from './Styles.tsx';
+
 interface ProductCardProps {
   description?: string;
   discount?: number;
@@ -44,8 +46,8 @@ function ProductCard({
 
   return (
     <Grid item md={3} sm={6} xs={12}>
-      <Card sx={{ cursor: 'pointer', maxHeight: '450px', position: 'relative' }}>
-        <Box sx={{ position: 'relative' }}>
+      <Card sx={cardStyle}>
+        <Box sx={boxStyle}>
           <CardMedia
             component="img"
             height="200"
@@ -53,37 +55,14 @@ function ProductCard({
             sx={{ objectFit: 'contain' }}
             title={name}
           />
-          {discount && (
-            <Chip
-              color="success"
-              label={discountName}
-              sx={{
-                position: 'absolute',
-                bottom: '10px',
-                left: '10px',
-                zIndex: 1,
-                height: '25px',
-                borderRadius: '10px',
-              }}
-            />
-          )}
+          {discount && <Chip color="success" label={discountName} sx={chipStyle} />}
         </Box>
 
         <CardContent>
           <Typography component="div" gutterBottom sx={{ lineHeight: '1.3' }} variant="h6">
             {name}
           </Typography>
-          <Typography
-            color="text.secondary"
-            sx={{
-              display: '-webkit-box',
-              WebkitBoxOrient: 'vertical',
-              WebkitLineClamp: 4,
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-            }}
-            variant="body2"
-          >
+          <Typography color="text.secondary" sx={descriptionStyle} variant="body2">
             {description}
           </Typography>
         </CardContent>
@@ -92,10 +71,7 @@ function ProductCard({
             {formattedPrice}
           </Typography>
           {discount && (
-            <Typography
-              sx={{ textDecoration: 'line-through', ml: '10px', color: 'grey' }}
-              variant="h6"
-            >
+            <Typography sx={startPriceStyle} variant="h6">
               {priceBeforeDiscount}
             </Typography>
           )}
