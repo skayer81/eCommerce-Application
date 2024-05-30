@@ -49,15 +49,19 @@ type AtribListItem = {
 };
 
 type ProductProperties = {
-  listOfAtributes: Array<AtribListItem> | undefined;
+  description: string;
+  imgList: Array<string>;
+  listOfAtributes: Array<AtribListItem>;
   name: string;
 };
 
 function productAdapter(data: ClientResponse): ProductProperties {
   const product: Product = data.body as Product;
   return {
+    description: product.masterData.current.description?.en ?? '',
+    imgList: product.masterData.current.masterVariant.images?.map((img) => img.url) ?? [''],
     name: product.masterData.current.name.en,
-    listOfAtributes: product.masterData.current.masterVariant.attributes,
+    listOfAtributes: product.masterData.current.masterVariant.attributes ?? [],
   };
 }
 
