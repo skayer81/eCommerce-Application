@@ -8,19 +8,27 @@ import { useQuery } from '@tanstack/react-query';
 
 import { getProducts } from '@/api/clientService';
 import ErrorAlert from '@/components/errorAlert/ErrorAlert';
+import { useCatalogStore } from '@/stores/catalogStore';
 
+import ControlPanel from './ControlPanel';
 import ProductCard from './ProductCard';
 
 function CatalogPage(): JSX.Element {
-  const { data, isSuccess, isError, error } = useQuery<
-    ClientResponse<ProductProjectionPagedQueryResponse>
-  >({
-    queryKey: ['products'],
-    queryFn: getProducts,
+  const { categoryId, sortValue } = useCatalogStore((state) => ({
+    categoryId: state.categoryId,
+    sortValue: state.sortValue,
+  }));
+
+  console.log('sortVAlue=', sortValue);
+
+  const { data, isError, error, isSuccess } = useQuery({
+    queryKey: ['products', categoryId, sortValue],
+    queryFn: () => getProducts(categoryId, sortValue),
+    select: (data: ClientResponse<ProductProjectionPagedQueryResponse>) => data.body.results,
   });
 
   if (isSuccess) {
-    console.log('products=', data.body.results);
+    console.log('products=', data);
   }
 
   if (isError) {
@@ -42,16 +50,11 @@ function CatalogPage(): JSX.Element {
         <Grid item xs={10}>
           <Grid container direction="column" spacing={2}>
             {/* Первый ряд второй колонки */}
-            <Grid item>
-              <Paper>
-                <Typography variant="h6">Вторая колонка - Ряд 1</Typography>
-                <Typography>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Typography>
-              </Paper>
-            </Grid>
+            <ControlPanel />
             {/* Второй ряд второй колонки */}
             <Grid item>
               <Grid container spacing={2}>
-                {data?.body.results.map((item: ProductProjection) => (
+                {data?.map((item: ProductProjection) => (
                   <ProductCard
                     description={item.metaDescription?.en}
                     discount={item.masterVariant.prices?.[0].discounted?.value.centAmount}
