@@ -13,13 +13,20 @@ import { useCatalogStore } from '@/stores/catalogStore';
 
 import CatalogBreadcrumbs from './CatalogBreadCrumbs';
 import Categories from './Categories';
+import ControlPanel from './ControlPanel';
 import ProductCard from './ProductCard/ProductCard';
 
 function CatalogPage(): JSX.Element {
-  const categoryId = useCatalogStore((state) => state.categoryId);
+  const { categoryId, sortValue } = useCatalogStore((state) => ({
+    categoryId: state.categoryId,
+    sortValue: state.sortValue,
+  }));
+
+  console.log('sortVAlue=', sortValue);
+
   const { data, isError, error, isLoading } = useQuery({
-    queryKey: ['products', categoryId],
-    queryFn: () => getProducts(categoryId),
+    queryKey: ['products', categoryId, sortValue],
+    queryFn: () => getProducts(categoryId, sortValue),
     select: (data: ClientResponse<ProductProjectionPagedQueryResponse>) => data.body.results,
   });
 
@@ -51,10 +58,7 @@ function CatalogPage(): JSX.Element {
 
             <Grid item>
               <CatalogBreadcrumbs />
-              <Paper>
-                <Typography variant="h6">Вторая колонка - Ряд 1</Typography>
-                <Typography>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Typography>
-              </Paper>
+              <ControlPanel />
             </Grid>
             {/* Второй ряд второй колонки */}
             <Grid item>
