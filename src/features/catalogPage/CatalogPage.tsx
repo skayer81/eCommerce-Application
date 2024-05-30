@@ -13,7 +13,7 @@ import { useCatalogStore } from '@/stores/catalogStore';
 
 import CatalogBreadcrumbs from './CatalogBreadCrumbs';
 import Categories from './Categories';
-import ProductCard from './ProductCard';
+import ProductCard from './ProductCard/ProductCard';
 
 function CatalogPage(): JSX.Element {
   const categoryId = useCatalogStore((state) => state.categoryId);
