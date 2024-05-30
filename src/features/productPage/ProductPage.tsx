@@ -3,7 +3,7 @@ import { Container } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 
 import { getProductByKey } from '../../api/clientService';
-import ProductCard from './ProductCard';
+import DetailedCard from './DetailedCard';
 
 type Props = {
   productKey: string;
@@ -50,7 +50,7 @@ export default function ProductPage({ productKey = 'ficus-elastica5' }: Props): 
 
   return (
     <Container sx={{ border: 1 }}>
-      <ProductCard productProps={productAdapter(data)} />
+      <DetailedCard productProps={productAdapter(data)} />
     </Container>
   );
 }

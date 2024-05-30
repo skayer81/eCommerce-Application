@@ -28,7 +28,7 @@ type ProductProperties = {
   };
 };
 
-export default function ProductCard({ productProps }: ProductProperties): JSX.Element {
+export default function DetailedCard({ productProps }: ProductProperties): JSX.Element {
   return (
     <>
       <Typography align="center" component="h1" sx={{ mt: 5 }} variant="h4">
