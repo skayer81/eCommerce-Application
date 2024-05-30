@@ -127,11 +127,35 @@ export async function getCustomer(root: ByProjectKeyRequestBuilder): Promise<voi
   return root.me().get().execute().then(console.log).catch(console.error);
 }
 
-export async function getProducts(): Promise<ClientResponse> {
+export async function getProducts(categoryId = ''): Promise<ClientResponse> {
   return apiRoot
     .productProjections()
-    .get({ queryArgs: { limit: PRODUCTS_LIMIT } })
+    .search()
+    .get({
+      queryArgs: {
+        'filter.query': categoryId ? `categories.id:subtree("${categoryId}")` : undefined,
+        limit: PRODUCTS_LIMIT,
+      },
+    })
     .execute();
+}
+
+export async function getMainCategories(): Promise<ClientResponse> {
+  return apiRoot
+    .categories()
+    .get({ queryArgs: { where: ['parent(id is not defined)'] } })
+    .execute();
+}
+
+export async function getSubCategories(categoryId: string): Promise<ClientResponse> {
+  return apiRoot
+    .categories()
+    .get({ queryArgs: { where: [`parent(id="${categoryId}")`] } })
+    .execute();
+}
+
+export async function getCategoryById(categoryId: string): Promise<ClientResponse> {
+  return apiRoot.categories().withId({ ID: categoryId }).get().execute();
 }
 
 export async function getDiscountById(id: string): Promise<ClientResponse> {

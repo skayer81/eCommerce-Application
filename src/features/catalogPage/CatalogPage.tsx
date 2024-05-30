@@ -8,19 +8,23 @@ import { useQuery } from '@tanstack/react-query';
 
 import { getProducts } from '@/api/clientService';
 import ErrorAlert from '@/components/errorAlert/ErrorAlert';
+import Loader from '@/components/loader/Loader';
+import { useCatalogStore } from '@/stores/catalogStore';
 
+import CatalogBreadcrumbs from './CatalogBreadCrumbs';
+import Categories from './Categories';
 import ProductCard from './ProductCard/ProductCard';
 
 function CatalogPage(): JSX.Element {
-  const { data, isSuccess, isError, error } = useQuery<
-    ClientResponse<ProductProjectionPagedQueryResponse>
-  >({
-    queryKey: ['products'],
-    queryFn: getProducts,
+  const categoryId = useCatalogStore((state) => state.categoryId);
+  const { data, isError, error, isLoading } = useQuery({
+    queryKey: ['products', categoryId],
+    queryFn: () => getProducts(categoryId),
+    select: (data: ClientResponse<ProductProjectionPagedQueryResponse>) => data.body.results,
   });
 
-  if (isSuccess) {
-    console.log('products=', data.body.results);
+  if (isLoading) {
+    return <Loader />;
   }
 
   if (isError) {
@@ -33,16 +37,20 @@ function CatalogPage(): JSX.Element {
       <Grid container spacing={2}>
         {/* Первая колонка */}
         <Grid item xs={2}>
-          <Paper>
-            <Typography variant="h6">Первая колонка</Typography>
-            <Typography>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Typography>
+          <Paper sx={{ pt: '10px' }}>
+            <Typography align="center" variant="h6">
+              Categories
+            </Typography>
+            <Categories />
           </Paper>
         </Grid>
         {/* Вторая колонка */}
         <Grid item xs={10}>
           <Grid container direction="column" spacing={2}>
             {/* Первый ряд второй колонки */}
+
             <Grid item>
+              <CatalogBreadcrumbs />
               <Paper>
                 <Typography variant="h6">Вторая колонка - Ряд 1</Typography>
                 <Typography>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Typography>
@@ -51,7 +59,7 @@ function CatalogPage(): JSX.Element {
             {/* Второй ряд второй колонки */}
             <Grid item>
               <Grid container spacing={2}>
-                {data?.body.results.map((item: ProductProjection) => (
+                {data?.map((item: ProductProjection) => (
                   <ProductCard
                     description={item.metaDescription?.en}
                     discount={item.masterVariant.prices?.[0].discounted?.value.centAmount}
