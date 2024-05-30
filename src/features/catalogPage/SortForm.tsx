@@ -15,7 +15,7 @@ function SortForm(): JSX.Element {
 
   const sortOptions = new Map([
     ['', 'No Sorting'],
-    ['name.en asc', 'By Alphabet'],
+    ['name.en asc', 'By Name'],
     ['price asc', 'By Price (Ascending)'],
     ['price desc', 'By Price (Descending)'],
   ]);
