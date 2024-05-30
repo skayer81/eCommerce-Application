@@ -126,6 +126,7 @@ export async function getCustomer(root: ByProjectKeyRequestBuilder): Promise<voi
   return root.me().get().execute().then(console.log).catch(console.error);
 }
 
-export function geypPoductByID(key: string): Promise<ClientResponse> {
+export function getProductByKey(key: string): Promise<ClientResponse> {
+  console.log(key);
   return apiRoot.products().withKey({ key: key }).get().execute();
 }
