@@ -38,6 +38,7 @@ export default function ProductPage({ productKey = 'ficus-elastica5' }: Props): 
   const { data, error, isPending } = useQuery({
     queryKey: ['products', { key: productKey }],
     queryFn: () => getProductByKey(item),
+    select: productAdapter,
   });
 
   if (isPending) {
@@ -50,7 +51,7 @@ export default function ProductPage({ productKey = 'ficus-elastica5' }: Props): 
 
   return (
     <Container sx={{ border: 1 }}>
-      <DetailedCard productProps={productAdapter(data)} />
+      <DetailedCard productProps={data} />
     </Container>
   );
 }
