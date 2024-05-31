@@ -15,6 +15,7 @@ import CatalogBreadcrumbs from './CatalogBreadCrumbs';
 import Categories from './Categories';
 import ControlPanel from './ControlPanel';
 import ProductCard from './ProductCard/ProductCard';
+import Search from './Search';
 
 function CatalogPage(): JSX.Element {
   const { categoryId, sortValue } = useCatalogStore((state) => ({
@@ -42,6 +43,8 @@ function CatalogPage(): JSX.Element {
   return (
     <>
       <Grid container spacing={2}>
+        {/* Строка с поиском */}
+        <Search />
         {/* Первая колонка */}
         <Grid item xs={2}>
           <Paper sx={{ pt: '10px' }}>
