@@ -4,7 +4,6 @@ import { AttributeDefinition, ClientResponse, ProductType } from '@commercetools
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import {
   Button,
-  Chip,
   Divider,
   FormControl,
   FormControlLabel,
@@ -26,14 +25,10 @@ import { PRODUCT_TYPE_KEY } from '@/utils/constants';
 function FilterForm(): JSX.Element {
   const [selectedValues, setSelectedValues] = useState<Record<string, string>>({});
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const { setAttributes, isAttributesEmpty, resetAllAttributes, attributes, resetAttribute } =
-    useCatalogStore((state) => ({
-      setAttributes: state.setAttributes,
-      isAttributesEmpty: state.isAttributesEmpty,
-      resetAllAttributes: state.resetAllAttributes,
-      attributes: state.attributes,
-      resetAttribute: state.resetAttribute,
-    }));
+  const { setAttributes, isAttributesEmpty } = useCatalogStore((state) => ({
+    setAttributes: state.setAttributes,
+    isAttributesEmpty: state.isAttributesEmpty,
+  }));
   const handleChange = (attributeName: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedValues({
       ...selectedValues,
@@ -42,8 +37,6 @@ function FilterForm(): JSX.Element {
   };
 
   const applyFilters = (): void => {
-    console.log('Applied filters:', selectedValues);
-
     setAttributes(selectedValues);
     handleClose();
   };
@@ -81,26 +74,7 @@ function FilterForm(): JSX.Element {
       >
         <FilterAltIcon />
       </IconButton>
-      {Object.entries(attributes).map(([key, value]) =>
-        value ? (
-          <Chip
-            key={key}
-            label={`${key}: ${value}`}
-            onDelete={() => resetAttribute(key)}
-            sx={{ ml: 1 }}
-          />
-        ) : null,
-      )}
-      {!isAttributesEmpty() && (
-        <Chip
-          label="Reset Filters"
-          onDelete={resetAllAttributes}
-          sx={{
-            ml: 1,
-            backgroundColor: 'lightgrey',
-          }}
-        />
-      )}
+
       <Popover
         anchorEl={anchorEl}
         anchorOrigin={{
