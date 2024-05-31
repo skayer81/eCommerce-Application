@@ -3,7 +3,9 @@ import { create } from 'zustand';
 interface CatalogState {
   attributes: Record<string, string>;
   categoryId: string;
+  isAttributesEmpty: () => boolean;
   parentId: string;
+  resetAllAttributes: () => void;
   resetAttribute: (key: string) => void;
   setAttributes: (newAttributes: Record<string, string>) => void;
   setCategory: (newCategory: { categoryId: string; parentId: string }) => void;
@@ -11,7 +13,7 @@ interface CatalogState {
   sortValue: string;
 }
 
-export const useCatalogStore = create<CatalogState>((set) => ({
+export const useCatalogStore = create<CatalogState>((set, get) => ({
   categoryId: '',
   parentId: '',
   sortValue: '',
@@ -37,4 +39,16 @@ export const useCatalogStore = create<CatalogState>((set) => ({
         [key]: '',
       },
     })),
+  resetAllAttributes: () =>
+    set({
+      attributes: {},
+    }),
+  isAttributesEmpty: () => {
+    const state = get();
+    const attributes = state.attributes;
+    return (
+      Object.keys(attributes).length === 0 ||
+      Object.values(attributes).every((value) => value === '')
+    );
+  },
 }));

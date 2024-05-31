@@ -4,6 +4,7 @@ import { AttributeDefinition, ClientResponse, ProductType } from '@commercetools
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import {
   Button,
+  Chip,
   Divider,
   FormControl,
   FormControlLabel,
@@ -16,6 +17,7 @@ import {
   Stack,
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
+// import { ClearIcon } from '@mui/x-date-pickers';
 
 import { getAttributes } from '@/api/clientService';
 import { useCatalogStore } from '@/stores/catalogStore';
@@ -24,9 +26,14 @@ import { PRODUCT_TYPE_KEY } from '@/utils/constants';
 function FilterForm(): JSX.Element {
   const [selectedValues, setSelectedValues] = useState<Record<string, string>>({});
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const { setAttributes } = useCatalogStore((state) => ({
-    setAttributes: state.setAttributes,
-  }));
+  const { setAttributes, isAttributesEmpty, resetAllAttributes, attributes, resetAttribute } =
+    useCatalogStore((state) => ({
+      setAttributes: state.setAttributes,
+      isAttributesEmpty: state.isAttributesEmpty,
+      resetAllAttributes: state.resetAllAttributes,
+      attributes: state.attributes,
+      resetAttribute: state.resetAttribute,
+    }));
   const handleChange = (attributeName: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedValues({
       ...selectedValues,
@@ -36,6 +43,7 @@ function FilterForm(): JSX.Element {
 
   const applyFilters = (): void => {
     console.log('Applied filters:', selectedValues);
+
     setAttributes(selectedValues);
     handleClose();
   };
@@ -66,13 +74,33 @@ function FilterForm(): JSX.Element {
         aria-label="filter"
         onClick={handleClickOnIcon}
         sx={{
-          backgroundColor: 'inherit',
+          backgroundColor: isAttributesEmpty() ? 'inherit' : 'lightgreen',
           borderRadius: '10px',
           boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.3)',
         }}
       >
         <FilterAltIcon />
       </IconButton>
+      {Object.entries(attributes).map(([key, value]) =>
+        value ? (
+          <Chip
+            key={key}
+            label={`${key}: ${value}`}
+            onDelete={() => resetAttribute(key)}
+            sx={{ ml: 1 }}
+          />
+        ) : null,
+      )}
+      {!isAttributesEmpty() && (
+        <Chip
+          label="Reset Filters"
+          onDelete={resetAllAttributes}
+          sx={{
+            ml: 1,
+            backgroundColor: 'lightgrey',
+          }}
+        />
+      )}
       <Popover
         anchorEl={anchorEl}
         anchorOrigin={{
