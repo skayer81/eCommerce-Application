@@ -24,7 +24,9 @@ import { PRODUCT_TYPE_KEY } from '@/utils/constants';
 function FilterForm(): JSX.Element {
   const [selectedValues, setSelectedValues] = useState<Record<string, string>>({});
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const { setAttributes } = useCatalogStore();
+  const { setAttributes } = useCatalogStore((state) => ({
+    setAttributes: state.setAttributes,
+  }));
   const handleChange = (attributeName: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedValues({
       ...selectedValues,
@@ -38,13 +40,13 @@ function FilterForm(): JSX.Element {
     handleClose();
   };
 
-  const { data: attributes, isSuccess } = useQuery({
+  const { data: queryattributes, isSuccess } = useQuery({
     queryKey: ['attributes'],
     queryFn: () => getAttributes(PRODUCT_TYPE_KEY),
     select: (data: ClientResponse<ProductType>) => data.body.attributes,
   });
 
-  const filtAttributes = attributes?.filter((attr) => attr.name !== 'size');
+  const filtAttributes = queryattributes?.filter((attr) => attr.name !== 'size');
 
   const handleClickOnIcon = (event: React.MouseEvent<HTMLElement>): void => {
     setAnchorEl(event.currentTarget);
@@ -55,7 +57,7 @@ function FilterForm(): JSX.Element {
   };
 
   if (isSuccess) {
-    console.log('attributes= ', attributes);
+    console.log('attributes= ', filtAttributes);
   }
 
   return (

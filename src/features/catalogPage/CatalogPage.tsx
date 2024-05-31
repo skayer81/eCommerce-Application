@@ -17,16 +17,17 @@ import ControlPanel from './ControlPanel';
 import ProductCard from './ProductCard/ProductCard';
 
 function CatalogPage(): JSX.Element {
-  const { categoryId, sortValue } = useCatalogStore((state) => ({
+  const { categoryId, sortValue, attributes } = useCatalogStore((state) => ({
     categoryId: state.categoryId,
     sortValue: state.sortValue,
+    attributes: state.attributes,
   }));
 
-  console.log('sortVAlue=', sortValue);
+  console.log('attributesstate=', attributes);
 
-  const { data, isError, error, isLoading } = useQuery({
-    queryKey: ['products', categoryId, sortValue],
-    queryFn: () => getProducts(categoryId, sortValue),
+  const { data, isError, error, isLoading, isSuccess } = useQuery({
+    queryKey: ['products', categoryId, sortValue, attributes],
+    queryFn: () => getProducts(categoryId, sortValue, attributes),
     select: (data: ClientResponse<ProductProjectionPagedQueryResponse>) => data.body.results,
   });
 
@@ -37,6 +38,10 @@ function CatalogPage(): JSX.Element {
   if (isError) {
     console.error(error);
     return <ErrorAlert />;
+  }
+
+  if (isSuccess) {
+    console.log('products=', data);
   }
 
   return (
