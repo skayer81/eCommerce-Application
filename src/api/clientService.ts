@@ -127,13 +127,15 @@ export async function getCustomer(root: ByProjectKeyRequestBuilder): Promise<voi
   return root.me().get().execute().then(console.log).catch(console.error);
 }
 
-export async function getProducts(categoryId = ''): Promise<ClientResponse> {
+export async function getProducts(categoryId = '', sortValue: string): Promise<ClientResponse> {
+  console.log('sort');
   return apiRoot
     .productProjections()
     .search()
     .get({
       queryArgs: {
         'filter.query': categoryId ? `categories.id:subtree("${categoryId}")` : undefined,
+        sort: sortValue === '' ? undefined : [sortValue],
         limit: PRODUCTS_LIMIT,
       },
     })
