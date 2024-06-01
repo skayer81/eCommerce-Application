@@ -1,3 +1,4 @@
 const PRODUCTS_LIMIT = 50;
+const PRODUCT_TYPE_KEY = 'PL';
 
-export default PRODUCTS_LIMIT;
+export { PRODUCT_TYPE_KEY, PRODUCTS_LIMIT };

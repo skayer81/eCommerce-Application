@@ -7,7 +7,7 @@ import { Client, ClientBuilder } from '@commercetools/sdk-client-v2';
 
 import { PROJECT_KEY } from '@/config/clientConfig';
 import { LoginForm, RegistrationRequestBody } from '@/types/interfaces';
-import PRODUCTS_LIMIT from '@/utils/constants';
+import { PRODUCTS_LIMIT } from '@/utils/constants';
 
 import {
   authAnonymMiddlewareOptions,
@@ -176,4 +176,8 @@ export async function getCategoryById(categoryId: string): Promise<ClientRespons
 
 export async function getDiscountById(id: string): Promise<ClientResponse> {
   return apiRoot.productDiscounts().withId({ ID: id }).get().execute();
+}
+
+export async function getAttributes(productTypeKey: string): Promise<ClientResponse> {
+  return apiRoot.productTypes().withKey({ key: productTypeKey }).get().execute();
 }

@@ -72,17 +72,21 @@ function CatalogPage(): JSX.Element {
             {/* Второй ряд второй колонки */}
             <Grid item>
               <Grid container spacing={2}>
-                {data?.map((item: ProductProjection) => (
-                  <ProductCard
-                    description={item.metaDescription?.en}
-                    discount={item.masterVariant.prices?.[0].discounted?.value.centAmount}
-                    discountId={item.masterVariant.prices?.[0].discounted?.discount.id}
-                    imageUrl={item.masterVariant.images?.[0].url}
-                    key={item.key}
-                    name={item.name.en}
-                    price={item.masterVariant.prices?.[0].value.centAmount}
-                  />
-                ))}
+                {data?.length === 0 ? (
+                  <Typography sx={{ p: '10px' }}>Nothing was found</Typography>
+                ) : (
+                  data?.map((item: ProductProjection) => (
+                    <ProductCard
+                      description={item.metaDescription?.en}
+                      discount={item.masterVariant.prices?.[0].discounted?.value.centAmount}
+                      discountId={item.masterVariant.prices?.[0].discounted?.discount.id}
+                      imageUrl={item.masterVariant.images?.[0].url}
+                      key={item.key}
+                      name={item.name.en}
+                      price={item.masterVariant.prices?.[0].value.centAmount}
+                    />
+                  ))
+                )}
               </Grid>
             </Grid>
           </Grid>
