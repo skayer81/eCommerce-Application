@@ -7,7 +7,7 @@ import { Client, ClientBuilder } from '@commercetools/sdk-client-v2';
 
 import { PROJECT_KEY } from '@/config/clientConfig';
 import { LoginForm, RegistrationRequestBody } from '@/types/interfaces';
-import PRODUCTS_LIMIT from '@/utils/constants';
+import { PRODUCTS_LIMIT } from '@/utils/constants';
 
 import {
   authAnonymMiddlewareOptions,
@@ -127,16 +127,27 @@ export async function getCustomer(root: ByProjectKeyRequestBuilder): Promise<voi
   return root.me().get().execute().then(console.log).catch(console.error);
 }
 
-export async function getProducts(categoryId = '', sortValue: string): Promise<ClientResponse> {
-  console.log('sort');
+export async function getProducts(
+  categoryId = '',
+  sortValue: string,
+  attributes: Record<string, string>,
+): Promise<ClientResponse> {
+  const attrFilters = Object.entries(attributes)
+    .filter(([attrkey, value]) => value !== '' && attrkey) // Фильтрация элементов с пустыми значениями
+    .map(([key, value]) => `variants.attributes.${key}.key:"${value}"`);
+  const catFilter = categoryId ? [`categories.id:subtree("${categoryId}")`] : [];
+  const resFilters = [...attrFilters, ...catFilter];
+
+  console.log('filters=', resFilters);
   return apiRoot
     .productProjections()
     .search()
     .get({
       queryArgs: {
-        'filter.query': categoryId ? `categories.id:subtree("${categoryId}")` : undefined,
+        'filter.query': resFilters,
         sort: sortValue === '' ? undefined : [sortValue],
         limit: PRODUCTS_LIMIT,
+        markMatchingVariants: true,
       },
     })
     .execute();
@@ -162,4 +173,8 @@ export async function getCategoryById(categoryId: string): Promise<ClientRespons
 
 export async function getDiscountById(id: string): Promise<ClientResponse> {
   return apiRoot.productDiscounts().withId({ ID: id }).get().execute();
+}
+
+export async function getAttributes(productTypeKey: string): Promise<ClientResponse> {
+  return apiRoot.productTypes().withKey({ key: productTypeKey }).get().execute();
 }
