@@ -34,6 +34,7 @@ export default function CatalogBreadcrumbs(): JSX.Element {
         <Typography
           onClick={() => setCategory({ categoryId: '', parentId: '' })}
           sx={{
+            fontWeight: !parentId && !categoryId ? 'bold' : 'normal',
             color: getColor(),
             textDecoration: 'none',
             '&:hover': {
@@ -61,7 +62,11 @@ export default function CatalogBreadcrumbs(): JSX.Element {
           </Typography>
         )}
 
-        {categoryId && <Typography color="text.primary">{categoryName}</Typography>}
+        {categoryId && (
+          <Typography color="text.primary" sx={{ fontWeight: 'bold' }}>
+            {categoryName}
+          </Typography>
+        )}
       </Breadcrumbs>
     </div>
   );

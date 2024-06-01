@@ -58,7 +58,7 @@ function ProductCard({
           {discount && <Chip color="success" label={discountName} sx={chipStyle} />}
         </Box>
 
-        <CardContent>
+        <CardContent sx={{ flexGrow: '1' }}>
           <Typography component="div" gutterBottom sx={{ lineHeight: '1.3' }} variant="h6">
             {name}
           </Typography>
@@ -66,8 +66,11 @@ function ProductCard({
             {description}
           </Typography>
         </CardContent>
-        <CardActions>
-          <Typography sx={{ color: discount ? 'red' : 'inherit' }} variant="h5">
+        <CardActions sx={{ mt: 'auto' }}>
+          <Typography
+            sx={{ color: discount ? 'red' : 'primary.main', fontWeight: '500' }}
+            variant="h5"
+          >
             {formattedPrice}
           </Typography>
           {discount && (

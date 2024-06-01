@@ -61,22 +61,29 @@ function CategoryItem({ category }: CategoryProps): JSX.Element {
         <ListItemButton
           onClick={() => setCategory({ categoryId: category.id, parentId: '' })}
           selected={categoryId === category.id}
-          sx={{ height: '50px' }}
+          sx={{
+            height: '30px',
+            color: categoryId === category.id ? 'primary.main' : 'inherit',
+          }}
         >
           <ListItemText
             primary={category.name.en}
-            primaryTypographyProps={{ fontWeight: 'bold' }}
+            primaryTypographyProps={{ fontWeight: 'bold', lineHeight: '1.2em' }}
           />
         </ListItemButton>
-        <Divider />
-        <Collapse in={true} timeout="auto" unmountOnExit>
+
+        <Collapse in={true} sx={{ mb: '10px' }} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {subcategories.map((subcategory) => (
               <ListItemButton
                 key={subcategory.id}
                 onClick={() => setCategory({ categoryId: subcategory.id, parentId: category.id })}
                 selected={categoryId === subcategory.id}
-                sx={{ pl: 4, height: '30px' }}
+                sx={{
+                  pl: 4,
+                  height: '25px',
+                  color: categoryId === subcategory.id ? 'primary.main' : 'inherit',
+                }}
               >
                 <ListItemText primary={subcategory.name.en} />
               </ListItemButton>

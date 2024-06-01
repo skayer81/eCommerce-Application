@@ -71,7 +71,7 @@ function CatalogPage(): JSX.Element {
             </Grid>
             {/* Второй ряд второй колонки */}
             <Grid item>
-              <Grid container spacing={2}>
+              <Grid container spacing={2} sx={{ mb: '50px' }}>
                 {data?.length === 0 ? (
                   <Typography sx={{ p: '10px' }}>Nothing was found</Typography>
                 ) : (

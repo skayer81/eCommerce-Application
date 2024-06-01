@@ -1,4 +1,4 @@
-import { Chip, Container } from '@mui/material';
+import { Chip, Stack } from '@mui/material';
 
 import { useCatalogStore } from '@/stores/catalogStore';
 
@@ -13,15 +13,10 @@ function FilterChips(): JSX.Element {
   );
 
   return (
-    <Container>
+    <Stack direction="row" spacing={1}>
       {Object.entries(attributes).map(([key, value]) =>
         value ? (
-          <Chip
-            key={key}
-            label={`${key}: ${value}`}
-            onDelete={() => resetAttribute(key)}
-            sx={{ ml: 1 }}
-          />
+          <Chip key={key} label={`${key}: ${value}`} onDelete={() => resetAttribute(key)} />
         ) : null,
       )}
       {!isAttributesEmpty() && (
@@ -34,7 +29,7 @@ function FilterChips(): JSX.Element {
           }}
         />
       )}
-    </Container>
+    </Stack>
   );
 }
 

@@ -4,13 +4,13 @@ const header = {
   alignItems: 'center',
   height: '60px',
   fontFamily: 'Cera Pro',
-  maxWidth: 1224,
+  maxWidth: 1280,
   margin: '0 auto',
   padding: '0 12px',
 };
 
 const main = {
-  maxWidth: 1224,
+  maxWidth: 1280,
   margin: '0 auto',
   padding: '0 12px',
 };

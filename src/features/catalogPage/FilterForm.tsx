@@ -16,7 +16,6 @@ import {
   Stack,
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
-// import { ClearIcon } from '@mui/x-date-pickers';
 
 import { getAttributes } from '@/api/clientService';
 import { useCatalogStore } from '@/stores/catalogStore';
@@ -67,7 +66,7 @@ function FilterForm(): JSX.Element {
         aria-label="filter"
         onClick={handleClickOnIcon}
         sx={{
-          backgroundColor: isAttributesEmpty() ? 'inherit' : 'lightgreen',
+          backgroundColor: isAttributesEmpty() ? 'bgButtons.light' : 'bgButtons.main',
           borderRadius: '10px',
           boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.3)',
         }}
