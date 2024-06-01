@@ -7,8 +7,10 @@ interface CatalogState {
   parentId: string;
   resetAllAttributes: () => void;
   resetAttribute: (key: string) => void;
+  searchValue: string;
   setAttributes: (newAttributes: Record<string, string>) => void;
   setCategory: (newCategory: { categoryId: string; parentId: string }) => void;
+  setSearchValue: (newSearchValue: string) => void;
   setSortValue: (newSortValue: string) => void;
   sortValue: string;
 }
@@ -17,15 +19,22 @@ export const useCatalogStore = create<CatalogState>((set, get) => ({
   categoryId: '',
   parentId: '',
   sortValue: '',
+  searchValue: '',
   attributes: {},
   setCategory: (newCategory) =>
     set({
       categoryId: newCategory.categoryId,
       parentId: newCategory.parentId,
+      searchValue: '',
     }),
   setSortValue: (newSortValue) =>
     set({
       sortValue: newSortValue,
+    }),
+
+  setSearchValue: (newSearchValue) =>
+    set({
+      searchValue: newSearchValue,
     }),
   setAttributes: (newAttributes) =>
     set({

@@ -131,9 +131,10 @@ export async function getProducts(
   categoryId = '',
   sortValue: string,
   attributes: Record<string, string>,
+  searchValue = '',
 ): Promise<ClientResponse> {
   const attrFilters = Object.entries(attributes)
-    .filter(([attrkey, value]) => value !== '' && attrkey) // Фильтрация элементов с пустыми значениями
+    .filter(([attrkey, value]) => value !== '' && attrkey)
     .map(([key, value]) => `variants.attributes.${key}.key:"${value}"`);
   const catFilter = categoryId ? [`categories.id:subtree("${categoryId}")`] : [];
   const resFilters = [...attrFilters, ...catFilter];
@@ -148,6 +149,8 @@ export async function getProducts(
         sort: sortValue === '' ? undefined : [sortValue],
         limit: PRODUCTS_LIMIT,
         markMatchingVariants: true,
+        fuzzy: true,
+        'text.en': searchValue,
       },
     })
     .execute();
