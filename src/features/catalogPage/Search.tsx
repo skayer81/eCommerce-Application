@@ -1,13 +1,16 @@
 import { useRef } from 'react';
 
 import SearchIcon from '@mui/icons-material/Search';
-import { Grid, IconButton, InputAdornment, TextField } from '@mui/material';
+import { Grid, IconButton, InputAdornment, Stack, TextField } from '@mui/material';
 
 import { useCatalogStore } from '@/stores/catalogStore';
+
+import SearchQuery from './SearchQuery';
 
 function Search(): JSX.Element {
   const { setSearchValue } = useCatalogStore((state) => ({
     setSearchValue: state.setSearchValue,
+    searchValue: state.searchValue,
   }));
 
   const searchRef = useRef<HTMLInputElement>(null);
@@ -26,24 +29,27 @@ function Search(): JSX.Element {
 
   return (
     <Grid item xs={12}>
-      <Grid item xs={4}>
-        <TextField
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={handleSearch}>
-                  <SearchIcon />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-          fullWidth
-          inputRef={searchRef}
-          onKeyDown={handleKeyDown}
-          placeholder="Search..."
-          size="small"
-          variant="outlined"
-        />
+      <Grid item md={4} sm={6} xs={12}>
+        <Stack>
+          <TextField
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleSearch}>
+                    <SearchIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            fullWidth
+            inputRef={searchRef}
+            onKeyDown={handleKeyDown}
+            placeholder="Search..."
+            size="small"
+            variant="outlined"
+          />
+          <SearchQuery />
+        </Stack>
       </Grid>
     </Grid>
   );

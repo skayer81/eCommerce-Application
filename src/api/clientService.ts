@@ -127,16 +127,30 @@ export async function getCustomer(root: ByProjectKeyRequestBuilder): Promise<voi
   return root.me().get().execute().then(console.log).catch(console.error);
 }
 
-export async function getProducts(categoryId = '', sortValue: string): Promise<ClientResponse> {
-  console.log('sort');
+export async function getProducts(
+  categoryId = '',
+  sortValue: string,
+  attributes: Record<string, string>,
+  searchValue = '',
+): Promise<ClientResponse> {
+  const attrFilters = Object.entries(attributes)
+    .filter(([attrkey, value]) => value !== '' && attrkey) // Фильтрация элементов с пустыми значениями
+    .map(([key, value]) => `variants.attributes.${key}.key:"${value}"`);
+  const catFilter = categoryId ? [`categories.id:subtree("${categoryId}")`] : [];
+  const resFilters = [...attrFilters, ...catFilter];
+
+  console.log('filters=', resFilters);
   return apiRoot
     .productProjections()
     .search()
     .get({
       queryArgs: {
-        'filter.query': categoryId ? `categories.id:subtree("${categoryId}")` : undefined,
+        'filter.query': resFilters,
         sort: sortValue === '' ? undefined : [sortValue],
         limit: PRODUCTS_LIMIT,
+        markMatchingVariants: true,
+        fuzzy: true,
+        'text.en': searchValue,
       },
     })
     .execute();

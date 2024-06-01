@@ -25,6 +25,7 @@ export const useCatalogStore = create<CatalogState>((set, get) => ({
     set({
       categoryId: newCategory.categoryId,
       parentId: newCategory.parentId,
+      searchValue: '',
     }),
   setSortValue: (newSortValue) =>
     set({
