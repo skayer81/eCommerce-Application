@@ -22,6 +22,7 @@ import Search from './Search';
 function CatalogPage(): JSX.Element {
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.up('md'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const { categoryId, sortValue, attributes, searchValue } = useCatalogStore((state) => ({
     categoryId: state.categoryId,
@@ -76,7 +77,12 @@ function CatalogPage(): JSX.Element {
             </Grid>
             {/* Второй ряд второй колонки */}
             <Grid item>
-              <Grid container justifyContent="center" spacing={2} sx={{ mb: '50px' }}>
+              <Grid
+                container
+                justifyContent={isMobile ? 'center' : 'flex-start'}
+                spacing={2}
+                sx={{ mb: '50px' }}
+              >
                 {data?.length === 0 ? (
                   <Typography sx={{ p: '10px' }}>Nothing was found</Typography>
                 ) : (
