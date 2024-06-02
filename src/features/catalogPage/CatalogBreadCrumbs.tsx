@@ -4,27 +4,43 @@ import Typography from '@mui/material/Typography';
 import { useQuery } from '@tanstack/react-query';
 
 import { getCategoryById } from '@/api/clientService';
+import ErrorAlert from '@/components/errorAlert/ErrorAlert';
 import { useCatalogStore } from '@/stores/catalogStore';
 
 export default function CatalogBreadcrumbs(): JSX.Element {
   const { categoryId, parentId, setCategory } = useCatalogStore();
 
-  const { data: categoryName } = useQuery({
+  const {
+    data: categoryName,
+    isError: isCatError,
+    error: catError,
+  } = useQuery({
     queryKey: ['category', categoryId],
     queryFn: () => getCategoryById(categoryId),
     select: (data: ClientResponse<Category>) => data.body.name.en,
     enabled: !!categoryId,
   });
 
-  const { data: parentName } = useQuery({
+  const {
+    data: parentName,
+    isError: isParentError,
+    error: parentError,
+  } = useQuery({
     queryKey: ['parent', parentId],
     queryFn: () => getCategoryById(parentId),
     select: (data: ClientResponse<Category>) => data.body.name.en,
     enabled: !!parentId,
   });
 
-  console.log('parent=', parentName);
-  console.log('category=', categoryName);
+  if (isCatError) {
+    console.error(catError);
+    return <ErrorAlert />;
+  }
+
+  if (isParentError) {
+    console.error(parentError);
+    return <ErrorAlert />;
+  }
 
   const getColor = (): string => (!parentId && !categoryId ? 'text.primary' : 'inherit');
 

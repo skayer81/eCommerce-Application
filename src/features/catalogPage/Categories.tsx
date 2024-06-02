@@ -11,12 +11,14 @@ import {
 import { useQuery } from '@tanstack/react-query';
 
 import { getMainCategories, getSubCategories } from '@/api/clientService';
+import ErrorAlert from '@/components/errorAlert/ErrorAlert';
 import { useCatalogStore } from '@/stores/catalogStore';
 
 function Categories(): JSX.Element {
   const {
     data: categories,
-    error: errorCategories,
+    error,
+    isError,
     isSuccess,
   } = useQuery({
     queryKey: ['categories'],
@@ -24,8 +26,9 @@ function Categories(): JSX.Element {
     select: (data: ClientResponse<CategoryPagedQueryResponse>) => data.body.results,
   });
 
-  if (errorCategories) {
-    return <Typography>Error fetching categories: {errorCategories.message}</Typography>;
+  if (isError) {
+    console.error(error);
+    return <ErrorAlert />;
   }
 
   if (isSuccess) {
@@ -55,7 +58,8 @@ function CategoryItem({ category }: CategoryProps): JSX.Element {
   const categoryId = useCatalogStore((state) => state.categoryId);
   const {
     data: subcategories,
-    error: errorSubcategories,
+    error,
+    isError,
     isSuccess,
   } = useQuery({
     queryKey: ['subcategories', category.id],
@@ -63,8 +67,9 @@ function CategoryItem({ category }: CategoryProps): JSX.Element {
     select: (data: ClientResponse<CategoryPagedQueryResponse>) => data.body.results,
   });
 
-  if (errorSubcategories) {
-    return <Typography>Error fetching categories: {errorSubcategories.message}</Typography>;
+  if (isError) {
+    console.error(error);
+    return <ErrorAlert />;
   }
 
   if (isSuccess) {
