@@ -120,8 +120,8 @@ export default function Header(): JSX.Element {
                     key={index}
                     sx={{
                       color: location.pathname === item.path ? 'primary.main' : 'inherit',
-                      justifyContent: 'center', // Центрируем содержимое по горизонтали
-                      textAlign: 'center', // Центрируем текст по горизонтали
+                      justifyContent: 'center',
+                      textAlign: 'center',
                     }}
                     to={item.path}
                   >
