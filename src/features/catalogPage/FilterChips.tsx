@@ -1,4 +1,4 @@
-import { Chip, Container } from '@mui/material';
+import { Chip } from '@mui/material';
 
 import { useCatalogStore } from '@/stores/catalogStore';
 
@@ -13,14 +13,21 @@ function FilterChips(): JSX.Element {
   );
 
   return (
-    <Container>
+    <div
+      style={{
+        marginTop: 0,
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: '8px',
+      }}
+    >
       {Object.entries(attributes).map(([key, value]) =>
         value ? (
           <Chip
             key={key}
             label={`${key}: ${value}`}
             onDelete={() => resetAttribute(key)}
-            sx={{ ml: 1 }}
+            size="small"
           />
         ) : null,
       )}
@@ -28,13 +35,13 @@ function FilterChips(): JSX.Element {
         <Chip
           label="Reset Filters"
           onDelete={resetAllAttributes}
+          size="small"
           sx={{
-            ml: 1,
             backgroundColor: 'lightgrey',
           }}
         />
       )}
-    </Container>
+    </div>
   );
 }
 

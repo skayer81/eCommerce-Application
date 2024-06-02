@@ -4,7 +4,14 @@ const main = {
   gridTemplateAreas: `"top top"
   "left right"`,
   justifyContent: 'space-between',
-  pt: '30px',
+
+  backgroundColor: '#ffffff',
+  borderRadius: '10px',
+  overflow: 'hidden',
+
+  margin: 0,
+  maxWidth: '1280px',
+  padding: '30px 10px 10px 10px',
 };
 
 const topEl = {

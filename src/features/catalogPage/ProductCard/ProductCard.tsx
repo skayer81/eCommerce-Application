@@ -45,7 +45,7 @@ function ProductCard({
   });
 
   return (
-    <Grid item md={3} sm={6} xs={12}>
+    <Grid item lg={3} md={4} md1={4} sm={6} sm1={8} xs={12}>
       <Card sx={cardStyle}>
         <Box sx={boxStyle}>
           <CardMedia
@@ -58,7 +58,7 @@ function ProductCard({
           {discount && <Chip color="success" label={discountName} sx={chipStyle} />}
         </Box>
 
-        <CardContent>
+        <CardContent sx={{ flexGrow: '1' }}>
           <Typography component="div" gutterBottom sx={{ lineHeight: '1.3' }} variant="h6">
             {name}
           </Typography>
@@ -66,8 +66,11 @@ function ProductCard({
             {description}
           </Typography>
         </CardContent>
-        <CardActions>
-          <Typography sx={{ color: discount ? 'red' : 'inherit' }} variant="h5">
+        <CardActions sx={{ mt: 'auto' }}>
+          <Typography
+            sx={{ color: discount ? 'red' : 'primary.main', fontWeight: '500' }}
+            variant="h5"
+          >
             {formattedPrice}
           </Typography>
           {discount && (

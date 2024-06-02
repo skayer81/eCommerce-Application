@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import SortIcon from '@mui/icons-material/Sort';
-import { FormControlLabel, IconButton, Menu, MenuItem, Radio, RadioGroup } from '@mui/material';
+import { FormControlLabel, IconButton, ListItem, Menu, Radio, RadioGroup } from '@mui/material';
 
 import { useCatalogStore } from '@/stores/catalogStore';
 
@@ -39,7 +39,7 @@ function SortForm(): JSX.Element {
         aria-label="sort"
         onClick={handleClick}
         sx={{
-          backgroundColor: sortValue ? 'lightgreen' : 'inherit',
+          backgroundColor: sortValue ? 'bgButtons.main' : 'bgButtons.light',
           borderRadius: '10px',
           boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.3)',
         }}
@@ -49,9 +49,9 @@ function SortForm(): JSX.Element {
       <Menu anchorEl={anchorEl} keepMounted onClose={handleClose} open={Boolean(anchorEl)}>
         <RadioGroup aria-label="sort" name="sort" onChange={handleChange} value={sortValue}>
           {Array.from(sortOptions.entries()).map(([value, label]) => (
-            <MenuItem key={value} onClick={handleClose} sx={{ height: '30px' }}>
+            <ListItem key={value} onClick={handleClose} sx={{ height: '30px' }}>
               <FormControlLabel control={<Radio />} label={label} value={value} />
-            </MenuItem>
+            </ListItem>
           ))}
         </RadioGroup>
       </Menu>
