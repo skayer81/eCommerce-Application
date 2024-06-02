@@ -12,7 +12,17 @@ function ControlPanel(): JSX.Element {
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
   return (
     <Grid item>
-      <Stack direction="row" spacing={2}>
+      <Stack
+        spacing={2}
+        sx={{
+          flexDirection: {
+            xs: 'column',
+
+            md: 'row',
+          },
+          gap: '10px',
+        }}
+      >
         <Stack direction="row" spacing={2}>
           {isTablet && <CategoriesControl />}
 
