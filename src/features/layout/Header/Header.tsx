@@ -3,15 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import { Close, Menu } from '@mui/icons-material';
-import {
-  Box,
-  Drawer,
-  IconButton,
-  List,
-  ListItemButton,
-  ListItemText,
-  Typography,
-} from '@mui/material';
+import { Box, Drawer, IconButton, List, ListItemButton, ListItemText } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
@@ -22,20 +14,20 @@ import NoAuthPanel from '@/components/noAuthPanel/NoAuthPanel';
 import { useUserStore } from '@/stores/userStore';
 
 import logo from '../../../assets/icons/Logo.svg';
-import { buttons, header, li, ul } from './Styles';
+import { buttons, header, ul } from './Styles';
 
 export default function Header(): JSX.Element {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
   const { isLogin, logoutUserInStore } = useUserStore();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
-    if (!isMobile) {
+    if (!isTablet) {
       setDrawerOpen(false);
     }
-  }, [isMobile]);
+  }, [isTablet]);
 
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
@@ -50,6 +42,8 @@ export default function Header(): JSX.Element {
   const menuItems = [
     { text: 'Main', path: '/' },
     { text: 'Catalog', path: '/catalog' },
+    { text: 'About', path: '/about' },
+    { text: 'Cart', path: '/cart' },
   ];
 
   const DrawerList = (
@@ -84,7 +78,7 @@ export default function Header(): JSX.Element {
               component={Link}
               key={index}
               sx={{
-                color: location.pathname === item.path ? '#2e7d32' : 'inherit',
+                color: location.pathname === item.path ? 'primary.main' : 'inherit',
               }}
               to={item.path}
             >
@@ -116,25 +110,35 @@ export default function Header(): JSX.Element {
         <Link to="/">
           <img alt="logo" src={logo} />
         </Link>
-        {!isMobile ? (
+        {!isTablet ? (
           <>
             <Box component="nav">
               <List component="ul" sx={ul}>
-                <Typography component="li" sx={li}>
-                  <Link to="/">Main</Link>
-                </Typography>
-                <Typography component="li" sx={li}>
-                  <Link to="/catalog">Catalog</Link>
-                </Typography>
+                {menuItems.map((item, index) => (
+                  <ListItemButton
+                    component={Link}
+                    key={index}
+                    sx={{
+                      color: location.pathname === item.path ? 'primary.main' : 'inherit',
+                      justifyContent: 'center', // Центрируем содержимое по горизонтали
+                      textAlign: 'center', // Центрируем текст по горизонтали
+                    }}
+                    to={item.path}
+                  >
+                    <ListItemText
+                      primary={item.text}
+                      primaryTypographyProps={{ fontSize: '20px', fontWeight: '500' }}
+                    />
+                  </ListItemButton>
+                ))}
               </List>
             </Box>
             <Box component="div" sx={buttons}>
-              <NoAuthPanel />
-              {isLogin ? <AuthPanel logout={logout} /> : ''}
+              {isLogin ? <AuthPanel logout={logout} /> : <NoAuthPanel />}
             </Box>
           </>
         ) : (
-          <IconButton aria-label="menu" color="inherit" edge="end" onClick={toggleDrawer(true)}>
+          <IconButton aria-label="menu" color="primary" edge="end" onClick={toggleDrawer(true)}>
             <Menu sx={{ fontSize: '40px' }} />
           </IconButton>
         )}
