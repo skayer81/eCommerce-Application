@@ -49,17 +49,6 @@ const theme: ThemeOptions = {
       md1: 750,
     },
   },
-  components: {
-    MuiContainer: {
-      styleOverrides: {
-        root: {
-          '@media (min-width: 1200px)': {
-            maxWidth: '1280px',
-          },
-        },
-      },
-    },
-  },
 };
 
 export default createTheme(theme);
