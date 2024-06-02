@@ -8,6 +8,12 @@ declare module '@mui/material/styles' {
     bgButtons?: PaletteOptions['primary'];
   }
 }
+declare module '@mui/material/styles' {
+  interface BreakpointOverrides {
+    md1: true;
+    sm1: true;
+  }
+}
 
 const theme: ThemeOptions = {
   palette: {
@@ -31,6 +37,17 @@ const theme: ThemeOptions = {
   },
   typography: {
     fontFamily: 'Cera Pro',
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 550,
+      sm1: 450,
+      md: 900,
+      lg: 1200,
+      xl: 1920,
+      md1: 750,
+    },
   },
 };
 

@@ -4,6 +4,8 @@ import {
   ProductProjectionPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 import { Grid, Paper, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useQuery } from '@tanstack/react-query';
 
 import { getProducts } from '@/api/clientService';
@@ -18,6 +20,9 @@ import ProductCard from './ProductCard/ProductCard';
 import Search from './Search';
 
 function CatalogPage(): JSX.Element {
+  const theme = useTheme();
+  const isTablet = useMediaQuery(theme.breakpoints.up('md'));
+
   const { categoryId, sortValue, attributes, searchValue } = useCatalogStore((state) => ({
     categoryId: state.categoryId,
     sortValue: state.sortValue,
@@ -52,16 +57,16 @@ function CatalogPage(): JSX.Element {
         {/* Строка с поиском */}
         <Search />
         {/* Первая колонка */}
-        <Grid item xs={2}>
-          <Paper sx={{ pt: '10px' }}>
-            <Typography align="center" variant="h6">
-              Categories
-            </Typography>
-            <Categories />
-          </Paper>
-        </Grid>
+        {isTablet && (
+          <Grid item sx={{ flexBasis: 200, flexShrink: 0 }}>
+            <Paper sx={{ pt: '10px' }}>
+              <Categories />
+            </Paper>
+          </Grid>
+        )}
+
         {/* Вторая колонка */}
-        <Grid item xs={10}>
+        <Grid item xs>
           <Grid container direction="column" spacing={2}>
             {/* Первый ряд второй колонки */}
 
@@ -71,7 +76,7 @@ function CatalogPage(): JSX.Element {
             </Grid>
             {/* Второй ряд второй колонки */}
             <Grid item>
-              <Grid container spacing={2} sx={{ mb: '50px' }}>
+              <Grid container justifyContent="center" spacing={2} sx={{ mb: '50px' }}>
                 {data?.length === 0 ? (
                   <Typography sx={{ p: '10px' }}>Nothing was found</Typography>
                 ) : (

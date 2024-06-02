@@ -45,7 +45,7 @@ function ProductCard({
   });
 
   return (
-    <Grid item md={3} sm={6} xs={12}>
+    <Grid item lg={3} md={4} md1={4} sm={6} sm1={8} xs={12}>
       <Card sx={cardStyle}>
         <Box sx={boxStyle}>
           <CardMedia
