@@ -5,6 +5,12 @@ const main = {
   "left right"`,
   justifyContent: 'space-between',
   pt: '30px',
+  backgroundColor: '#ffffff',
+  borderRadius: '10px',
+  overflow: 'hidden',
+  pb: '10px',
+  margin: 0,
+  maxWidth: '1280px',
 };
 
 const topEl = {
