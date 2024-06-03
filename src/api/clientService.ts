@@ -127,6 +127,11 @@ export async function getCustomer(root: ByProjectKeyRequestBuilder): Promise<voi
   return root.me().get().execute().then(console.log).catch(console.error);
 }
 
+export function getProductByKey(key: string): Promise<ClientResponse> {
+  console.log(key);
+  return apiRoot.products().withKey({ key: key }).get().execute();
+}
+
 export async function getProducts(
   categoryId = '',
   sortValue: string,
@@ -139,7 +144,6 @@ export async function getProducts(
   const catFilter = categoryId ? [`categories.id:subtree("${categoryId}")`] : [];
   const resFilters = [...attrFilters, ...catFilter];
 
-  console.log('filters=', resFilters);
   return apiRoot
     .productProjections()
     .search()
