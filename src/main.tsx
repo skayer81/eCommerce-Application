@@ -2,11 +2,13 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { anonymFlowAuth, existingFlowAuth, getCustomer } from './api/clientService';
 import RequireMain from './components/requireMain/RequireMain';
 import { PROJECT_KEY } from './config/clientConfig.ts';
+import theme from './config/theme.ts';
 import AboutPage from './features/aboutPage/AboutPage.tsx';
 import CartPage from './features/cartPage/CartPage.tsx';
 import { CatalogPageLazy as CatalogPage } from './features/catalogPage/CatalogPageLazy.tsx';
@@ -89,7 +91,10 @@ const queryClient = new QueryClient();
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <RouterProvider router={router} />
+      </ThemeProvider>
     </QueryClientProvider>
   </React.StrictMode>,
 );

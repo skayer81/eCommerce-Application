@@ -1,7 +1,10 @@
 const cardStyle = {
   cursor: 'pointer',
-  maxHeight: '450px',
+  minHeight: '350px',
   position: 'relative',
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100%',
   transition: 'background-color 0.3s, box-shadow 0.3s',
   '&:hover': {
     backgroundColor: '#f4fbf0',

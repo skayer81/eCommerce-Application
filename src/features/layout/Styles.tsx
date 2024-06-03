@@ -1,5 +1,5 @@
 const main = {
-  maxWidth: 1224,
+  maxWidth: 1280,
   margin: '0 auto',
   padding: '0 12px',
 };

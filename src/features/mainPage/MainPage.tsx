@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 import flower from '../../assets/images/flowers.jpg';
 import { accent, description, left, main, right, subtitle, title } from './Styles';
@@ -6,7 +6,7 @@ import { textContent } from './TextContent';
 
 function MainPage(): JSX.Element {
   return (
-    <Container component="section" sx={main}>
+    <Box component="section" sx={main}>
       <Box component="div" sx={left}>
         <Typography component="span" sx={subtitle}>
           {textContent.subtitle}
@@ -25,7 +25,7 @@ function MainPage(): JSX.Element {
       <Box component="div" sx={right}>
         <img alt="flowers" src={flower} />
       </Box>
-    </Container>
+    </Box>
   );
 }
 

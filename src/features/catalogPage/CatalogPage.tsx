@@ -4,6 +4,8 @@ import {
   ProductProjectionPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 import { Grid, Paper, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useQuery } from '@tanstack/react-query';
 
 import { getProducts } from '@/api/clientService';
@@ -13,13 +15,27 @@ import { useCatalogStore } from '@/stores/catalogStore';
 
 import CatalogBreadcrumbs from './CatalogBreadCrumbs';
 import Categories from './Categories';
+import ControlPanel from './ControlPanel';
 import ProductCard from './ProductCard/ProductCard';
+import Search from './Search';
 
 function CatalogPage(): JSX.Element {
-  const categoryId = useCatalogStore((state) => state.categoryId);
-  const { data, isError, error, isLoading } = useQuery({
-    queryKey: ['products', categoryId],
-    queryFn: () => getProducts(categoryId),
+  const theme = useTheme();
+  const isTablet = useMediaQuery(theme.breakpoints.up('md'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const { categoryId, sortValue, attributes, searchValue } = useCatalogStore((state) => ({
+    categoryId: state.categoryId,
+    sortValue: state.sortValue,
+    attributes: state.attributes,
+    searchValue: state.searchValue,
+  }));
+
+  console.log('attributesstate=', attributes);
+
+  const { data, isError, error, isLoading, isSuccess } = useQuery({
+    queryKey: ['products', categoryId, sortValue, attributes, searchValue],
+    queryFn: () => getProducts(categoryId, sortValue, attributes, searchValue),
     select: (data: ClientResponse<ProductProjectionPagedQueryResponse>) => data.body.results,
   });
 
@@ -32,44 +48,56 @@ function CatalogPage(): JSX.Element {
     return <ErrorAlert />;
   }
 
+  if (isSuccess) {
+    console.log('products=', data);
+  }
+
   return (
     <>
       <Grid container spacing={2}>
+        {/* Строка с поиском */}
+        <Search />
         {/* Первая колонка */}
-        <Grid item xs={2}>
-          <Paper sx={{ pt: '10px' }}>
-            <Typography align="center" variant="h6">
-              Categories
-            </Typography>
-            <Categories />
-          </Paper>
-        </Grid>
+        {isTablet && (
+          <Grid item sx={{ flexBasis: 200, flexShrink: 0 }}>
+            <Paper sx={{ pt: '10px' }}>
+              <Categories />
+            </Paper>
+          </Grid>
+        )}
+
         {/* Вторая колонка */}
-        <Grid item xs={10}>
+        <Grid item xs>
           <Grid container direction="column" spacing={2}>
             {/* Первый ряд второй колонки */}
 
             <Grid item>
               <CatalogBreadcrumbs />
-              <Paper>
-                <Typography variant="h6">Вторая колонка - Ряд 1</Typography>
-                <Typography>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Typography>
-              </Paper>
+              <ControlPanel />
             </Grid>
             {/* Второй ряд второй колонки */}
             <Grid item>
-              <Grid container spacing={2}>
-                {data?.map((item: ProductProjection) => (
-                  <ProductCard
-                    description={item.metaDescription?.en}
-                    discount={item.masterVariant.prices?.[0].discounted?.value.centAmount}
-                    discountId={item.masterVariant.prices?.[0].discounted?.discount.id}
-                    imageUrl={item.masterVariant.images?.[0].url}
-                    key={item.key}
-                    name={item.name.en}
-                    price={item.masterVariant.prices?.[0].value.centAmount}
-                  />
-                ))}
+              <Grid
+                container
+                justifyContent={isMobile ? 'center' : 'flex-start'}
+                spacing={2}
+                sx={{ mb: '50px' }}
+              >
+                {data?.length === 0 ? (
+                  <Typography sx={{ p: '10px' }}>Nothing was found</Typography>
+                ) : (
+                  data?.map((item: ProductProjection) => (
+                    <ProductCard
+                      description={item.metaDescription?.en}
+                      discount={item.masterVariant.prices?.[0].discounted?.value.centAmount}
+                      discountId={item.masterVariant.prices?.[0].discounted?.discount.id}
+                      imageUrl={item.masterVariant.images?.[0].url}
+                      key={item.key}
+                      name={item.name.en}
+                      price={item.masterVariant.prices?.[0].value.centAmount}
+                    />
+                  ))
+                )}
               </Grid>
             </Grid>
           </Grid>
