@@ -18,6 +18,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 
 import { getAttributes } from '@/api/clientService';
+import ErrorAlert from '@/components/errorAlert/ErrorAlert';
 import { useCatalogStore } from '@/stores/catalogStore';
 import { PRODUCT_TYPE_KEY } from '@/utils/constants';
 
@@ -40,11 +41,20 @@ function FilterForm(): JSX.Element {
     handleClose();
   };
 
-  const { data: queryattributes, isSuccess } = useQuery({
+  const {
+    data: queryattributes,
+    isError,
+    error,
+  } = useQuery({
     queryKey: ['attributes'],
     queryFn: () => getAttributes(PRODUCT_TYPE_KEY),
     select: (data: ClientResponse<ProductType>) => data.body.attributes,
   });
+
+  if (isError) {
+    console.error(error);
+    return <ErrorAlert />;
+  }
 
   const filtAttributes = queryattributes?.filter((attr) => attr.name !== 'size');
 
@@ -55,10 +65,6 @@ function FilterForm(): JSX.Element {
   const handleClose = (): void => {
     setAnchorEl(null);
   };
-
-  if (isSuccess) {
-    console.log('attributes= ', filtAttributes);
-  }
 
   return (
     <div>
