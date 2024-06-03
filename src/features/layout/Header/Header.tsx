@@ -2,7 +2,7 @@ import type { JSX } from 'react';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-import { Close, Menu } from '@mui/icons-material';
+import { AccountCircle, Close, Menu } from '@mui/icons-material';
 import { Box, Drawer, IconButton, List, ListItemButton, ListItemText } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -112,7 +112,7 @@ export default function Header(): JSX.Element {
         </Link>
         {!isTablet ? (
           <>
-            <Box component="nav">
+            <Box component="nav" sx={{ maxWidth: '500px', width: '100%' }}>
               <List component="ul" sx={ul}>
                 {menuItems.map((item, index) => (
                   <ListItemButton
@@ -127,7 +127,7 @@ export default function Header(): JSX.Element {
                   >
                     <ListItemText
                       primary={item.text}
-                      primaryTypographyProps={{ fontSize: '20px', fontWeight: '500' }}
+                      primaryTypographyProps={{ fontSize: '18px', fontWeight: '500' }}
                     />
                   </ListItemButton>
                 ))}
@@ -138,9 +138,18 @@ export default function Header(): JSX.Element {
             </Box>
           </>
         ) : (
-          <IconButton aria-label="menu" color="primary" edge="end" onClick={toggleDrawer(true)}>
-            <Menu sx={{ fontSize: '40px' }} />
-          </IconButton>
+          <Box>
+            {isLogin ? (
+              <IconButton component={Link} to="/profile">
+                <AccountCircle color="primary" fontSize="large" />
+              </IconButton>
+            ) : (
+              ''
+            )}
+            <IconButton aria-label="menu" color="primary" edge="end" onClick={toggleDrawer(true)}>
+              <Menu sx={{ fontSize: '40px' }} />
+            </IconButton>
+          </Box>
         )}
         <Drawer anchor="right" onClose={toggleDrawer(false)} open={drawerOpen}>
           {DrawerList}

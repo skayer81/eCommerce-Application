@@ -7,10 +7,10 @@ import { button } from '@/features/layout/Header/Styles';
 export default function NoAuthPanel(): JSX.Element {
   return (
     <>
-      <Button color="success" sx={button} variant="contained">
-        <Link to="/login">Login</Link>
+      <Button color="primary" sx={button} variant="contained">
+        <Link to="/login">Log in</Link>
       </Button>
-      <Button color="success" sx={button} variant="contained">
+      <Button color="primary" sx={button} variant="contained">
         <Link to="/registration">Sign up</Link>
       </Button>
     </>
