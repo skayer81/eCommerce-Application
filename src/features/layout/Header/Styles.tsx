@@ -21,10 +21,11 @@ const buttons = {
 };
 
 const ul = {
+  padding: 0,
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'space-between',
-  width: '600px',
+  width: '100%',
 };
 
 const button = {
@@ -37,6 +38,7 @@ const button = {
   height: 35,
   width: 'max-content',
   borderRadius: 2,
+  mt: '7px',
 };
 
 export { button, buttons, header, main, ul };
