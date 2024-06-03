@@ -1,13 +1,11 @@
+import { useParams } from 'react-router-dom';
+
 import { ClientResponse, Product } from '@commercetools/platform-sdk';
 import { Container } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 
 import { getProductByKey } from '../../api/clientService';
 import DetailedCard from './DetailedCard';
-
-type Props = {
-  productKey: string;
-};
 
 type AtribListItem = {
   name: string;
@@ -33,12 +31,14 @@ function productAdapter(data: ClientResponse): ProductProperties {
   };
 }
 
-export default function ProductPage({ productKey = 'ficus-elastica5' }: Props): JSX.Element {
-  const item = 'ficus-elastica5';
+export default function ProductPage(): JSX.Element {
+  const { key } = useParams();
+
   const { data, error, isPending } = useQuery({
-    queryKey: ['products', { key: productKey }],
-    queryFn: () => getProductByKey(item),
+    queryKey: ['product', key],
+    queryFn: () => getProductByKey(key),
     select: productAdapter,
+    enabled: !!key && key.trim() !== '',
   });
 
   if (isPending) {
