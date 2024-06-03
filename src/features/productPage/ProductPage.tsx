@@ -38,7 +38,6 @@ export default function ProductPage(): JSX.Element {
     queryKey: ['product', key],
     queryFn: () => getProductByKey(key),
     select: productAdapter,
-    enabled: !!key && key.trim() !== '',
   });
 
   if (isPending) {
