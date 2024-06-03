@@ -60,6 +60,7 @@ function ProductList(): JSX.Element {
             key={item.key}
             name={item.name.en}
             price={item.masterVariant.prices?.[0].value.centAmount}
+            productKey={item.key}
           />
         ))
       )}

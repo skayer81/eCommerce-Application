@@ -6,6 +6,8 @@ const cardStyle = {
   flexDirection: 'column',
   height: '100%',
   transition: 'background-color 0.3s, box-shadow 0.3s',
+  textDecoration: 'none',
+  color: 'inherit',
   '&:hover': {
     backgroundColor: '#f4fbf0',
     boxShadow: '0 4px 10px rgba(0, 0, 0, 0.3)',

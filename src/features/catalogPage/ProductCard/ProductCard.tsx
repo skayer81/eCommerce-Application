@@ -1,3 +1,5 @@
+import { Link as RouterLink } from 'react-router-dom';
+
 import { ClientResponse, ProductDiscount } from '@commercetools/platform-sdk';
 import {
   Box,
@@ -22,6 +24,7 @@ interface ProductCardProps {
   imageUrl?: string;
   name: string;
   price?: number;
+  productKey?: string;
 }
 
 function ProductCard({
@@ -31,6 +34,7 @@ function ProductCard({
   price,
   discount,
   discountId,
+  productKey,
 }: ProductCardProps): JSX.Element {
   const finalPrice = discount ? discount : price;
   const formattedPrice = finalPrice ? (finalPrice / 1000).toFixed(2) + '$' : '';
@@ -46,7 +50,7 @@ function ProductCard({
 
   return (
     <Grid item lg={3} md={4} md1={4} sm={6} sm1={8} xs={12}>
-      <Card sx={cardStyle}>
+      <Card component={RouterLink} sx={cardStyle} to={`/product/${productKey}`}>
         <Box sx={boxStyle}>
           <CardMedia
             component="img"
