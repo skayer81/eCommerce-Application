@@ -18,6 +18,7 @@ import { LoginPageLazy as LoginPage } from './features/loginPage/LoginPageLazy.t
 import { MainPageLazy as MainPage } from './features/mainPage/MainPageLazy.tsx';
 import ProductPage from './features/productPage/ProductPage.tsx';
 import ProfilePage from './features/profilePage/ProfilePage.tsx';
+import RedirectToMain from './features/profilePage/RedirectToMain.tsx';
 import { RegistrationPageLazy as RegistrationPage } from './features/registrationPage/RegistrationPageLazy.tsx';
 import getCookie from './utils/helpers/cookies.ts';
 
@@ -63,7 +64,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/profile',
-        element: <ProfilePage />,
+        element: (
+          <RedirectToMain>
+            <ProfilePage />
+          </RedirectToMain>
+        ),
       },
       {
         path: '/cart',
