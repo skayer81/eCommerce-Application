@@ -1,4 +1,4 @@
-import { Box, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { Box, CardActions, List, ListItem, ListItemText, Typography } from '@mui/material';
 
 import DetailedCardSlider from './productCardSlider/DetailedCardSlider';
 
@@ -12,9 +12,11 @@ type AtribListItem = {
 type ProductProperties = {
   productProps: {
     description: string;
+    discount: number | undefined;
     imgList: Array<string>;
     listOfAtributes: Array<AtribListItem> | undefined;
     name: string;
+    price: number;
   };
   setIsFullScreen: (isFullScreen: boolean) => void;
 };
@@ -23,6 +25,11 @@ export default function DetailedCard({
   productProps,
   setIsFullScreen,
 }: ProductProperties): JSX.Element {
+  const finalPrice = productProps.discount ? productProps.discount : productProps.price;
+  const formattedPrice = finalPrice ? (finalPrice / 1000).toFixed(2) + '$' : '';
+  const priceBeforeDiscount = productProps.price
+    ? (productProps.price / 1000).toFixed(2) + '$'
+    : '';
   return (
     <>
       <Typography align="center" component="h1" variant="h4">
@@ -51,6 +58,22 @@ export default function DetailedCard({
                   </ListItem>
                 );
               })}
+          <CardActions sx={{ mt: 'auto' }}>
+            <Typography
+              sx={{ color: productProps.discount ? 'red' : 'primary.main', fontWeight: '500' }}
+              variant="h5"
+            >
+              {formattedPrice}
+            </Typography>
+            {productProps.discount && (
+              <Typography
+                sx={{ textDecoration: 'line-through', ml: '10px', color: 'grey' }}
+                variant="h6"
+              >
+                {priceBeforeDiscount}
+              </Typography>
+            )}
+          </CardActions>
         </List>
       </Box>
       <Typography>{productProps.description}</Typography>

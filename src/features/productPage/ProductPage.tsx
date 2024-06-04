@@ -18,18 +18,26 @@ type AtribListItem = {
 
 type ProductProperties = {
   description: string;
+  discount: number | undefined;
   imgList: Array<string>;
   listOfAtributes: Array<AtribListItem>;
   name: string;
+  price: number;
 };
 
 function productAdapter(data: ClientResponse): ProductProperties {
   const product: Product = data.body as Product;
+  console.log(product);
+  const prices = product.masterData.current.masterVariant.prices;
+
+  const discount = prices ? prices[0].discounted?.value.centAmount : undefined; //product.masterData.current.masterVariant.
   return {
     description: product.masterData.current.description?.en ?? '',
     imgList: product.masterData.current.masterVariant.images?.map((img) => img.url) ?? [''],
     name: product.masterData.current.name.en,
     listOfAtributes: product.masterData.current.masterVariant.attributes ?? [],
+    price: prices ? prices[0]?.value.centAmount : 0,
+    discount: discount,
   };
 }
 
