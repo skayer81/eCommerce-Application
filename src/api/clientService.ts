@@ -6,6 +6,7 @@ import {
 import { Client, ClientBuilder } from '@commercetools/sdk-client-v2';
 
 import { PROJECT_KEY } from '@/config/clientConfig';
+import { Customer } from '@/features/profilePage/Types';
 import { LoginForm, RegistrationRequestBody } from '@/types/interfaces';
 import { PRODUCTS_LIMIT } from '@/utils/constants';
 
@@ -25,7 +26,7 @@ const ctpClient = new ClientBuilder()
   .withLoggerMiddleware()
   .build();
 
-let apiRoot = getApiRoot(ctpClient);
+export let apiRoot = getApiRoot(ctpClient);
 
 function getApiRoot(ctpClient: Client): ByProjectKeyRequestBuilder {
   return createApiBuilderFromCtpClient(ctpClient).withProjectKey({
@@ -186,4 +187,26 @@ export async function getDiscountById(id: string): Promise<ClientResponse> {
 
 export async function getAttributes(productTypeKey: string): Promise<ClientResponse> {
   return apiRoot.productTypes().withKey({ key: productTypeKey }).get().execute();
+}
+
+export async function getUserInfo(
+  root: ByProjectKeyRequestBuilder,
+  store: (res: Customer) => void,
+): Promise<void> {
+  return root
+    .me()
+    .get()
+    .execute()
+    .then((res) => store(res.body))
+    .catch(console.error);
+}
+
+export async function changeData(data: object, customerId: string): Promise<void> {
+  return apiRoot
+    .customers()
+    .withId({ ID: customerId })
+    .post({ body: data })
+    .execute()
+    .then(console.log)
+    .catch(console.error);
 }

@@ -1,4 +1,4 @@
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 export interface RegistrationForm {
   billingAdress: string;
@@ -47,3 +47,9 @@ export type RegistrationRequestBody = {
   shippingAddresses?: Array<number>;
   title: string;
 };
+
+export interface profileData {
+  dateOfBirth: dayjs.Dayjs | null | string;
+  lastName: string;
+  name: string;
+}
