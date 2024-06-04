@@ -4,7 +4,7 @@ import { Info } from '@mui/icons-material';
 import { Container, IconButton, ImageListItem, ImageListItemBar } from '@mui/material';
 import { useKeenSlider } from 'keen-slider/react';
 
-import './DetailedCardSlider.css';
+import './detailedFullScreenSlider.css';
 import 'keen-slider/keen-slider.min.css';
 
 type Props = {
@@ -13,7 +13,11 @@ type Props = {
   setIsFullScreen: (f: boolean) => void;
 };
 
-export default function DetailedCardSlider({ imgList, name, setIsFullScreen }: Props): JSX.Element {
+export default function DetailedFullScreenSlider({
+  imgList,
+  name,
+  setIsFullScreen,
+}: Props): JSX.Element {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
@@ -27,23 +31,31 @@ export default function DetailedCardSlider({ imgList, name, setIsFullScreen }: P
   });
 
   return (
-    <Container sx={{ width: '40%' }}>
-      <div className="navigation-wrapper">
+    <div className="full-screen">
+      <Container className="navigation-wrapper">
+        {/* <Button onClick={()=>{setIsFullScreen(false)}}>XXXXXXXXXXXXXX</Button> */}
         <div className="keen-slider" ref={sliderRef}>
           {imgList.map((item, index) => (
             <ImageListItem
               className="keen-slider__slide"
               key={item}
               onClick={() => {
-                setIsFullScreen(true);
+                setIsFullScreen(false);
               }}
-              sx={{ cursor: 'pointer' }}
+              sx={{
+                maxHeight: '100vh',
+                display: 'flex',
+                justifyContent: 'center',
+                cursor: 'pointer',
+              }}
             >
               <img
                 alt={`${name}${index + 1}`}
+                className="image-item"
                 loading="lazy"
                 src={`${item}?w=248&fit=crop&auto=format`}
                 srcSet={`${item}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                style={{ width: '100wh' }}
               />
               <ImageListItemBar
                 actionIcon={
@@ -76,7 +88,7 @@ export default function DetailedCardSlider({ imgList, name, setIsFullScreen }: P
             />
           </>
         )}
-      </div>
+      </Container>
       {loaded && instanceRef.current && (
         <div className="dots">
           {[...Array(instanceRef.current.track.details.slides.length).keys()].map((idx) => {
@@ -92,7 +104,7 @@ export default function DetailedCardSlider({ imgList, name, setIsFullScreen }: P
           })}
         </div>
       )}
-    </Container>
+    </div>
   );
 }
 

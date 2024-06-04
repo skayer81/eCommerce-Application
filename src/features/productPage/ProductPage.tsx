@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { ClientResponse, Product } from '@commercetools/platform-sdk';
@@ -6,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { getProductByKey } from '../../api/clientService';
 import DetailedCard from './DetailedCard';
+import DetailedFullScreenSlider from './detailedFullScreenSlider/detailedFullScreenSlider';
 
 type AtribListItem = {
   name: string;
@@ -34,6 +36,8 @@ function productAdapter(data: ClientResponse): ProductProperties {
 export default function ProductPage(): JSX.Element {
   const { key } = useParams();
 
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
   const { data, error, isPending } = useQuery({
     queryKey: ['product', key],
     queryFn: () => getProductByKey(key),
@@ -49,8 +53,20 @@ export default function ProductPage(): JSX.Element {
   }
 
   return (
-    <Container sx={{ border: 1 }}>
-      <DetailedCard productProps={data} />
-    </Container>
+    <>
+      <Container sx={{ border: 1, padding: 2 }}>
+        <DetailedCard productProps={data} setIsFullScreen={setIsFullScreen} />
+        {/* // <DetailedFullScreenSlider/> */}
+      </Container>
+      {isFullScreen ? (
+        <DetailedFullScreenSlider
+          imgList={data.imgList}
+          name={data.name}
+          setIsFullScreen={setIsFullScreen}
+        />
+      ) : (
+        <div style={{ display: 'none' }}></div>
+      )}
+    </>
   );
 }
