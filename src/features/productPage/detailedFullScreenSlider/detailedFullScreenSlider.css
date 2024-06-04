@@ -1,3 +1,4 @@
+
 [class^='number-slide'],
 [class*=' number-slide'] {
   background: grey;
@@ -13,8 +14,8 @@
 
 .navigation-wrapper {
   position: relative;
+  /* width: 350px; */
   width: 100%;
-  /* border: 1px solid red; */
 }
 
 .dots {
@@ -64,4 +65,27 @@
 
 .arrow--disabled {
   fill: rgba(255, 255, 255, 0.5);
+}
+
+.full-screen{
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100lvh !important;
+  width: 100vw !important;
+  /* border: 1px solid red; */
+  background-color: rgba(0, 0, 0, 0.5);
+
+}
+
+.keen-slider{
+  /* border: 1px solid blue; */
+  max-height: 100lvh;
+  padding: 0;
+}
+
+.image-item{
+  width: auto;
+  max-height: 95lvh;
+  width: auto  !important;
 }

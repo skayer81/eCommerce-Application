@@ -1,4 +1,4 @@
-import { Box, ImageList, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { Box, List, ListItem, ListItemText, Typography } from '@mui/material';
 
 import DetailedCardSlider from './productCardSlider/DetailedCardSlider';
 
@@ -16,19 +16,27 @@ type ProductProperties = {
     listOfAtributes: Array<AtribListItem> | undefined;
     name: string;
   };
+  setIsFullScreen: (isFullScreen: boolean) => void;
 };
 
-export default function DetailedCard({ productProps }: ProductProperties): JSX.Element {
+export default function DetailedCard({
+  productProps,
+  setIsFullScreen,
+}: ProductProperties): JSX.Element {
   return (
     <>
-      <Typography align="center" component="h1" sx={{ mt: 5 }} variant="h4">
+      <Typography align="center" component="h1" variant="h4">
         {productProps.name}
       </Typography>
       <Box sx={{ flexDirection: 'row', display: 'flex' }}>
-        <ImageList sx={{ width: 500, height: 450 }}>
-          <DetailedCardSlider imgList={productProps.imgList} name={productProps.name} />
-        </ImageList>
-        <List>
+        {/* <ImageList sx={{ width: '40%', height: 'auto' }} > */}
+        <DetailedCardSlider
+          imgList={productProps.imgList}
+          name={productProps.name}
+          setIsFullScreen={setIsFullScreen}
+        />
+        {/* </ImageList> */}
+        <List sx={{ width: '60%', height: 'auto' }}>
           {productProps.listOfAtributes === undefined
             ? ''
             : productProps.listOfAtributes.map((elem, index) => {
