@@ -1,16 +1,6 @@
-import InfoIcon from '@mui/icons-material/Info';
-import {
-  Box,
-  IconButton,
-  ImageList,
-  ImageListItem,
-  ImageListItemBar,
-  List,
-  ListItem,
-  ListItemText,
-  ListSubheader,
-  Typography,
-} from '@mui/material';
+import { Box, ImageList, List, ListItem, ListItemText, Typography } from '@mui/material';
+
+import DetailedCardSlider from './productCardSlider/DetailedCardSlider';
 
 type AtribListItem = {
   name: string;
@@ -22,7 +12,7 @@ type AtribListItem = {
 type ProductProperties = {
   productProps: {
     description: string;
-    imgList: Array<string> | undefined;
+    imgList: Array<string>;
     listOfAtributes: Array<AtribListItem> | undefined;
     name: string;
   };
@@ -36,30 +26,8 @@ export default function DetailedCard({ productProps }: ProductProperties): JSX.E
       </Typography>
       <Box sx={{ flexDirection: 'row', display: 'flex' }}>
         <ImageList sx={{ width: 500, height: 450 }}>
-          <ImageListItem cols={2} key="Subheader">
-            <ListSubheader component="div">Slider</ListSubheader>
-          </ImageListItem>
-          {productProps.imgList.map((item, index) => (
-            <ImageListItem key={item}>
-              <img
-                alt={`${productProps.name}${index}`}
-                loading="lazy"
-                src={`${item}?w=248&fit=crop&auto=format`}
-                srcSet={`${item}?w=248&fit=crop&auto=format&dpr=2 2x`}
-              />
-              <ImageListItemBar
-                actionIcon={
-                  <IconButton aria-label={`full size`} sx={{ color: 'rgba(255, 255, 255, 0.54)' }}>
-                    <InfoIcon />
-                  </IconButton>
-                }
-                subtitle={`image ${index}`}
-                title={productProps.name}
-              />
-            </ImageListItem>
-          ))}
+          <DetailedCardSlider imgList={productProps.imgList} name={productProps.name} />
         </ImageList>
-
         <List>
           {productProps.listOfAtributes === undefined
             ? ''
