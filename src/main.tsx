@@ -5,7 +5,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import { anonymFlowAuth, existingFlowAuth, getCustomer } from './api/clientService';
+import { anonymFlowAuth, existingFlowAuth } from './api/clientService';
 import RequireMain from './components/requireMain/RequireMain';
 import { PROJECT_KEY } from './config/clientConfig.ts';
 import theme from './config/theme.ts';
@@ -27,8 +27,7 @@ import './index.css';
 const token = getCookie(PROJECT_KEY);
 if (token !== null) {
   const accessToken = 'Bearer ' + token;
-  const root = existingFlowAuth(accessToken);
-  await getCustomer(root);
+  existingFlowAuth(accessToken);
 } else {
   anonymFlowAuth();
 }
