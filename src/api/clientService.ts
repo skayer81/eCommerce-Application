@@ -7,7 +7,7 @@ import { Client, ClientBuilder } from '@commercetools/sdk-client-v2';
 
 import { PROJECT_KEY } from '@/config/clientConfig';
 import { Customer } from '@/features/profilePage/Types';
-import { LoginForm, RegistrationRequestBody } from '@/types/interfaces';
+import { LoginForm, PasswordChange, RegistrationRequestBody } from '@/types/interfaces';
 import { PRODUCTS_LIMIT } from '@/utils/constants';
 
 import {
@@ -189,16 +189,8 @@ export async function getAttributes(productTypeKey: string): Promise<ClientRespo
   return apiRoot.productTypes().withKey({ key: productTypeKey }).get().execute();
 }
 
-export async function getUserInfo(
-  root: ByProjectKeyRequestBuilder,
-  store: (res: Customer) => void,
-): Promise<void> {
-  return root
-    .me()
-    .get()
-    .execute()
-    .then((res) => store(res.body))
-    .catch(console.error);
+export async function getUserInfo(): Promise<ClientResponse<Customer>> {
+  return apiRoot.me().get().execute();
 }
 
 export async function changeData(data: object, customerId: string): Promise<void> {
@@ -209,4 +201,8 @@ export async function changeData(data: object, customerId: string): Promise<void
     .execute()
     .then(console.log)
     .catch(console.error);
+}
+
+export async function changePassword(data: PasswordChange): Promise<ClientResponse<Customer>> {
+  return apiRoot.customers().password().post({ body: data }).execute();
 }

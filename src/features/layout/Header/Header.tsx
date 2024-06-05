@@ -7,14 +7,12 @@ import { Box, Drawer, IconButton, List, ListItemButton, ListItemText } from '@mu
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import { anonymFlowAuth, existingFlowAuth, getUserInfo } from '@/api/clientService';
+import { anonymFlowAuth } from '@/api/clientService';
 import { tokenCache } from '@/api/tokenCache';
 import AuthPanel from '@/components/authPanel/AuthPanel';
 import NoAuthPanel from '@/components/noAuthPanel/NoAuthPanel';
-import { PROJECT_KEY } from '@/config/clientConfig';
 import { useCustomerStore } from '@/features/profilePage/Types';
 import { useUserStore } from '@/stores/userStore';
-import getCookie from '@/utils/helpers/cookies';
 
 import logo from '../../../assets/icons/Logo.svg';
 import { buttons, header, ul } from './Styles';
@@ -24,7 +22,7 @@ export default function Header(): JSX.Element {
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
   const { isLogin, logoutUserInStore } = useUserStore();
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const { deleteUserFromStore, saveUserInStore } = useCustomerStore();
+  const { deleteUserFromStore } = useCustomerStore();
   const location = useLocation();
 
   useEffect(() => {
@@ -42,15 +40,6 @@ export default function Header(): JSX.Element {
     deleteUserFromStore();
     anonymFlowAuth();
     tokenCache.deleteToken();
-  };
-
-  const getUser = async (): Promise<void> => {
-    const token = getCookie(PROJECT_KEY);
-    if (token !== null) {
-      const accessToken = 'Bearer ' + token;
-      const root = existingFlowAuth(accessToken);
-      await getUserInfo(root, saveUserInStore);
-    }
   };
 
   const menuItems = [
@@ -148,18 +137,7 @@ export default function Header(): JSX.Element {
               </List>
             </Box>
             <Box component="div" sx={buttons}>
-              {isLogin ? (
-                <AuthPanel
-                  getUser={() => {
-                    (async () => {
-                      await getUser();
-                    })().catch(console.error);
-                  }}
-                  logout={logout}
-                />
-              ) : (
-                <NoAuthPanel />
-              )}
+              {isLogin ? <AuthPanel logout={logout} /> : <NoAuthPanel />}
             </Box>
           </>
         ) : (

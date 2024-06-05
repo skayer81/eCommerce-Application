@@ -2,35 +2,36 @@ import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 import { HttpErrorType } from '@commercetools/sdk-client-v2';
-import { Box, Container, Stack, TextField, Typography } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { Box, Stack, Switch, TextField, Typography } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
 
 import RulesValidation from '@/components/formComponents/rulesValidation';
-import { PROJECT_KEY } from '@/config/clientConfig';
-import { useCustomerStore } from '@/features/profilePage/Types';
-import { profileData } from '@/types/interfaces';
-import getCookie from '@/utils/helpers/cookies';
+import { Customer } from '@/features/profilePage/Types';
+import { ProfileData } from '@/types/interfaces';
 
-import { changeData, existingFlowAuth, getUserInfo } from '../../api/clientService';
+import { changeData } from '../../api/clientService';
 
-function UserData(): JSX.Element {
+function UserData({ ...props }): JSX.Element {
+  const customer: Customer = { ...props };
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [editMode] = useState(false);
-  const [firstName, setFirstName] = useState(useCustomerStore().customer.firstName);
-  const [lastName, setLastName] = useState(useCustomerStore().customer.lastName);
-  const [dateOfBirthD, setDateOfBirth] = useState(dayjs(useCustomerStore().customer.dateOfBirth));
-  const { saveUserInStore } = useCustomerStore();
-  const customerId = useCustomerStore().customer.id as string;
-  const version = useCustomerStore().customer.version;
+  const [editMode, setEditMode] = useState(false);
+  const [firstName, setFirstName] = useState(customer.firstName);
+  const [lastName, setLastName] = useState(customer.lastName);
+  const [dateOfBirthD, setDateOfBirth] = useState(dayjs(customer.dateOfBirth));
+  // const { saveUserInStore } = useCustomerStore();
+  const customerId = customer.id as string;
+  const version = customer.version;
 
   const {
     handleSubmit,
     formState: { errors },
     control,
-  } = useForm<profileData>({
+  } = useForm<ProfileData>({
     mode: 'onChange',
     defaultValues: {
       name: firstName,
@@ -39,14 +40,14 @@ function UserData(): JSX.Element {
     },
   });
 
-  const getUser = async (): Promise<void> => {
-    const token = getCookie(PROJECT_KEY);
-    if (token !== null) {
-      const accessToken = 'Bearer ' + token;
-      const root = existingFlowAuth(accessToken);
-      await getUserInfo(root, saveUserInStore);
-    }
-  };
+  // const getUser = async (): Promise<void> => {
+  //   const token = getCookie(PROJECT_KEY);
+  //   if (token !== null) {
+  //     const accessToken = 'Bearer ' + token;
+  //     const root = existingFlowAuth(accessToken);
+  //     await getUserInfo(root, saveUserInStore);
+  //   }
+  // };
 
   const updateUserData = (): Promise<void> => {
     const data = {
@@ -69,9 +70,10 @@ function UserData(): JSX.Element {
     return changeData(data, customerId);
   };
 
-  const submit: SubmitHandler<profileData> = (): void => {
+  const submit: SubmitHandler<ProfileData> = (): void => {
+    setLoading(true);
     updateUserData()
-      .then(() => getUser())
+      .then(console.log)
       .catch((err: HttpErrorType) => {
         if (err.status === 400) {
           setError(true);
@@ -79,12 +81,14 @@ function UserData(): JSX.Element {
           console.error(error);
         }
       })
-      .finally(() => {});
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
     <LocalizationProvider adapterLocale="de" dateAdapter={AdapterDayjs}>
-      <Container component="section">
+      <Box component="section" sx={{ width: 350, margin: 0 }}>
         <Stack
           maxWidth={350}
           spacing={2}
@@ -100,9 +104,20 @@ function UserData(): JSX.Element {
             onSubmit={(event) => void handleSubmit(submit)(event)}
             style={{ width: '100%' }}
           >
-            <Typography component="h1" sx={{ mb: 2 }} variant="h5">
-              Profile
-            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Typography component="h1" variant="h5">
+                User data
+              </Typography>
+              <Box sx={{ display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
+                <Typography>Edit mode</Typography>
+                <Switch
+                  color="success"
+                  onChange={() => {
+                    setEditMode(editMode === true ? false : true);
+                  }}
+                />
+              </Box>
+            </Box>
             <Controller
               control={control}
               name="name"
@@ -157,7 +172,7 @@ function UserData(): JSX.Element {
               control={control}
               name="dateOfBirth"
               render={({ field: { onChange } }) => (
-                <Box alignItems="center" display="flex" sx={{ mb: 4 }}>
+                <Box alignItems="center" display="flex">
                   <Typography component="label" htmlFor="last-name" sx={{ mr: 2 }} variant="body1">
                     Date of birth:
                   </Typography>
@@ -181,9 +196,20 @@ function UserData(): JSX.Element {
               )}
               rules={RulesValidation.dateOfbirth}
             />
+            <LoadingButton
+              color="success"
+              disabled={editMode === false ? true : false}
+              loading={loading}
+              size="small"
+              sx={{ mb: 2, mt: 3 }}
+              type="submit"
+              variant="contained"
+            >
+              <span style={{ fontSize: 'inherit' }}>Update data</span>
+            </LoadingButton>
           </form>
         </Stack>
-      </Container>
+      </Box>
     </LocalizationProvider>
   );
 }

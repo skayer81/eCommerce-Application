@@ -48,8 +48,24 @@ export type RegistrationRequestBody = {
   title: string;
 };
 
-export interface profileData {
+export interface ProfileData {
   dateOfBirth: dayjs.Dayjs | null | string;
   lastName: string;
   name: string;
+}
+
+export interface Email {
+  email: string;
+}
+
+export interface Password {
+  newPassword: string;
+  password: string;
+}
+
+export interface PasswordChange {
+  currentPassword: string;
+  id: string;
+  newPassword: string;
+  version: number;
 }

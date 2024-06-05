@@ -4,12 +4,11 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
-  Container,
   Stack,
   Typography,
 } from '@mui/material';
 
-import { useCustomerStore } from '@/features/profilePage/Types';
+import { Customer } from '@/features/profilePage/Types';
 
 const country = {
   RU: 'Russia',
@@ -17,13 +16,14 @@ const country = {
   SE: 'Sweden',
 };
 
-function Addresses(): JSX.Element {
-  const addresses = useCustomerStore().customer.addresses;
-  const billingAddressIds = useCustomerStore().customer.billingAddressIds;
+function Addresses({ ...props }): JSX.Element {
+  const customer: Customer = props;
+  const addresses = customer.addresses;
+  const billingAddressIds = customer.billingAddressIds;
   const filteredBillingAddresses = addresses!.filter((address) =>
     billingAddressIds!.includes(address.id as string),
   );
-  const shippingAddressIds = useCustomerStore().customer.shippingAddressIds;
+  const shippingAddressIds = customer.shippingAddressIds;
   const filteredShippingAddresses = addresses!.filter((address) =>
     shippingAddressIds!.includes(address.id as string),
   );
@@ -32,11 +32,11 @@ function Addresses(): JSX.Element {
       !billingAddressIds!.includes(address.id as string) &&
       !shippingAddressIds!.includes(address.id as string),
   );
-  const defaultBillingAddres = useCustomerStore().customer.defaultBillingAddressId as string;
-  const defaultShippingAddres = useCustomerStore().customer.defaultShippingAddressId;
+  const defaultBillingAddres = customer.defaultBillingAddressId as string;
+  const defaultShippingAddres = customer.defaultShippingAddressId;
 
   return (
-    <Container component="section">
+    <Box component="section">
       <Stack
         maxWidth={350}
         spacing={2}
@@ -171,7 +171,7 @@ function Addresses(): JSX.Element {
           ''
         )}
       </Stack>
-    </Container>
+    </Box>
   );
 }
 
