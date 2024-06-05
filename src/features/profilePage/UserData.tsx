@@ -23,7 +23,6 @@ function UserData({ ...props }): JSX.Element {
   const [firstName, setFirstName] = useState(customer.firstName);
   const [lastName, setLastName] = useState(customer.lastName);
   const [dateOfBirthD, setDateOfBirth] = useState(dayjs(customer.dateOfBirth));
-  // const { saveUserInStore } = useCustomerStore();
   const customerId = customer.id as string;
   const version = customer.version;
 
@@ -39,15 +38,6 @@ function UserData({ ...props }): JSX.Element {
       dateOfBirth: dateOfBirthD,
     },
   });
-
-  // const getUser = async (): Promise<void> => {
-  //   const token = getCookie(PROJECT_KEY);
-  //   if (token !== null) {
-  //     const accessToken = 'Bearer ' + token;
-  //     const root = existingFlowAuth(accessToken);
-  //     await getUserInfo(root, saveUserInStore);
-  //   }
-  // };
 
   const updateUserData = (): Promise<void> => {
     const data = {
