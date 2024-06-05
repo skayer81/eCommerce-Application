@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 import { CustomerUpdate } from '@commercetools/platform-sdk';
-// import { HttpErrorType } from '@commercetools/sdk-client-v2';
 import { LoadingButton } from '@mui/lab';
 import { Box, Snackbar, Stack, Switch, TextField, Typography } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -12,6 +11,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import 'dayjs/locale/de';
 
+import ErrorAlert from '@/components/errorAlert/ErrorAlert';
 import RulesValidation from '@/components/formComponents/rulesValidation';
 import { Customer } from '@/features/profilePage/Types';
 import { ProfileData } from '@/types/interfaces';
@@ -20,7 +20,7 @@ import { changeData } from '../../api/clientService';
 
 function UserData({ ...props }): JSX.Element {
   const customer: Customer = { ...props };
-  console.log('customer', customer);
+
   const [loading, setLoading] = useState(false);
   const [snackBarState, setSnackBar] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -29,7 +29,7 @@ function UserData({ ...props }): JSX.Element {
 
   const queryClient = useQueryClient();
 
-  const mutation = useMutation<unknown, unknown, CustomerUpdate>({
+  const { mutate, error, isError } = useMutation<unknown, unknown, CustomerUpdate, unknown>({
     mutationFn: (newData: CustomerUpdate) => changeData(newData, customerId),
     onSuccess: async () => {
       setLoading(false);
@@ -53,7 +53,6 @@ function UserData({ ...props }): JSX.Element {
   });
 
   const submit: SubmitHandler<ProfileData> = (data: ProfileData): void => {
-    console.log('data=', data);
     setLoading(true);
     setEditMode;
     const newData: CustomerUpdate = {
@@ -74,12 +73,17 @@ function UserData({ ...props }): JSX.Element {
       ],
     };
 
-    mutation.mutate(newData);
+    mutate(newData);
   };
 
   const handleClose = (): void => {
     setSnackBar(false);
   };
+
+  if (isError) {
+    console.error(error);
+    return <ErrorAlert />;
+  }
 
   return (
     <LocalizationProvider adapterLocale="de" dateAdapter={AdapterDayjs}>
