@@ -39,7 +39,7 @@
 }
 
 .dot.active {
-  background: #46A358;
+  background: #46a358;
 }
 
 .arrow--left {
@@ -54,7 +54,6 @@
 .arrow--disabled {
   fill: rgba(255, 255, 255, 0.3);
 }
-
 
 .full-screen {
   position: absolute;
