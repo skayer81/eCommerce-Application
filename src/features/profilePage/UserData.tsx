@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
-import { HttpErrorType } from '@commercetools/sdk-client-v2';
+import { CustomerUpdate } from '@commercetools/platform-sdk';
+// import { HttpErrorType } from '@commercetools/sdk-client-v2';
 import { LoadingButton } from '@mui/lab';
-import { Box, Stack, Switch, TextField, Typography } from '@mui/material';
+import { Box, Snackbar, Stack, Switch, TextField, Typography } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
+import 'dayjs/locale/de';
 
 import RulesValidation from '@/components/formComponents/rulesValidation';
 import { Customer } from '@/features/profilePage/Types';
@@ -17,14 +20,24 @@ import { changeData } from '../../api/clientService';
 
 function UserData({ ...props }): JSX.Element {
   const customer: Customer = { ...props };
+  console.log('customer', customer);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [snackBarState, setSnackBar] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [firstName, setFirstName] = useState(customer.firstName);
-  const [lastName, setLastName] = useState(customer.lastName);
-  const [dateOfBirthD, setDateOfBirth] = useState(dayjs(customer.dateOfBirth));
   const customerId = customer.id as string;
   const version = customer.version;
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation<unknown, unknown, CustomerUpdate>({
+    mutationFn: (newData: CustomerUpdate) => changeData(newData, customerId),
+    onSuccess: async () => {
+      setLoading(false);
+      setEditMode(false);
+      setSnackBar(true);
+      await queryClient.invalidateQueries({ queryKey: ['me'] });
+    },
+  });
 
   const {
     handleSubmit,
@@ -33,47 +46,39 @@ function UserData({ ...props }): JSX.Element {
   } = useForm<ProfileData>({
     mode: 'onChange',
     defaultValues: {
-      name: firstName,
-      lastName: lastName,
-      dateOfBirth: dateOfBirthD,
+      name: customer.firstName,
+      lastName: customer.lastName,
+      dateOfBirth: dayjs(customer.dateOfBirth),
     },
   });
 
-  const updateUserData = (): Promise<void> => {
-    const data = {
-      version: version,
+  const submit: SubmitHandler<ProfileData> = (data: ProfileData): void => {
+    console.log('data=', data);
+    setLoading(true);
+    setEditMode;
+    const newData: CustomerUpdate = {
+      version: version as number,
       actions: [
         {
           action: 'setLastName',
-          lastName: lastName,
+          lastName: data.lastName,
         },
         {
           action: 'setFirstName',
-          firstName: firstName,
+          firstName: data.name,
         },
         {
           action: 'setDateOfBirth',
-          dateOfBirth: dateOfBirthD.format('YYYY-MM-DD'),
+          dateOfBirth: data.dateOfBirth.format('YYYY-MM-DD'),
         },
       ],
     };
-    return changeData(data, customerId);
+
+    mutation.mutate(newData);
   };
 
-  const submit: SubmitHandler<ProfileData> = (): void => {
-    setLoading(true);
-    updateUserData()
-      .then(console.log)
-      .catch((err: HttpErrorType) => {
-        if (err.status === 400) {
-          setError(true);
-        } else {
-          console.error(error);
-        }
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+  const handleClose = (): void => {
+    setSnackBar(false);
   };
 
   return (
@@ -89,11 +94,7 @@ function UserData({ ...props }): JSX.Element {
             justifyContent: 'center',
           }}
         >
-          <form
-            onChange={() => setError(false)}
-            onSubmit={(event) => void handleSubmit(submit)(event)}
-            style={{ width: '100%' }}
-          >
+          <form onSubmit={(event) => void handleSubmit(submit)(event)} style={{ width: '100%' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <Typography component="h1" variant="h5">
                 User data
@@ -101,6 +102,7 @@ function UserData({ ...props }): JSX.Element {
               <Box sx={{ display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
                 <Typography>Edit mode</Typography>
                 <Switch
+                  checked={editMode}
                   color="success"
                   onChange={() => {
                     setEditMode(editMode === true ? false : true);
@@ -111,22 +113,19 @@ function UserData({ ...props }): JSX.Element {
             <Controller
               control={control}
               name="name"
-              render={({ field: { onChange } }) => (
+              render={({ field: { value, onChange } }) => (
                 <Box alignItems="center" display="flex">
                   <Typography component="label" htmlFor="last-name" sx={{ mr: 2 }} variant="body1">
                     FirstName:
                   </Typography>
                   <TextField
-                    defaultValue={firstName}
                     disabled={editMode === false ? true : false}
                     error={!!errors.name}
                     fullWidth
                     helperText={errors.name?.message}
                     id="name"
-                    onChange={(e) => {
-                      setFirstName(e.target.value);
-                      onChange(e);
-                    }}
+                    onChange={onChange}
+                    value={value}
                     variant="standard"
                   />
                 </Box>
@@ -136,22 +135,19 @@ function UserData({ ...props }): JSX.Element {
             <Controller
               control={control}
               name="lastName"
-              render={({ field: { onChange } }) => (
+              render={({ field: { value, onChange } }) => (
                 <Box alignItems="center" display="flex">
                   <Typography component="label" htmlFor="last-name" sx={{ mr: 2 }} variant="body1">
                     LastName:
                   </Typography>
                   <TextField
-                    defaultValue={lastName}
                     disabled={editMode === false ? true : false}
                     error={!!errors.lastName}
                     fullWidth
                     helperText={errors.lastName?.message}
                     id="last-name"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-                      setLastName(e.target.value);
-                      onChange(e);
-                    }}
+                    onChange={onChange}
+                    value={value}
                     variant="standard"
                   />
                 </Box>
@@ -161,18 +157,14 @@ function UserData({ ...props }): JSX.Element {
             <Controller
               control={control}
               name="dateOfBirth"
-              render={({ field: { onChange } }) => (
+              render={({ field: { value, onChange } }) => (
                 <Box alignItems="center" display="flex">
                   <Typography component="label" htmlFor="last-name" sx={{ mr: 2 }} variant="body1">
                     Date of birth:
                   </Typography>
                   <DatePicker
-                    defaultValue={dateOfBirthD}
                     disabled={editMode === false ? true : false}
-                    onChange={(e) => {
-                      setDateOfBirth(dayjs(e));
-                      onChange(e);
-                    }}
+                    onChange={onChange}
                     slotProps={{
                       textField: {
                         size: 'small',
@@ -181,6 +173,7 @@ function UserData({ ...props }): JSX.Element {
                         variant: 'standard',
                       },
                     }}
+                    value={value}
                   />
                 </Box>
               )}
@@ -200,6 +193,14 @@ function UserData({ ...props }): JSX.Element {
           </form>
         </Stack>
       </Box>
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        autoHideDuration={3000}
+        key={'top' + 'right'}
+        message="User data updated successfully"
+        onClose={handleClose}
+        open={snackBarState}
+      />
     </LocalizationProvider>
   );
 }

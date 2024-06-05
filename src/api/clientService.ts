@@ -1,6 +1,7 @@
 import {
   ByProjectKeyRequestBuilder,
   ClientResponse,
+  CustomerUpdate,
   createApiBuilderFromCtpClient,
 } from '@commercetools/platform-sdk';
 import { Client, ClientBuilder } from '@commercetools/sdk-client-v2';
@@ -193,14 +194,11 @@ export async function getUserInfo(): Promise<ClientResponse<Customer>> {
   return apiRoot.me().get().execute();
 }
 
-export async function changeData(data: object, customerId: string): Promise<void> {
-  return apiRoot
-    .customers()
-    .withId({ ID: customerId })
-    .post({ body: data })
-    .execute()
-    .then(console.log)
-    .catch(console.error);
+export async function changeData(
+  data: CustomerUpdate,
+  customerId: string,
+): Promise<ClientResponse> {
+  return apiRoot.customers().withId({ ID: customerId }).post({ body: data }).execute();
 }
 
 export async function changePassword(data: PasswordChange): Promise<ClientResponse<Customer>> {

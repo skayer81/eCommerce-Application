@@ -49,7 +49,7 @@ export type RegistrationRequestBody = {
 };
 
 export interface ProfileData {
-  dateOfBirth: dayjs.Dayjs | null | string;
+  dateOfBirth: dayjs.Dayjs;
   lastName: string;
   name: string;
 }
