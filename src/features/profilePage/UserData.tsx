@@ -107,7 +107,7 @@ function UserData({ ...props }): JSX.Element {
                 <Typography>Edit mode</Typography>
                 <Switch
                   checked={editMode}
-                  color="success"
+                  color="primary"
                   onChange={() => {
                     setEditMode(editMode === true ? false : true);
                   }}
@@ -184,7 +184,7 @@ function UserData({ ...props }): JSX.Element {
               rules={RulesValidation.dateOfbirth}
             />
             <LoadingButton
-              color="success"
+              color="primary"
               disabled={editMode === false ? true : false}
               loading={loading}
               size="small"
