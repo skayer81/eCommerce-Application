@@ -39,19 +39,19 @@
 }
 
 .dot.active {
-  background: #000;
+  background: #46A358;
 }
 
-.arrow {
+/* .full-screen .arrow {
   width: 30px;
   height: 30px;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   -webkit-transform: translateY(-50%);
-  fill: #000;
+  fill: #fff;
   cursor: pointer;
-}
+} */
 
 .arrow--left {
   left: 5px;
@@ -63,8 +63,9 @@
 }
 
 .arrow--disabled {
-  fill: rgba(255, 255, 255, 0.5);
+  fill: rgba(255, 255, 255, 0.3);
 }
+
 
 .full-screen {
   position: absolute;
@@ -73,7 +74,7 @@
   height: 100lvh !important;
   width: 100vw !important;
   /* border: 1px solid red; */
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 .keen-slider {
