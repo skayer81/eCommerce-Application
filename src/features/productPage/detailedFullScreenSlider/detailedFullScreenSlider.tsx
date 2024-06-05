@@ -8,6 +8,7 @@ import './detailedFullScreenSlider.css';
 import 'keen-slider/keen-slider.min.css';
 
 type Props = {
+  firstSlideNumber: number;
   imgList: Array<string>;
   name: string;
   setIsFullScreen: (f: boolean) => void;
@@ -17,11 +18,12 @@ export default function DetailedFullScreenSlider({
   imgList,
   name,
   setIsFullScreen,
+  firstSlideNumber,
 }: Props): JSX.Element {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(firstSlideNumber);
   const [loaded, setLoaded] = useState(false);
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
-    initial: 0,
+    initial: firstSlideNumber,
     slideChanged(slider) {
       setCurrentSlide(slider.track.details.rel);
     },

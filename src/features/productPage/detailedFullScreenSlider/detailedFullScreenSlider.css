@@ -39,18 +39,7 @@
 }
 
 .dot.active {
-  background: #000;
-}
-
-.arrow {
-  width: 30px;
-  height: 30px;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  -webkit-transform: translateY(-50%);
-  fill: #000;
-  cursor: pointer;
+  background: #46a358;
 }
 
 .arrow--left {
@@ -63,7 +52,7 @@
 }
 
 .arrow--disabled {
-  fill: rgba(255, 255, 255, 0.5);
+  fill: rgba(255, 255, 255, 0.3);
 }
 
 .full-screen {
@@ -73,7 +62,7 @@
   height: 100lvh !important;
   width: 100vw !important;
   /* border: 1px solid red; */
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 .keen-slider {

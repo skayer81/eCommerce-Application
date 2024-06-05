@@ -27,7 +27,7 @@ type ProductProperties = {
 
 function productAdapter(data: ClientResponse): ProductProperties {
   const product: Product = data.body as Product;
-  console.log(product);
+  // console.log(product);
   const prices = product.masterData.current.masterVariant.prices;
 
   const discount = prices ? prices[0].discounted?.value.centAmount : undefined; //product.masterData.current.masterVariant.
@@ -45,6 +45,7 @@ export default function ProductPage(): JSX.Element {
   const { key } = useParams();
 
   const [isFullScreen, setIsFullScreen] = useState(false);
+  const [fullScreenSlideNumber, setFullScreenSlideNumber] = useState(0);
 
   const { data, error, isPending } = useQuery({
     queryKey: ['product', key],
@@ -63,11 +64,16 @@ export default function ProductPage(): JSX.Element {
   return (
     <>
       <Container sx={{ border: 1, padding: 2 }}>
-        <DetailedCard productProps={data} setIsFullScreen={setIsFullScreen} />
+        <DetailedCard
+          productProps={data}
+          setIsFullScreen={setIsFullScreen}
+          setSlideNumber={setFullScreenSlideNumber}
+        />
         {/* // <DetailedFullScreenSlider/> */}
       </Container>
       {isFullScreen ? (
         <DetailedFullScreenSlider
+          firstSlideNumber={fullScreenSlideNumber}
           imgList={data.imgList}
           name={data.name}
           setIsFullScreen={setIsFullScreen}

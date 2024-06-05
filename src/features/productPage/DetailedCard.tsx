@@ -19,11 +19,13 @@ type ProductProperties = {
     price: number;
   };
   setIsFullScreen: (isFullScreen: boolean) => void;
+  setSlideNumber: (slideNumber: number) => void;
 };
 
 export default function DetailedCard({
   productProps,
   setIsFullScreen,
+  setSlideNumber,
 }: ProductProperties): JSX.Element {
   const finalPrice = productProps.discount ? productProps.discount : productProps.price;
   const formattedPrice = finalPrice ? (finalPrice / 1000).toFixed(2) + '$' : '';
@@ -41,6 +43,7 @@ export default function DetailedCard({
           imgList={productProps.imgList}
           name={productProps.name}
           setIsFullScreen={setIsFullScreen}
+          setSlideNumber={setSlideNumber}
         />
         {/* </ImageList> */}
         <List sx={{ width: '60%', height: 'auto' }}>
