@@ -42,17 +42,6 @@
   background: #46A358;
 }
 
-/* .full-screen .arrow {
-  width: 30px;
-  height: 30px;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  -webkit-transform: translateY(-50%);
-  fill: #fff;
-  cursor: pointer;
-} */
-
 .arrow--left {
   left: 5px;
 }

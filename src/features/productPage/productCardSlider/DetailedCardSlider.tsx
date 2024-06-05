@@ -11,15 +11,22 @@ type Props = {
   imgList: Array<string>;
   name: string;
   setIsFullScreen: (f: boolean) => void;
+  setSlideNumber: (nubmer: number) => void;
 };
 
-export default function DetailedCardSlider({ imgList, name, setIsFullScreen }: Props): JSX.Element {
+export default function DetailedCardSlider({
+  imgList,
+  name,
+  setIsFullScreen,
+  setSlideNumber,
+}: Props): JSX.Element {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     initial: 0,
     slideChanged(slider) {
       setCurrentSlide(slider.track.details.rel);
+      //console.log(slider.track.details.rel)
     },
     created() {
       setLoaded(true);
@@ -35,6 +42,8 @@ export default function DetailedCardSlider({ imgList, name, setIsFullScreen }: P
               className="keen-slider__slide"
               key={item}
               onClick={() => {
+                console.log('currentSlideNumber', currentSlide);
+                setSlideNumber(currentSlide);
                 setIsFullScreen(true);
               }}
               sx={{ cursor: 'pointer' }}
