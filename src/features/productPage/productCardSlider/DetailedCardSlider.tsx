@@ -26,7 +26,6 @@ export default function DetailedCardSlider({
     initial: 0,
     slideChanged(slider) {
       setCurrentSlide(slider.track.details.rel);
-      //console.log(slider.track.details.rel)
     },
     created() {
       setLoaded(true);
@@ -42,7 +41,6 @@ export default function DetailedCardSlider({
               className="keen-slider__slide"
               key={item}
               onClick={() => {
-                console.log('currentSlideNumber', currentSlide);
                 setSlideNumber(currentSlide);
                 setIsFullScreen(true);
               }}

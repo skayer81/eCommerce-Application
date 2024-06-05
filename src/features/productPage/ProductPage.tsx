@@ -27,7 +27,7 @@ type ProductProperties = {
 
 function productAdapter(data: ClientResponse): ProductProperties {
   const product: Product = data.body as Product;
-  console.log(product);
+  // console.log(product);
   const prices = product.masterData.current.masterVariant.prices;
 
   const discount = prices ? prices[0].discounted?.value.centAmount : undefined; //product.masterData.current.masterVariant.
