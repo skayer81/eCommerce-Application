@@ -26,7 +26,7 @@ const ctpClient = new ClientBuilder()
   .withLoggerMiddleware()
   .build();
 
-export let apiRoot = getApiRoot(ctpClient);
+let apiRoot = getApiRoot(ctpClient);
 
 function getApiRoot(ctpClient: Client): ByProjectKeyRequestBuilder {
   return createApiBuilderFromCtpClient(ctpClient).withProjectKey({
