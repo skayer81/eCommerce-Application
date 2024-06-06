@@ -1,39 +1,44 @@
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
+  // Accordion,
+  // AccordionDetails,
+  // AccordionSummary,
   Box,
   Stack,
-  Typography,
+  // Typography,
 } from '@mui/material';
 
 import { Customer } from '@/features/profilePage/Types';
 
-const country = {
-  RU: 'Russia',
-  JP: 'Japan',
-  SE: 'Sweden',
-};
+import { Addres } from './Addres';
+
+// const country = {
+//   RU: 'Russia',
+//   JP: 'Japan',
+//   SE: 'Sweden',
+// };
 
 function Addresses({ ...props }): JSX.Element {
   const customer: Customer = props;
+  console.log('props', props);
+
   const addresses = customer.addresses;
-  const billingAddressIds = customer.billingAddressIds;
-  const filteredBillingAddresses = addresses!.filter((address) =>
-    billingAddressIds!.includes(address.id as string),
-  );
-  const shippingAddressIds = customer.shippingAddressIds;
-  const filteredShippingAddresses = addresses!.filter((address) =>
-    shippingAddressIds!.includes(address.id as string),
-  );
-  const filteredAnyAddresses = addresses!.filter(
-    (address) =>
-      !billingAddressIds!.includes(address.id as string) &&
-      !shippingAddressIds!.includes(address.id as string),
-  );
-  const defaultBillingAddres = customer.defaultBillingAddressId as string;
-  const defaultShippingAddres = customer.defaultShippingAddressId;
+  console.log('addresses', addresses);
+  // const billingAddressIds = customer.billingAddressIds;
+  // const filteredBillingAddresses = addresses!.filter((address) =>
+  //   billingAddressIds!.includes(address.id as string),
+  // );
+  // const shippingAddressIds = customer.shippingAddressIds;
+  // const filteredShippingAddresses = addresses!.filter((address) =>
+  //   shippingAddressIds!.includes(address.id as string),
+  // );
+  // const filteredAnyAddresses = addresses!.filter(
+  //   (address) =>
+  //     !billingAddressIds!.includes(address.id as string) &&
+  //     !shippingAddressIds!.includes(address.id as string),
+  // );
+  // const defaultBillingAddres = customer.defaultBillingAddressId as string;
+  // const defaultShippingAddres = customer.defaultShippingAddressId;
 
   return (
     <Box component="section">
@@ -47,7 +52,21 @@ function Addresses({ ...props }): JSX.Element {
           justifyContent: 'center',
         }}
       >
-        <Accordion sx={{ width: '100%' }}>
+        {addresses?.map((addres, index) => {
+          const defaultAddres = {
+            city: addres.city ?? '',
+            country: addres.country ?? '',
+            index: addres.postalCode ?? '',
+            street: addres.streetName ?? '',
+            // useAsBilling: true,
+            // useAsShipping: true,
+            // useByDefaultBilling: true,
+            useByDefaultShipping: true,
+            adressID: addres.id ?? '',
+          };
+          return <Addres defaultAddres={defaultAddres} isNewAddres={false} key={index}></Addres>;
+        })}
+        {/* <Accordion sx={{ width: '100%' }}>
           <AccordionSummary
             aria-controls="billing-addresses"
             expandIcon={<ExpandMoreIcon />}
@@ -135,9 +154,9 @@ function Addresses({ ...props }): JSX.Element {
               );
             })}
           </AccordionDetails>
-        </Accordion>
+        </Accordion> */}
 
-        {filteredAnyAddresses.length > 0 ? (
+        {/* {filteredAnyAddresses.length > 0 ? (
           <Accordion sx={{ width: '100%' }}>
             <AccordionSummary
               aria-controls="billing-addresses"
@@ -169,7 +188,7 @@ function Addresses({ ...props }): JSX.Element {
           </Accordion>
         ) : (
           ''
-        )}
+        )} */}
       </Stack>
     </Box>
   );
