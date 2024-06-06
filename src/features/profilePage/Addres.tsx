@@ -10,10 +10,12 @@ import { AddresType } from '@/types/interfaces';
 
 import AdressCountrySelect from './AddresCountrySelect';
 import { AdressInput } from './AddresInput';
+// import { ClientResponse } from  '@commercetools/platform-sdk';;
 
 type Props = {
   defaultAddres: AddresType;
   isNewAddres: boolean;
+  setIsAddresAdd?: (isAddresAdd: boolean) => void;
   version: number;
 };
 
@@ -23,6 +25,14 @@ type OutputAddres = {
   postalCode: string;
   streetName: string;
 };
+
+// type InputAddres = {
+//   city: string;
+//   country: string;
+//   id: string;
+//   postalCode: string;
+//   streetName: string;
+// };
 
 type AddnewAddresAction = {
   action: 'addAddress' | 'changeAddress';
@@ -37,7 +47,12 @@ type SetDefaultAddressAction = {
 
 type Actions = Array<AddnewAddresAction | SetDefaultAddressAction>;
 
-export function Addres({ defaultAddres, isNewAddres, version }: Props): JSX.Element {
+export function Addres({
+  defaultAddres,
+  isNewAddres,
+  setIsAddresAdd,
+  version,
+}: Props): JSX.Element {
   const {
     control,
     formState: { errors },
@@ -46,6 +61,7 @@ export function Addres({ defaultAddres, isNewAddres, version }: Props): JSX.Elem
   } = useForm<AddresType>({ mode: 'onChange', defaultValues: defaultAddres });
 
   const deleteAddres = (): void => {
+    console.log('удаляем', defaultAddres.adressID);
     addOrChangeAddres({
       actions: [
         {
@@ -91,14 +107,17 @@ export function Addres({ defaultAddres, isNewAddres, version }: Props): JSX.Elem
 
     const actions: Actions = [action];
     await queryClient.invalidateQueries({ queryKey: ['me'] });
+
     if (isNewAddres) {
       addOrChangeAddres({
         actions: actions,
         version: version,
       })
         .then(() => {
-          //TODO получить id
           setIsAdressDisabled(true);
+          if (setIsAddresAdd) {
+            setIsAddresAdd(true);
+          }
         })
         .catch((error: Error) => {
           console.log(error);
@@ -176,55 +195,51 @@ export function Addres({ defaultAddres, isNewAddres, version }: Props): JSX.Elem
           rules={indexRules}
           type="text"
         />
-        <Controller
-          control={control}
-          name="useByDefaultShipping"
-          render={({ field: { onChange, value } }) => (
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={value}
-                  color="primary"
-                  disabled={isAdressDisabled}
-                  onChange={onChange}
-                  value={value}
-                />
-              }
-              label="Use as default shipping address"
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="useByDefaultBilling"
-          render={({ field: { onChange, value } }) => (
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={value}
-                  color="primary"
-                  disabled={isAdressDisabled}
-                  onChange={onChange}
-                  value={value}
-                />
-              }
-              label="Use as default billing address"
-              value={defaultAddres.useByDefaultBilling}
-            />
-          )}
-        />
-        {/* {isAdressDisabled ? (
-          <Button
-            onClick={() => {
-              setIsAdressDisabled(false);
-            }}
-            type="button"
-          >
-            Edit
-          </Button>
+        {isNewAddres ? (
+          ''
         ) : (
-          <Button type="submit"> Submit </Button>
-        )} */}
+          <Controller
+            control={control}
+            name="useByDefaultShipping"
+            render={({ field: { onChange, value } }) => (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={value}
+                    color="primary"
+                    disabled={isAdressDisabled}
+                    onChange={onChange}
+                    value={value}
+                  />
+                }
+                label="Use as default shipping address"
+              />
+            )}
+          />
+        )}
+        {isNewAddres ? (
+          ''
+        ) : (
+          <Controller
+            control={control}
+            name="useByDefaultBilling"
+            render={({ field: { onChange, value } }) => (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={value}
+                    color="primary"
+                    disabled={isAdressDisabled}
+                    onChange={onChange}
+                    value={value}
+                  />
+                }
+                label="Use as default billing address"
+                value={defaultAddres.useByDefaultBilling}
+              />
+            )}
+          />
+        )}
         <Button
           disabled={!isAdressDisabled}
           onClick={() => {
