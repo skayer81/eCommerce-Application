@@ -69,3 +69,15 @@ export interface PasswordChange {
   newPassword: string;
   version: number;
 }
+
+export type AddresType = {
+  adressID: string;
+  city: string;
+  country: string;
+  index: string;
+  street: string;
+  // useAsBilling: boolean;
+  // useAsShipping: boolean;
+  useByDefaultBilling: boolean;
+  useByDefaultShipping: boolean;
+};

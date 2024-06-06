@@ -201,6 +201,19 @@ export async function changeData(
   return apiRoot.customers().withId({ ID: customerId }).post({ body: data }).execute();
 }
 
+export async function addOrChangeAddres(data: object): Promise<void> {
+  return (
+    apiRoot
+      .me()
+      //   .customers()
+      //   .withId({ ID: customerId })
+      .post({ body: data })
+      .execute()
+      .then(console.log)
+      .catch(console.error)
+  );
+}
+
 export async function changePassword(data: PasswordChange): Promise<ClientResponse<Customer>> {
   return apiRoot.customers().password().post({ body: data }).execute();
 }
