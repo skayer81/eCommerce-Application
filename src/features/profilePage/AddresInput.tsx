@@ -4,19 +4,6 @@ import TextField from '@mui/material/TextField';
 
 import { AddresType } from '@/types/interfaces';
 
-// import { RegistrationForm } from '@/types/interfaces';
-
-// type AddresType = {
-//   city: string;
-//   country: string;
-//   index: string;
-//   street: string;
-//     useAsBilling: boolean;
-//     useAsShipping: boolean;
-//     useByDefaultBilling: boolean;
-//     useByDefaultShipping: boolean;
-// }
-
 type FormInputProps = {
   control: Control<AddresType>;
   errors: FieldErrors<AddresType>;

@@ -4,19 +4,6 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 import postalCodesMap from '@/components/formComponents/postalCodes';
 import { AddresType } from '@/types/interfaces';
-// import { RegistrationForm } from '@/types/interfaces';
-
-// import postalCodesMap from './postalCodes';
-// type AddresType = {
-//   city: string;
-//   country: string;
-//   index: string;
-//   street: string;
-//     useAsBilling: boolean;
-//     useAsShipping: boolean;
-//     useByDefaultBilling: boolean;
-//     useByDefaultShipping: boolean;
-// }
 
 type FormInputProps = {
   control: Control<AddresType>;
