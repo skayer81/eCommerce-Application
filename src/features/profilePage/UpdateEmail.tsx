@@ -27,6 +27,7 @@ function UpdateEmail({ ...props }): JSX.Element {
   const queryClient = useQueryClient();
 
   const {
+    reset,
     handleSubmit,
     formState: { errors },
     control,
@@ -36,19 +37,6 @@ function UpdateEmail({ ...props }): JSX.Element {
       email: customer.email,
     },
   });
-
-  // const updateEmail = (): Promise<void> => {
-  //   const data = {
-  //     version: version,
-  //     actions: [
-  //       {
-  //         action: 'changeEmail',
-  //         email: email,
-  //       },
-  //     ],
-  //   };
-  //   return changeData(data, customerId);
-  // };
 
   const submit: SubmitHandler<Email> = (data: Email): void => {
     const newData: CustomerUpdate = {
@@ -80,81 +68,88 @@ function UpdateEmail({ ...props }): JSX.Element {
     setSnackBar(false);
   };
 
+  const handleEditModeChange = (): void => {
+    setEditMode((prevEditMode) => !prevEditMode);
+    reset({
+      email: customer.email,
+    });
+  };
+
+  if (error) {
+    return <ErrorAlert />;
+  }
+
   return (
-    <>
-      {error && <ErrorAlert />}
-      <Box component="section" sx={{ width: 350, margin: 0 }}>
-        <Stack
-          maxWidth={350}
-          spacing={2}
-          sx={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <form onSubmit={(event) => void handleSubmit(submit)(event)} style={{ width: '100%' }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Typography component="h1" variant="h5">
-                Email
-              </Typography>
-              <Box sx={{ display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
-                <Typography>Edit mode</Typography>
-                <Switch
-                  checked={editMode}
-                  color="primary"
-                  onChange={() => {
-                    setEditMode(editMode === true ? false : true);
+    <Box component="section" sx={{ width: 350, margin: 0 }}>
+      <Stack
+        maxWidth={350}
+        spacing={2}
+        sx={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <form onSubmit={(event) => void handleSubmit(submit)(event)} style={{ width: '100%' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography component="h1" variant="h5">
+              Email
+            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
+              <Typography>Edit mode</Typography>
+              <Switch checked={editMode} color="primary" onChange={handleEditModeChange} />
+            </Box>
+          </Box>
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { value, onChange } }) => (
+              <Box alignItems="center" display="flex">
+                <Typography component="label" htmlFor="last-name" sx={{ mr: 2 }} variant="body1">
+                  Email:
+                </Typography>
+                <TextField
+                  disabled={editMode === false ? true : false}
+                  error={!!errors.email}
+                  fullWidth
+                  helperText={errors.email?.message}
+                  id="email"
+                  onChange={onChange}
+                  sx={{
+                    '& .MuiInputBase-input.Mui-disabled': {
+                      WebkitTextFillColor: '#46A358',
+                    },
                   }}
+                  value={value}
+                  variant="standard"
                 />
               </Box>
-            </Box>
-            <Controller
-              control={control}
-              name="email"
-              render={({ field: { value, onChange } }) => (
-                <Box alignItems="center" display="flex">
-                  <Typography component="label" htmlFor="last-name" sx={{ mr: 2 }} variant="body1">
-                    Email:
-                  </Typography>
-                  <TextField
-                    disabled={editMode === false ? true : false}
-                    error={!!errors.email}
-                    fullWidth
-                    helperText={errors.email?.message}
-                    id="email"
-                    onChange={onChange}
-                    value={value}
-                    variant="standard"
-                  />
-                </Box>
-              )}
-              rules={RulesValidation.mail}
-            />
-            <LoadingButton
-              color="primary"
-              disabled={editMode === false ? true : false}
-              loading={loading}
-              size="small"
-              sx={{ mb: 2, mt: 3 }}
-              type="submit"
-              variant="contained"
-            >
-              <span style={{ fontSize: 'inherit' }}>Update data</span>
-            </LoadingButton>
-          </form>
-        </Stack>
-        <Snackbar
-          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-          autoHideDuration={3000}
-          key={'top' + 'right'}
-          message="User data updated successfully"
-          onClose={handleClose}
-          open={snackBarState}
-        />
-      </Box>
-    </>
+            )}
+            rules={RulesValidation.mail}
+          />
+          <LoadingButton
+            color="primary"
+            disabled={editMode === false ? true : false}
+            loading={loading}
+            size="small"
+            sx={{ mb: 2, mt: 3 }}
+            type="submit"
+            variant="contained"
+          >
+            <span style={{ fontSize: 'inherit' }}>Update data</span>
+          </LoadingButton>
+        </form>
+      </Stack>
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        autoHideDuration={3000}
+        key={'top' + 'right'}
+        message="Email updated successfully"
+        onClose={handleClose}
+        open={snackBarState}
+      />
+    </Box>
   );
 }
 

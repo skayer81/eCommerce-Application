@@ -19,6 +19,7 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 
 import { tokenCache } from '@/api/tokenCache';
+import ErrorAlert from '@/components/errorAlert/ErrorAlert';
 import RulesValidation from '@/components/formComponents/rulesValidation';
 import { Customer } from '@/features/profilePage/Types';
 import { Password, PasswordChange } from '@/types/interfaces';
@@ -30,6 +31,7 @@ function UpdatePassword({ ...props }): JSX.Element {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [errorClient, setErrorClient] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const customerId = customer.id as string;
   const customerMail = customer.email as string;
@@ -77,6 +79,7 @@ function UpdatePassword({ ...props }): JSX.Element {
         if (err.status === 400) {
           setError(true);
         } else {
+          setErrorClient(true);
           console.error(error);
         }
       })
@@ -87,6 +90,10 @@ function UpdatePassword({ ...props }): JSX.Element {
   const handleClose = (): void => {
     setSnackBar(false);
   };
+
+  if (errorClient) {
+    return <ErrorAlert />;
+  }
 
   return (
     <Box component="section" sx={{ width: 350, margin: 0 }}>
@@ -113,7 +120,7 @@ function UpdatePassword({ ...props }): JSX.Element {
               <Typography>Edit mode</Typography>
               <Switch
                 checked={editMode}
-                color="success"
+                color="primary"
                 onChange={() => {
                   setEditMode(editMode === true ? false : true);
                 }}
@@ -196,7 +203,7 @@ function UpdatePassword({ ...props }): JSX.Element {
             </Alert>
           )}
           <LoadingButton
-            color="success"
+            color="primary"
             disabled={editMode === false ? true : false}
             loading={loading}
             size="small"

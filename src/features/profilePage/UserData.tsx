@@ -40,6 +40,7 @@ function UserData({ ...props }): JSX.Element {
   });
 
   const {
+    reset,
     handleSubmit,
     formState: { errors },
     control,
@@ -84,6 +85,14 @@ function UserData({ ...props }): JSX.Element {
     console.error(error);
     return <ErrorAlert />;
   }
+  const handleEditModeChange = (): void => {
+    setEditMode((prevEditMode) => !prevEditMode);
+    reset({
+      name: customer.firstName,
+      lastName: customer.lastName,
+      dateOfBirth: dayjs(customer.dateOfBirth),
+    });
+  };
 
   return (
     <LocalizationProvider adapterLocale="de" dateAdapter={AdapterDayjs}>
@@ -105,13 +114,7 @@ function UserData({ ...props }): JSX.Element {
               </Typography>
               <Box sx={{ display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
                 <Typography>Edit mode</Typography>
-                <Switch
-                  checked={editMode}
-                  color="primary"
-                  onChange={() => {
-                    setEditMode(editMode === true ? false : true);
-                  }}
-                />
+                <Switch checked={editMode} color="primary" onChange={handleEditModeChange} />
               </Box>
             </Box>
             <Controller
@@ -129,6 +132,11 @@ function UserData({ ...props }): JSX.Element {
                     helperText={errors.name?.message}
                     id="name"
                     onChange={onChange}
+                    sx={{
+                      '& .MuiInputBase-input.Mui-disabled': {
+                        WebkitTextFillColor: '#46A358',
+                      },
+                    }}
                     value={value}
                     variant="standard"
                   />
@@ -151,6 +159,11 @@ function UserData({ ...props }): JSX.Element {
                     helperText={errors.lastName?.message}
                     id="last-name"
                     onChange={onChange}
+                    sx={{
+                      '& .MuiInputBase-input.Mui-disabled': {
+                        WebkitTextFillColor: '#46A358',
+                      },
+                    }}
                     value={value}
                     variant="standard"
                   />
@@ -175,6 +188,11 @@ function UserData({ ...props }): JSX.Element {
                         error: !!errors['dateOfBirth']?.message,
                         helperText: errors['dateOfBirth']?.message,
                         variant: 'standard',
+                      },
+                    }}
+                    sx={{
+                      '& .MuiInputBase-input.Mui-disabled': {
+                        WebkitTextFillColor: '#46A358',
                       },
                     }}
                     value={value}
