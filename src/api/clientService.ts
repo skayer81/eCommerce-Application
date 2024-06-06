@@ -2,6 +2,7 @@ import {
   ByProjectKeyRequestBuilder,
   ClientResponse,
   CustomerUpdate,
+  MyCustomerUpdate,
   createApiBuilderFromCtpClient,
 } from '@commercetools/platform-sdk';
 import { Client, ClientBuilder } from '@commercetools/sdk-client-v2';
@@ -201,7 +202,7 @@ export async function changeData(
   return apiRoot.customers().withId({ ID: customerId }).post({ body: data }).execute();
 }
 
-export async function addOrChangeAddres(data: object): Promise<void> {
+export async function addOrChangeAddres(data: MyCustomerUpdate): Promise<void> {
   return (
     apiRoot
       .me()
