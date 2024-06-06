@@ -1,12 +1,14 @@
 import {
   ByProjectKeyRequestBuilder,
   ClientResponse,
+  CustomerUpdate,
   createApiBuilderFromCtpClient,
 } from '@commercetools/platform-sdk';
 import { Client, ClientBuilder } from '@commercetools/sdk-client-v2';
 
 import { PROJECT_KEY } from '@/config/clientConfig';
-import { LoginForm, RegistrationRequestBody } from '@/types/interfaces';
+import { Customer } from '@/features/profilePage/Types';
+import { LoginForm, PasswordChange, RegistrationRequestBody } from '@/types/interfaces';
 import { PRODUCTS_LIMIT } from '@/utils/constants';
 
 import {
@@ -186,4 +188,32 @@ export async function getDiscountById(id: string): Promise<ClientResponse> {
 
 export async function getAttributes(productTypeKey: string): Promise<ClientResponse> {
   return apiRoot.productTypes().withKey({ key: productTypeKey }).get().execute();
+}
+
+export async function getUserInfo(): Promise<ClientResponse<Customer>> {
+  return apiRoot.me().get().execute();
+}
+
+export async function changeData(
+  data: CustomerUpdate,
+  customerId: string,
+): Promise<ClientResponse> {
+  return apiRoot.customers().withId({ ID: customerId }).post({ body: data }).execute();
+}
+
+export async function addOrChangeAddres(data: object): Promise<void> {
+  return (
+    apiRoot
+      .me()
+      //   .customers()
+      //   .withId({ ID: customerId })
+      .post({ body: data })
+      .execute()
+      .then(console.log)
+      .catch(console.error)
+  );
+}
+
+export async function changePassword(data: PasswordChange): Promise<ClientResponse<Customer>> {
+  return apiRoot.customers().password().post({ body: data }).execute();
 }

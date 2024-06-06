@@ -1,4 +1,4 @@
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 export interface RegistrationForm {
   billingAdress: string;
@@ -46,4 +46,38 @@ export type RegistrationRequestBody = {
   salutation?: string;
   shippingAddresses?: Array<number>;
   title: string;
+};
+
+export interface ProfileData {
+  dateOfBirth: dayjs.Dayjs;
+  lastName: string;
+  name: string;
+}
+
+export interface Email {
+  email: string;
+}
+
+export interface Password {
+  newPassword: string;
+  password: string;
+}
+
+export interface PasswordChange {
+  currentPassword: string;
+  id: string;
+  newPassword: string;
+  version: number;
+}
+
+export type AddresType = {
+  adressID: string;
+  city: string;
+  country: string;
+  index: string;
+  street: string;
+  // useAsBilling: boolean;
+  // useAsShipping: boolean;
+  useByDefaultBilling: boolean;
+  useByDefaultShipping: boolean;
 };

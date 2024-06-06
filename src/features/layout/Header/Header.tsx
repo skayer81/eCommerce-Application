@@ -11,6 +11,7 @@ import { anonymFlowAuth } from '@/api/clientService';
 import { tokenCache } from '@/api/tokenCache';
 import AuthPanel from '@/components/authPanel/AuthPanel';
 import NoAuthPanel from '@/components/noAuthPanel/NoAuthPanel';
+import { useCustomerStore } from '@/features/profilePage/Types';
 import { useUserStore } from '@/stores/userStore';
 
 import logo from '../../../assets/icons/Logo.svg';
@@ -21,6 +22,7 @@ export default function Header(): JSX.Element {
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
   const { isLogin, logoutUserInStore } = useUserStore();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const { deleteUserFromStore } = useCustomerStore();
   const location = useLocation();
 
   useEffect(() => {
@@ -35,6 +37,7 @@ export default function Header(): JSX.Element {
 
   const logout = (): void => {
     logoutUserInStore();
+    deleteUserFromStore();
     anonymFlowAuth();
     tokenCache.deleteToken();
   };
