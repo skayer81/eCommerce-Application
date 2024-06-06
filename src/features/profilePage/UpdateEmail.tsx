@@ -4,7 +4,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { CustomerUpdate } from '@commercetools/platform-sdk';
 import { HttpErrorType } from '@commercetools/sdk-client-v2';
 import { LoadingButton } from '@mui/lab';
-import { Box, Snackbar, Stack, Switch, TextField, Typography } from '@mui/material';
+import { Alert, Box, Snackbar, Stack, Switch, TextField, Typography } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
 
 import ErrorAlert from '@/components/errorAlert/ErrorAlert';
@@ -18,6 +18,7 @@ function UpdateEmail({ ...props }): JSX.Element {
   const customer: Customer = { ...props };
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [errorClient, setErrorClient] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [snackBarState, setSnackBar] = useState(false);
   const customerId = customer.id as string;
@@ -54,9 +55,13 @@ function UpdateEmail({ ...props }): JSX.Element {
         setEditMode(false);
         setSnackBar(true);
       })
-      .catch((error: HttpErrorType) => {
-        console.error(error);
-        setError(false);
+      .catch((err: HttpErrorType) => {
+        if (err.status === 400) {
+          setError(true);
+        } else {
+          setErrorClient(true);
+          console.error(error);
+        }
       })
       .finally(() => {
         setLoading(false);
@@ -74,7 +79,7 @@ function UpdateEmail({ ...props }): JSX.Element {
     });
   };
 
-  if (error) {
+  if (errorClient) {
     return <ErrorAlert />;
   }
 
@@ -127,6 +132,11 @@ function UpdateEmail({ ...props }): JSX.Element {
             )}
             rules={RulesValidation.mail}
           />
+          {error && (
+            <Alert onClose={() => setError(false)} severity="error">
+              User with such email already exists
+            </Alert>
+          )}
           <LoadingButton
             color="primary"
             disabled={editMode === false ? true : false}
