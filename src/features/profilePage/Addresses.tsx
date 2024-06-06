@@ -49,6 +49,7 @@ function Addresses({ ...props }): JSX.Element {
             useByDefaultShipping: customer.defaultShippingAddressId === addres.id ? true : false,
             adressID: addres.id ?? '',
           };
+          console.log('defAdress', defaultAddres);
           return (
             <Accordion key={index} sx={{ width: '100%' }}>
               <AccordionSummary
@@ -56,7 +57,7 @@ function Addresses({ ...props }): JSX.Element {
                 expandIcon={<ExpandMoreIcon />}
                 id="billing-addresses"
               >
-                Addres {index}
+                Addres {index + 1} {defaultAddres.adressID}
               </AccordionSummary>
               <AccordionDetails>
                 <Addres
@@ -72,6 +73,7 @@ function Addresses({ ...props }): JSX.Element {
           <Addres
             defaultAddres={emptyAddres}
             isNewAddres={true}
+            setIsAddresAdd={setIsAddresAdd}
             version={customer.version ?? 0}
           ></Addres>
         ) : (

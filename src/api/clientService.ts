@@ -202,7 +202,7 @@ export async function changeData(
   return apiRoot.customers().withId({ ID: customerId }).post({ body: data }).execute();
 }
 
-export async function addOrChangeAddres(data: MyCustomerUpdate): Promise<void> {
+export async function addOrChangeAddres(data: MyCustomerUpdate): Promise<ClientResponse> {
   return (
     apiRoot
       .me()
@@ -210,8 +210,8 @@ export async function addOrChangeAddres(data: MyCustomerUpdate): Promise<void> {
       //   .withId({ ID: customerId })
       .post({ body: data })
       .execute()
-      .then(console.log)
-      .catch(console.error)
+    // .then(console.log)
+    // .catch(console.error)
   );
 }
 
