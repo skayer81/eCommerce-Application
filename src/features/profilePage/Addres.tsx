@@ -8,6 +8,8 @@ import { AdressInput } from './AddresInput';
 import { useEffect, useState } from 'react';
 import { Controller, RegisterOptions, SubmitHandler, useForm } from 'react-hook-form';
 
+import { useQueryClient } from '@tanstack/react-query';
+
 import { addAddres } from '@/api/clientService';
 import RulesValidation from '@/components/formComponents/rulesValidation';
 import { AddresType } from '@/types/interfaces';
@@ -27,9 +29,10 @@ import { AddresType } from '@/types/interfaces';
 type Props = {
   defaultAddres: AddresType;
   isNewAddres: boolean;
+  version: number;
 };
 
-export function Addres({ defaultAddres, isNewAddres }: Props): JSX.Element {
+export function Addres({ defaultAddres, isNewAddres, version }: Props): JSX.Element {
   const {
     control,
     formState: { errors },
@@ -38,6 +41,7 @@ export function Addres({ defaultAddres, isNewAddres }: Props): JSX.Element {
     watch,
   } = useForm<AddresType>({ mode: 'onChange', defaultValues: defaultAddres });
 
+  const queryClient = useQueryClient();
   const country = watch('country');
 
   const [indexRules, setIndexRules] = useState(RulesValidation.postCodeRU);
@@ -49,13 +53,14 @@ export function Addres({ defaultAddres, isNewAddres }: Props): JSX.Element {
 
   const [isAdressDisabled, SetIsAdressDisabled] = useState(true);
 
-  const onSubmit: SubmitHandler<AddresType> = (data: AddresType): void => {
+  const onSubmit: SubmitHandler<AddresType> = async (data: AddresType): Promise<void> => {
     const addres = {
       country: data.country,
       city: data.city,
       postalCode: data.index,
       streetName: data.street,
     };
+    await queryClient.invalidateQueries({ queryKey: ['me'] });
 
     if (isNewAddres) {
       // setLoading(true);
@@ -66,7 +71,7 @@ export function Addres({ defaultAddres, isNewAddres }: Props): JSX.Element {
             addres: addres,
           },
         ],
-        version: 2,
+        version: version,
       })
         // createCustomer(registrationFormDataAdapter(data))
         .then(() => {
@@ -96,7 +101,7 @@ export function Addres({ defaultAddres, isNewAddres }: Props): JSX.Element {
             addressId: defaultAddres.adressID,
           },
         ],
-        version: 4,
+        version: version,
       })
         .then(() => {
           console.log('изменено');

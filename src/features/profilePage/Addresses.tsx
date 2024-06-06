@@ -11,6 +11,7 @@ import {
 import { Customer } from '@/features/profilePage/Types';
 
 import { Addres } from './Addres';
+//import { version } from 'react';
 
 // const country = {
 //   RU: 'Russia',
@@ -64,8 +65,16 @@ function Addresses({ ...props }): JSX.Element {
             useByDefaultShipping: true,
             adressID: addres.id ?? '',
           };
-          return <Addres defaultAddres={defaultAddres} isNewAddres={false} key={index}></Addres>;
+          return (
+            <Addres
+              defaultAddres={defaultAddres}
+              isNewAddres={false}
+              key={index}
+              version={customer.version ?? 0}
+            ></Addres>
+          );
         })}
+
         {/* <Accordion sx={{ width: '100%' }}>
           <AccordionSummary
             aria-controls="billing-addresses"
