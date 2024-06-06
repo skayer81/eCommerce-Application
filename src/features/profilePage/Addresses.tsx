@@ -1,10 +1,10 @@
-// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useState } from 'react';
 
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
-  // Accordion,
-  // AccordionDetails,
-  // AccordionSummary,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
   Button,
   Stack,
@@ -85,12 +85,22 @@ function Addresses({ ...props }): JSX.Element {
             adressID: addres.id ?? '',
           };
           return (
-            <Addres
-              defaultAddres={defaultAddres}
-              isNewAddres={false}
-              key={index}
-              version={customer.version ?? 0}
-            ></Addres>
+            <Accordion key={index} sx={{ width: '100%' }}>
+              <AccordionSummary
+                aria-controls="billing-addresses"
+                expandIcon={<ExpandMoreIcon />}
+                id="billing-addresses"
+              >
+                Addres {index}
+              </AccordionSummary>
+              <AccordionDetails>
+                <Addres
+                  defaultAddres={defaultAddres}
+                  isNewAddres={false}
+                  version={customer.version ?? 0}
+                ></Addres>
+              </AccordionDetails>
+            </Accordion>
           );
         })}
         {isAddresAdd ? (
