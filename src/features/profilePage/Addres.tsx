@@ -51,7 +51,7 @@ export function Addres({ defaultAddres, isNewAddres, version }: Props): JSX.Elem
     setIndexRules(newRulesValidation);
   }, [country]);
 
-  const [isAdressDisabled, SetIsAdressDisabled] = useState(true);
+  const [isAdressDisabled, SetIsAdressDisabled] = useState(!isNewAddres);
 
   const onSubmit: SubmitHandler<AddresType> = async (data: AddresType): Promise<void> => {
     const addres = {
@@ -68,7 +68,7 @@ export function Addres({ defaultAddres, isNewAddres, version }: Props): JSX.Elem
         actions: [
           {
             action: 'addAddress',
-            addres: addres,
+            address: addres,
           },
         ],
         version: version,

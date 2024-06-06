@@ -1,16 +1,21 @@
 // import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useState } from 'react';
+
 import {
   // Accordion,
   // AccordionDetails,
   // AccordionSummary,
   Box,
+  Button,
   Stack,
   // Typography,
 } from '@mui/material';
 
 import { Customer } from '@/features/profilePage/Types';
+import { AddresType } from '@/types/interfaces';
 
 import { Addres } from './Addres';
+
 //import { version } from 'react';
 
 // const country = {
@@ -20,11 +25,25 @@ import { Addres } from './Addres';
 // };
 
 function Addresses({ ...props }): JSX.Element {
+  const emptyAddres: AddresType = {
+    city: '',
+    country: '',
+    index: '',
+    street: '',
+    // useAsBilling: true,
+    // useAsShipping: true,
+    // useByDefaultBilling: true,
+    useByDefaultShipping: false,
+    adressID: '',
+  };
+
   const customer: Customer = props;
   console.log('props', props);
 
   const addresses = customer.addresses;
   console.log('addresses', addresses);
+
+  const [isAddresAdd, setIsAddresAdd] = useState(false);
   // const billingAddressIds = customer.billingAddressIds;
   // const filteredBillingAddresses = addresses!.filter((address) =>
   //   billingAddressIds!.includes(address.id as string),
@@ -74,6 +93,33 @@ function Addresses({ ...props }): JSX.Element {
             ></Addres>
           );
         })}
+        {isAddresAdd ? (
+          <Addres
+            defaultAddres={emptyAddres}
+            isNewAddres={true}
+            //key={index}
+            version={customer.version ?? 0}
+          ></Addres>
+        ) : (
+          ''
+        )}
+        {isAddresAdd ? (
+          <Button
+            onClick={() => {
+              setIsAddresAdd(false);
+            }}
+          >
+            Cancel
+          </Button>
+        ) : (
+          <Button
+            onClick={() => {
+              setIsAddresAdd(true);
+            }}
+          >
+            Add addres
+          </Button>
+        )}
 
         {/* <Accordion sx={{ width: '100%' }}>
           <AccordionSummary
