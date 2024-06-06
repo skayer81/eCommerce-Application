@@ -32,10 +32,17 @@ function Addresses({ ...props }): JSX.Element {
     street: '',
     // useAsBilling: true,
     // useAsShipping: true,
-    // useByDefaultBilling: true,
+    useByDefaultBilling: false,
     useByDefaultShipping: false,
     adressID: '',
   };
+
+  //   const defaultBillingAddressId =
+  // :
+  // "cjFVYHi8"
+  // defaultShippingAddressId
+  // :
+  // "cjFVYHi8"
 
   const customer: Customer = props;
   console.log('props', props);
@@ -80,8 +87,8 @@ function Addresses({ ...props }): JSX.Element {
             street: addres.streetName ?? '',
             // useAsBilling: true,
             // useAsShipping: true,
-            // useByDefaultBilling: true,
-            useByDefaultShipping: true,
+            useByDefaultBilling: customer.defaultBillingAddressId === addres.id ? true : false,
+            useByDefaultShipping: customer.defaultShippingAddressId === addres.id ? true : false,
             adressID: addres.id ?? '',
           };
           return (

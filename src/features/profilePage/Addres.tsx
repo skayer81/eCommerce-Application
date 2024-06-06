@@ -10,7 +10,7 @@ import { Controller, RegisterOptions, SubmitHandler, useForm } from 'react-hook-
 
 import { useQueryClient } from '@tanstack/react-query';
 
-import { addAddres } from '@/api/clientService';
+import { addOrChangeAddres } from '@/api/clientService';
 import RulesValidation from '@/components/formComponents/rulesValidation';
 import { AddresType } from '@/types/interfaces';
 
@@ -32,6 +32,26 @@ type Props = {
   version: number;
 };
 
+type OutputAddres = {
+  city: string;
+  country: string;
+  postalCode: string;
+  streetName: string;
+};
+
+type AddnewAddresAction = {
+  action: 'addAddress' | 'changeAddress';
+  address: OutputAddres;
+  addressId: string;
+};
+
+type SetDefaultAddressAction = {
+  action: 'setDefaultBillingAddress' | 'setDefaultShippingAddress';
+  addressId: string;
+};
+
+type Actions = Array<AddnewAddresAction | SetDefaultAddressAction>;
+
 export function Addres({ defaultAddres, isNewAddres, version }: Props): JSX.Element {
   const {
     control,
@@ -40,6 +60,31 @@ export function Addres({ defaultAddres, isNewAddres, version }: Props): JSX.Elem
     // setValue,
     watch,
   } = useForm<AddresType>({ mode: 'onChange', defaultValues: defaultAddres });
+
+  const deleteAddres = (): void => {
+    //   await queryClient.invalidateQueries({ queryKey: ['me'] });
+    addOrChangeAddres({
+      actions: [
+        {
+          action: 'removeAddress',
+          addressId: defaultAddres.adressID,
+        },
+      ],
+      version: version,
+    })
+      .then(async (response) => {
+        await queryClient.invalidateQueries({ queryKey: ['me'] });
+        console.log('ответ', response);
+        //TODO получить id
+        console.log('отправлено');
+      })
+      .catch((error: Error) => {
+        // setLoading(false);
+        // const message = String(error.message) ?? '';
+        // resultOfSubmit({ hasError: true, message: message });
+        console.log(error);
+      });
+  };
 
   const queryClient = useQueryClient();
   const country = watch('country');
@@ -54,28 +99,47 @@ export function Addres({ defaultAddres, isNewAddres, version }: Props): JSX.Elem
   const [isAdressDisabled, SetIsAdressDisabled] = useState(!isNewAddres);
 
   const onSubmit: SubmitHandler<AddresType> = async (data: AddresType): Promise<void> => {
-    const addres = {
+    const addres: OutputAddres = {
       country: data.country,
       city: data.city,
       postalCode: data.index,
       streetName: data.street,
     };
-    await queryClient.invalidateQueries({ queryKey: ['me'] });
 
+    const action: AddnewAddresAction = {
+      address: addres,
+      addressId: isNewAddres ? '' : defaultAddres.adressID,
+      action: isNewAddres ? 'addAddress' : 'changeAddress',
+    };
+
+    // isNewAddres ? action.action = 'addAddress' : action.action = 'changeAddress';
+
+    const actions: Actions = [action];
+    // if (data.useByDefaultBilling) {
+    //   actions.push({
+    //     action:"setDefaultBillingAddress",
+    //     addressId: defaultAddres.adressID
+    //   })
+    // }
+    // if (data.useByDefaultShipping) {
+    //   actions.push({
+    //     action:"setDefaultShippingAddress",
+    //     addressId: defaultAddres.adressID
+    //   })
+    // }
+    // console.log('actions',actions)
+    await queryClient.invalidateQueries({ queryKey: ['me'] });
+    // console.log('новая версия')
     if (isNewAddres) {
       // setLoading(true);
-      addAddres({
-        actions: [
-          {
-            action: 'addAddress',
-            address: addres,
-          },
-        ],
+      addOrChangeAddres({
+        actions: actions,
         version: version,
       })
-        // createCustomer(registrationFormDataAdapter(data))
-        .then(() => {
-          console.log('отправлено'); //return loginUser({ email: data.email, password: data.password });
+        .then((response) => {
+          console.log('ответ', response);
+          //TODO получить id
+          console.log('отправлено');
         })
         // .then(({ body }: ClientResponse<CustomerSignInResult>) => {
         //   setLoading(false);
@@ -93,14 +157,21 @@ export function Addres({ defaultAddres, isNewAddres, version }: Props): JSX.Elem
           console.log(error);
         });
     } else {
-      addAddres({
-        actions: [
-          {
-            action: 'changeAddress',
-            address: addres,
-            addressId: defaultAddres.adressID,
-          },
-        ],
+      if (data.useByDefaultBilling) {
+        actions.push({
+          action: 'setDefaultBillingAddress',
+          addressId: defaultAddres.adressID,
+        });
+      }
+      if (data.useByDefaultShipping) {
+        actions.push({
+          action: 'setDefaultShippingAddress',
+          addressId: defaultAddres.adressID,
+        });
+      }
+
+      addOrChangeAddres({
+        actions: actions,
         version: version,
       })
         .then(() => {
@@ -163,10 +234,38 @@ export function Addres({ defaultAddres, isNewAddres, version }: Props): JSX.Elem
         <Controller
           control={control}
           name="useByDefaultShipping"
-          render={({ field }) => (
+          //defaultValue={defaultAddres.useByDefaultShipping}
+          render={({ field: { onChange, value } }) => (
             <FormControlLabel
-              control={<Checkbox {...field} color="primary" />}
-              label="Use as default address"
+              control={
+                <Checkbox
+                  color="primary"
+                  defaultChecked={value}
+                  disabled={isAdressDisabled}
+                  onChange={onChange}
+                  value={value}
+                />
+              }
+              label="Use as default shipping address"
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="useByDefaultBilling"
+          render={({ field: { onChange, value } }) => (
+            <FormControlLabel
+              control={
+                <Checkbox
+                  color="primary"
+                  defaultChecked={value}
+                  disabled={isAdressDisabled}
+                  onChange={onChange}
+                  value={value}
+                />
+              }
+              label="Use as default billing address"
+              value={defaultAddres.useByDefaultBilling}
             />
           )}
         />
@@ -180,8 +279,18 @@ export function Addres({ defaultAddres, isNewAddres, version }: Props): JSX.Elem
             Edit
           </Button>
         ) : (
-          <Button type="submit"> submit </Button>
+          <Button type="submit"> Submit </Button>
         )}
+
+        <Button
+          onClick={() => {
+            deleteAddres();
+          }}
+          type="button"
+        >
+          {' '}
+          Delete{' '}
+        </Button>
         {/* <Button type='submit'>
       submit
     </Button> */}

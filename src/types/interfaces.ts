@@ -78,6 +78,6 @@ export type AddresType = {
   street: string;
   // useAsBilling: boolean;
   // useAsShipping: boolean;
-  // useByDefaultBilling: boolean;
+  useByDefaultBilling: boolean;
   useByDefaultShipping: boolean;
 };

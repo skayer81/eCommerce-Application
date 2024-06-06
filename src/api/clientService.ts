@@ -203,7 +203,7 @@ export async function changeData(data: object, customerId: string): Promise<void
     .catch(console.error);
 }
 
-export async function addAddres(data: object): Promise<void> {
+export async function addOrChangeAddres(data: object): Promise<void> {
   return (
     apiRoot
       .me()
