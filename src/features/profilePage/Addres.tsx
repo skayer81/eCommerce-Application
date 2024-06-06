@@ -73,7 +73,7 @@ export function Addres({ defaultAddres, isNewAddres, version }: Props): JSX.Elem
     setIndexRules(newRulesValidation);
   }, [country]);
 
-  const [isAdressDisabled, SetIsAdressDisabled] = useState(!isNewAddres);
+  const [isAdressDisabled, setIsAdressDisabled] = useState(!isNewAddres);
 
   const onSubmit: SubmitHandler<AddresType> = async (data: AddresType): Promise<void> => {
     const addres: OutputAddres = {
@@ -98,6 +98,7 @@ export function Addres({ defaultAddres, isNewAddres, version }: Props): JSX.Elem
       })
         .then(() => {
           //TODO получить id
+          setIsAdressDisabled(true);
         })
         .catch((error: Error) => {
           console.log(error);
@@ -121,6 +122,7 @@ export function Addres({ defaultAddres, isNewAddres, version }: Props): JSX.Elem
         version: version,
       })
         .then(() => {
+          setIsAdressDisabled(true);
           console.log('изменено');
         })
         .catch((error: Error) => {
@@ -181,8 +183,8 @@ export function Addres({ defaultAddres, isNewAddres, version }: Props): JSX.Elem
             <FormControlLabel
               control={
                 <Checkbox
+                  checked={value}
                   color="primary"
-                  defaultChecked={value}
                   disabled={isAdressDisabled}
                   onChange={onChange}
                   value={value}
@@ -199,8 +201,8 @@ export function Addres({ defaultAddres, isNewAddres, version }: Props): JSX.Elem
             <FormControlLabel
               control={
                 <Checkbox
+                  checked={value}
                   color="primary"
-                  defaultChecked={value}
                   disabled={isAdressDisabled}
                   onChange={onChange}
                   value={value}
@@ -211,10 +213,10 @@ export function Addres({ defaultAddres, isNewAddres, version }: Props): JSX.Elem
             />
           )}
         />
-        {isAdressDisabled ? (
+        {/* {isAdressDisabled ? (
           <Button
             onClick={() => {
-              SetIsAdressDisabled(false);
+              setIsAdressDisabled(false);
             }}
             type="button"
           >
@@ -222,7 +224,21 @@ export function Addres({ defaultAddres, isNewAddres, version }: Props): JSX.Elem
           </Button>
         ) : (
           <Button type="submit"> Submit </Button>
-        )}
+        )} */}
+        <Button
+          disabled={!isAdressDisabled}
+          onClick={() => {
+            setIsAdressDisabled(false);
+          }}
+          type="button"
+        >
+          Edit
+        </Button>
+
+        <Button disabled={isAdressDisabled} type="submit">
+          {' '}
+          Submit{' '}
+        </Button>
 
         <Button
           onClick={() => {

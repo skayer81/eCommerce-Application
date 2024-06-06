@@ -56,7 +56,7 @@ function Addresses({ ...props }): JSX.Element {
                 expandIcon={<ExpandMoreIcon />}
                 id="billing-addresses"
               >
-                Addres {index}
+                Addres {index + 1}
               </AccordionSummary>
               <AccordionDetails>
                 <Addres
