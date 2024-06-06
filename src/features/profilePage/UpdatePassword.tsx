@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
-// import { ClientResponse } from '@commercetools/platform-sdk';
 import { HttpErrorType } from '@commercetools/sdk-client-v2';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
@@ -75,7 +74,6 @@ function UpdatePassword({ ...props }): JSX.Element {
         await queryClient.invalidateQueries({ queryKey: ['me'] });
       })
       .catch((err: HttpErrorType) => {
-        console.log('ERROR=', err);
         if (err.status === 400) {
           setError(true);
         } else {

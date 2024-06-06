@@ -20,13 +20,11 @@ import { changeData } from '../../api/clientService';
 
 function UserData({ ...props }): JSX.Element {
   const customer: Customer = { ...props };
-
   const [loading, setLoading] = useState(false);
   const [snackBarState, setSnackBar] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const customerId = customer.id as string;
   const version = customer.version;
-
   const queryClient = useQueryClient();
 
   const { mutate, error, isError } = useMutation<unknown, unknown, CustomerUpdate, unknown>({

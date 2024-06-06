@@ -19,7 +19,6 @@ function UpdateEmail({ ...props }): JSX.Element {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  // const [email, setEmail] = useState(customer.email);
   const [snackBarState, setSnackBar] = useState(false);
   const customerId = customer.id as string;
   const version = customer.version;
