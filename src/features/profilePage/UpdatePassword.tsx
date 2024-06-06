@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
-import { ClientResponse } from '@commercetools/platform-sdk';
+// import { ClientResponse } from '@commercetools/platform-sdk';
 import { HttpErrorType } from '@commercetools/sdk-client-v2';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
@@ -10,17 +10,20 @@ import {
   Box,
   IconButton,
   InputAdornment,
+  Snackbar,
   Stack,
   Switch,
   TextField,
   Typography,
 } from '@mui/material';
+import { useQueryClient } from '@tanstack/react-query';
 
+import { tokenCache } from '@/api/tokenCache';
 import RulesValidation from '@/components/formComponents/rulesValidation';
 import { Customer } from '@/features/profilePage/Types';
 import { Password, PasswordChange } from '@/types/interfaces';
 
-import { changePassword } from '../../api/clientService';
+import { changePassword, passwordFlowAuth } from '../../api/clientService';
 
 function UpdatePassword({ ...props }): JSX.Element {
   const customer: Customer = { ...props };
@@ -28,38 +31,49 @@ function UpdatePassword({ ...props }): JSX.Element {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [password, setPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
   const customerId = customer.id as string;
+  const customerMail = customer.email as string;
   const version = customer.version as number;
+  const queryClient = useQueryClient();
+  const [snackBarState, setSnackBar] = useState(false);
 
   const {
     handleSubmit,
     formState: { errors },
     control,
+    reset,
   } = useForm<Password>({
     mode: 'onChange',
     defaultValues: {
-      password: password,
-      newPassword: newPassword,
+      password: '',
+      newPassword: '',
     },
   });
 
-  const updatePassword = (): Promise<ClientResponse<Customer>> => {
-    const data: PasswordChange = {
+  const submit: SubmitHandler<Password> = (data: Password): void => {
+    const newData: PasswordChange = {
       id: customerId,
       version: version,
-      currentPassword: password,
-      newPassword: newPassword,
+      currentPassword: data.password,
+      newPassword: data.newPassword,
     };
-    return changePassword(data);
-  };
 
-  const submit: SubmitHandler<Password> = (): void => {
     setLoading(true);
-    updatePassword()
-      .then(console.log)
+    changePassword(newData)
+      .then(() => {
+        reset({ password: '', newPassword: '' });
+        setEditMode(false);
+        setSnackBar(true);
+        tokenCache.deleteToken();
+      })
+      .then(() => {
+        passwordFlowAuth({ email: customerMail, password: data.newPassword });
+      })
+      .then(async () => {
+        await queryClient.invalidateQueries({ queryKey: ['me'] });
+      })
       .catch((err: HttpErrorType) => {
+        console.log('ERROR=', err);
         if (err.status === 400) {
           setError(true);
         } else {
@@ -69,6 +83,9 @@ function UpdatePassword({ ...props }): JSX.Element {
       .finally(() => {
         setLoading(false);
       });
+  };
+  const handleClose = (): void => {
+    setSnackBar(false);
   };
 
   return (
@@ -95,6 +112,7 @@ function UpdatePassword({ ...props }): JSX.Element {
             <Box sx={{ display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
               <Typography>Edit mode</Typography>
               <Switch
+                checked={editMode}
                 color="success"
                 onChange={() => {
                   setEditMode(editMode === true ? false : true);
@@ -105,7 +123,7 @@ function UpdatePassword({ ...props }): JSX.Element {
           <Controller
             control={control}
             name="password"
-            render={({ field: { onChange } }) => (
+            render={({ field: { value, onChange } }) => (
               <Box alignItems="center" display="flex">
                 <Typography component="label" htmlFor="password" sx={{ mr: 2 }} variant="body1">
                   Current password:
@@ -128,11 +146,9 @@ function UpdatePassword({ ...props }): JSX.Element {
                   error={!!errors.password}
                   fullWidth
                   helperText={errors.password?.message}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    onChange(e);
-                  }}
+                  onChange={onChange}
                   type={showPassword ? 'text' : 'password'}
+                  value={value}
                   variant="standard"
                 />
               </Box>
@@ -142,7 +158,7 @@ function UpdatePassword({ ...props }): JSX.Element {
           <Controller
             control={control}
             name="newPassword"
-            render={({ field: { onChange } }) => (
+            render={({ field: { value, onChange } }) => (
               <Box alignItems="center" display="flex">
                 <Typography component="label" htmlFor="new-password" sx={{ mr: 2 }} variant="body1">
                   New password:
@@ -165,11 +181,9 @@ function UpdatePassword({ ...props }): JSX.Element {
                   error={!!errors.newPassword}
                   fullWidth
                   helperText={errors.newPassword?.message}
-                  onChange={(e) => {
-                    setNewPassword(e.target.value);
-                    onChange(e);
-                  }}
+                  onChange={onChange}
                   type={showPassword ? 'text' : 'password'}
+                  value={value}
                   variant="standard"
                 />
               </Box>
@@ -194,6 +208,14 @@ function UpdatePassword({ ...props }): JSX.Element {
           </LoadingButton>
         </form>
       </Stack>
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        autoHideDuration={3000}
+        key={'top' + 'right'}
+        message="Password updated successfully"
+        onClose={handleClose}
+        open={snackBarState}
+      />
     </Box>
   );
 }
