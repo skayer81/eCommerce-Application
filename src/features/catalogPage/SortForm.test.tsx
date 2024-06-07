@@ -3,17 +3,16 @@ import { MemoryRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import NoAuthPanel from './NoAuthPanel';
+import SortForm from './SortForm';
 
-describe('NoAuthPanel', () => {
+describe('SortForm', () => {
   it('should render', () => {
     render(
       <MemoryRouter>
-        <NoAuthPanel />
+        <SortForm />
       </MemoryRouter>,
     );
-
-    const textOnButton = screen.getByText('Log in');
-    expect(textOnButton).toBeInTheDocument();
+    const renderText = screen.getByText('By Name');
+    expect(renderText).toBeInTheDocument();
   });
 });
