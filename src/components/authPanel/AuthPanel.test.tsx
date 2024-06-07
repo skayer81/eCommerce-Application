@@ -7,13 +7,14 @@ import AuthPanel from './AuthPanel';
 
 describe('AuthPanel', () => {
   it('should render', () => {
+    const mockOnLogout = vi.fn();
     render(
       <MemoryRouter>
-        <AuthPanel />
+        <AuthPanel logout={mockOnLogout} />
       </MemoryRouter>,
     );
 
-    const logout = screen.getByText('Logout');
+    const logout = screen.getByText('Log out');
     expect(logout).toBeInTheDocument();
   });
 });

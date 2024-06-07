@@ -4,7 +4,7 @@ import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
-  base: './',
+  // base: './',
   plugins: [tsconfigPaths(), react()],
   test: {
     globals: true,
@@ -17,6 +17,6 @@ export default defineConfig({
     },
   },
   build: {
-    chunkSizeWarningLimit: 700,
+    chunkSizeWarningLimit: 1100,
   },
 });

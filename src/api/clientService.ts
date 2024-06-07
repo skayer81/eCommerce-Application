@@ -1,19 +1,26 @@
 import {
   ByProjectKeyRequestBuilder,
   ClientResponse,
+  CustomerUpdate,
+  MyCustomerUpdate,
   createApiBuilderFromCtpClient,
 } from '@commercetools/platform-sdk';
 import { Client, ClientBuilder } from '@commercetools/sdk-client-v2';
 
 import { PROJECT_KEY } from '@/config/clientConfig';
-import { LoginForm, RegistrationRequestBody } from '@/types/interfaces';
+import { Customer } from '@/features/profilePage/Types';
+import { LoginForm, PasswordChange, RegistrationRequestBody } from '@/types/interfaces';
+import { PRODUCTS_LIMIT } from '@/utils/constants';
 
 import {
   authAnonymMiddlewareOptions,
   authMiddlewareOptions,
   authUserMiddlewareOptions,
+  existingTokenMiddlewareoptions,
   httpMiddlewareOptions,
+  refreshMiddlewareOptions,
 } from './BuildClient';
+import { LocalStorageTokenCache } from './tokenCache';
 
 const ctpClient = new ClientBuilder()
   .withClientCredentialsFlow(authMiddlewareOptions)
@@ -44,6 +51,33 @@ export function anonymFlowAuth(): ByProjectKeyRequestBuilder {
 export function passwordFlowAuth({ email, password }: LoginForm): ByProjectKeyRequestBuilder {
   const ctpClient = new ClientBuilder()
     .withPasswordFlow(authUserMiddlewareOptions(email, password))
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .withLoggerMiddleware()
+    .build();
+
+  apiRoot = getApiRoot(ctpClient);
+
+  return apiRoot;
+}
+
+export function refreshFlowAuth(
+  token: string,
+  tokenCache: LocalStorageTokenCache,
+): ByProjectKeyRequestBuilder {
+  const ctpClient = new ClientBuilder()
+    .withRefreshTokenFlow(refreshMiddlewareOptions(token, tokenCache))
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .withLoggerMiddleware()
+    .build();
+
+  apiRoot = getApiRoot(ctpClient);
+
+  return apiRoot;
+}
+
+export function existingFlowAuth(token: string): ByProjectKeyRequestBuilder {
+  const ctpClient = new ClientBuilder()
+    .withExistingTokenFlow(token, existingTokenMiddlewareoptions)
     .withHttpMiddleware(httpMiddlewareOptions)
     .withLoggerMiddleware()
     .build();
@@ -90,4 +124,97 @@ export function createCustomer(body: RegistrationRequestBody): Promise<ClientRes
       body: body,
     })
     .execute();
+}
+
+export async function getCustomer(root: ByProjectKeyRequestBuilder): Promise<void> {
+  return root.me().get().execute().then(console.log).catch(console.error);
+}
+
+export function getProductByKey(key?: string): Promise<ClientResponse> {
+  if (!key) {
+    throw new Error('key is undefined');
+  }
+  return apiRoot.products().withKey({ key: key }).get().execute();
+}
+
+export async function getProducts(
+  categoryId = '',
+  sortValue: string,
+  attributes: Record<string, string>,
+  searchValue = '',
+): Promise<ClientResponse> {
+  const attrFilters = Object.entries(attributes)
+    .filter(([attrkey, value]) => value !== '' && attrkey)
+    .map(([key, value]) => `variants.attributes.${key}.key:"${value}"`);
+  const catFilter = categoryId ? [`categories.id:subtree("${categoryId}")`] : [];
+  const resFilters = [...attrFilters, ...catFilter];
+
+  return apiRoot
+    .productProjections()
+    .search()
+    .get({
+      queryArgs: {
+        'filter.query': resFilters,
+        sort: sortValue === '' ? undefined : [sortValue],
+        limit: PRODUCTS_LIMIT,
+        markMatchingVariants: true,
+        fuzzy: true,
+        'text.en': searchValue,
+      },
+    })
+    .execute();
+}
+
+export async function getMainCategories(): Promise<ClientResponse> {
+  return apiRoot
+    .categories()
+    .get({ queryArgs: { where: ['parent(id is not defined)'] } })
+    .execute();
+}
+
+export async function getSubCategories(categoryId: string): Promise<ClientResponse> {
+  return apiRoot
+    .categories()
+    .get({ queryArgs: { where: [`parent(id="${categoryId}")`] } })
+    .execute();
+}
+
+export async function getCategoryById(categoryId: string): Promise<ClientResponse> {
+  return apiRoot.categories().withId({ ID: categoryId }).get().execute();
+}
+
+export async function getDiscountById(id: string): Promise<ClientResponse> {
+  return apiRoot.productDiscounts().withId({ ID: id }).get().execute();
+}
+
+export async function getAttributes(productTypeKey: string): Promise<ClientResponse> {
+  return apiRoot.productTypes().withKey({ key: productTypeKey }).get().execute();
+}
+
+export async function getUserInfo(): Promise<ClientResponse<Customer>> {
+  return apiRoot.me().get().execute();
+}
+
+export async function changeData(
+  data: CustomerUpdate,
+  customerId: string,
+): Promise<ClientResponse> {
+  return apiRoot.customers().withId({ ID: customerId }).post({ body: data }).execute();
+}
+
+export async function addOrChangeAddres(data: MyCustomerUpdate): Promise<ClientResponse> {
+  return (
+    apiRoot
+      .me()
+      //   .customers()
+      //   .withId({ ID: customerId })
+      .post({ body: data })
+      .execute()
+    // .then(console.log)
+    // .catch(console.error)
+  );
+}
+
+export async function changePassword(data: PasswordChange): Promise<ClientResponse<Customer>> {
+  return apiRoot.customers().password().post({ body: data }).execute();
 }

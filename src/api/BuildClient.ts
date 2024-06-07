@@ -1,8 +1,10 @@
 import {
   AnonymousAuthMiddlewareOptions,
   AuthMiddlewareOptions,
+  ExistingTokenMiddlewareOptions,
   HttpMiddlewareOptions,
   PasswordAuthMiddlewareOptions,
+  RefreshAuthMiddlewareOptions,
 } from '@commercetools/sdk-client-v2';
 import fetch from 'node-fetch';
 
@@ -14,6 +16,7 @@ import {
   PROJECT_KEY,
   SCOPES,
 } from '../config/clientConfig.ts';
+import { LocalStorageTokenCache, tokenCache } from './tokenCache.ts';
 
 // Configure authMiddlewareOptions
 export const authMiddlewareOptions: AuthMiddlewareOptions = {
@@ -68,5 +71,28 @@ export const authUserMiddlewareOptions = (
     scopes: SCOPES,
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     fetch,
+    tokenCache: tokenCache,
   };
+};
+
+export const refreshMiddlewareOptions = (
+  refrToken: string,
+  tokenCache: LocalStorageTokenCache,
+): RefreshAuthMiddlewareOptions => {
+  return {
+    host: AUTH_URL,
+    projectKey: PROJECT_KEY,
+    credentials: {
+      clientId: CLIENT_ID,
+      clientSecret: CLIENT_SECRET,
+    },
+    refreshToken: refrToken,
+    tokenCache: tokenCache,
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    fetch,
+  };
+};
+
+export const existingTokenMiddlewareoptions: ExistingTokenMiddlewareOptions = {
+  force: true,
 };

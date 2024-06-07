@@ -23,13 +23,15 @@ import ButtonToAnotherPage from '@/components/formComponents/ButtonToAnotherPage
 import RulesValidation from '@/components/formComponents/rulesValidation';
 import { useUserStore } from '@/stores/userStore';
 import { LoginForm } from '@/types/interfaces';
+
+import { useCustomerStore } from '../profilePage/Types';
 export default function LoginPage(): JSX.Element {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigation = useNavigate();
   const { loginUserInStore } = useUserStore();
-
+  const { saveUserInStore } = useCustomerStore();
   const {
     handleSubmit,
     formState: { errors },
@@ -49,6 +51,7 @@ export default function LoginPage(): JSX.Element {
         navigation('/');
         loginUserInStore(body.customer.id);
         const root = passwordFlowAuth(data);
+        saveUserInStore(body.customer);
         return getProject(root);
       })
       .catch((err: HttpErrorType) => {

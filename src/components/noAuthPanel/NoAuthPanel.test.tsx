@@ -13,7 +13,7 @@ describe('NoAuthPanel', () => {
       </MemoryRouter>,
     );
 
-    const textOnButton = screen.getByText('Login');
+    const textOnButton = screen.getByText('Log in');
     expect(textOnButton).toBeInTheDocument();
   });
 });
