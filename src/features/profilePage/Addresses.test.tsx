@@ -3,17 +3,16 @@ import { MemoryRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import NoAuthPanel from './NoAuthPanel';
+import Addresses from './Addresses';
 
-describe('NoAuthPanel', () => {
+describe('Addresses', () => {
   it('should render', () => {
     render(
       <MemoryRouter>
-        <NoAuthPanel />
+        <Addresses />
       </MemoryRouter>,
     );
-
-    const textOnButton = screen.getByText('Log in');
-    expect(textOnButton).toBeInTheDocument();
+    const renderText = screen.getByText('Add addres');
+    expect(renderText).toBeInTheDocument();
   });
 });

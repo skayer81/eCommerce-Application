@@ -3,17 +3,17 @@ import { MemoryRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import NoAuthPanel from './NoAuthPanel';
+import ErrorAlert from './ErrorAlert'; //ButtonToAnotherPage from './ButtonToAnotherPage';
 
-describe('NoAuthPanel', () => {
+describe('ErrorAlert', () => {
   it('should render', () => {
     render(
       <MemoryRouter>
-        <NoAuthPanel />
+        <ErrorAlert />
       </MemoryRouter>,
     );
 
-    const textOnButton = screen.getByText('Log in');
+    const textOnButton = screen.getByText('Something went wrong. Try again later...');
     expect(textOnButton).toBeInTheDocument();
   });
 });

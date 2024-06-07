@@ -14,7 +14,7 @@ describe('AuthPanel', () => {
       </MemoryRouter>,
     );
 
-    const logout = screen.getByText('Logout');
+    const logout = screen.getByText('Log out');
     expect(logout).toBeInTheDocument();
   });
 });
