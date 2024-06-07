@@ -1,5 +1,6 @@
 import {
   ByProjectKeyRequestBuilder,
+  CartDraft,
   ClientResponse,
   CustomerUpdate,
   MyCustomerUpdate,
@@ -217,4 +218,21 @@ export async function addOrChangeAddres(data: MyCustomerUpdate): Promise<ClientR
 
 export async function changePassword(data: PasswordChange): Promise<ClientResponse<Customer>> {
   return apiRoot.customers().password().post({ body: data }).execute();
+}
+
+export function addItemToBasket(body: RegistrationRequestBody): Promise<ClientResponse> {
+  return apiRoot
+    .customers()
+    .post({
+      body: body,
+    })
+    .execute();
+}
+
+export function getCustomerBasket(customerId: string): Promise<ClientResponse> {
+  return apiRoot.carts().withCustomerId({ customerId: customerId }).get().execute(); // get().; // .customers().execute();
+}
+
+export function createBasket(data: CartDraft): Promise<ClientResponse> {
+  return apiRoot.carts().post(data).execute();
 }

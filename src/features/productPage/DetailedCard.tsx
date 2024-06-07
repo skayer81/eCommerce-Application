@@ -1,4 +1,4 @@
-import { Box, CardActions, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { Box, Button, CardActions, List, ListItem, ListItemText, Typography } from '@mui/material';
 
 import DetailedCardSlider from './productCardSlider/DetailedCardSlider';
 
@@ -77,9 +77,15 @@ export default function DetailedCard({
               </Typography>
             )}
           </CardActions>
+          <CardActions sx={{ mt: 'auto' }}>
+            <Button>add to basket</Button>
+            <Button>delete from basket</Button>
+          </CardActions>
         </List>
       </Box>
       <Typography>{productProps.description}</Typography>
     </>
   );
 }
+
+//{useUserStore().userId}

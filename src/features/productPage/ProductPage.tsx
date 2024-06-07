@@ -5,9 +5,10 @@ import { ClientResponse, Product } from '@commercetools/platform-sdk';
 import { Container } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 
-import { getProductByKey } from '../../api/clientService';
+import { getProductByKey } from '../../api/clientService'; //getCustomerBasket
 import DetailedCard from './DetailedCard';
 import DetailedFullScreenSlider from './detailedFullScreenSlider/detailedFullScreenSlider';
+// import { useUserStore } from '@/stores/userStore';
 
 type AtribListItem = {
   name: string;
@@ -53,6 +54,14 @@ export default function ProductPage(): JSX.Element {
     select: productAdapter,
   });
 
+  //const userID = useUserStore().userId;
+
+  // const { dataBasket, errorBasket, isPendingBasket } = useQuery({
+  //   queryKey: ['cart', userID],
+  //   queryFn: () =>  getCustomerBasket(userID),
+  //   select: productAdapter,
+  // });
+
   if (isPending) {
     return <Container>Loading...</Container>;
   }
@@ -60,6 +69,8 @@ export default function ProductPage(): JSX.Element {
   if (error) {
     return <Container> `An error has occurred: ${error.message}`</Container>;
   }
+
+  // console.log('dataBasket', dataBasket);
 
   return (
     <>
