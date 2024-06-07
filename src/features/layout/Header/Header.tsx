@@ -47,6 +47,7 @@ export default function Header(): JSX.Element {
     { text: 'Catalog', path: '/catalog' },
     { text: 'About', path: '/about' },
     { text: 'Cart', path: '/cart' },
+    { text: 'Basket', path: '/basket' },
   ];
 
   const DrawerList = (
