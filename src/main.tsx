@@ -10,6 +10,7 @@ import RequireMain from './components/requireMain/RequireMain';
 import { PROJECT_KEY } from './config/clientConfig.ts';
 import theme from './config/theme.ts';
 import AboutPage from './features/aboutPage/AboutPage.tsx';
+import { BasketPage } from './features/basketPage/basketPage.tsx';
 import CartPage from './features/cartPage/CartPage.tsx';
 import { CatalogPageLazy as CatalogPage } from './features/catalogPage/CatalogPageLazy.tsx';
 import { ErrorPageLazy as ErrorPage } from './features/errorPage/ErrorPageLazy.tsx';
@@ -81,6 +82,10 @@ const router = createBrowserRouter([
       {
         path: '/product/:key',
         element: <ProductPage />,
+      },
+      {
+        path: '/basket',
+        element: <BasketPage />,
       },
       {
         path: '*',
