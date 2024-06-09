@@ -1,7 +1,8 @@
 import { Box, CardActions, List, ListItem, ListItemText, Typography } from '@mui/material';
 
-import ButtonAddToBasket from './ButtonAddToBasket';
-import ButtonChangeQuantity from './ButtonChangeQuantity';
+import ButtonAddToBasket from '@/components/buttonsForBasket/ButtonAddToBasket';
+import ButtonChangeQuantity from '@/components/buttonsForBasket/ButtonChangeQuantity';
+
 import DetailedCardSlider from './productCardSlider/DetailedCardSlider';
 
 type AtribListItem = {
