@@ -6,12 +6,20 @@ import { useUserStore } from '@/stores/userStore';
 
 // import { useQuery } from "@tanstack/react-query";
 
-function ButtonAddToBasket({ disabled, sku }: { disabled: boolean; sku: string }): JSX.Element {
+function ButtonAddToBasket({
+  children,
+  disabled,
+  sku,
+}: {
+  children: JSX.Element | string;
+  disabled: boolean;
+  sku: string;
+}): JSX.Element {
   const basketId = useUserStore().busketId;
 
   const addToBasket = (): void => {
     const testBady: MyCartUpdate = {
-      version: 16,
+      version: 22,
       actions: [{ action: 'addLineItem', sku: sku, quantity: 1 }],
     };
     changeNumberItemInBasket(testBady, basketId)
@@ -30,7 +38,7 @@ function ButtonAddToBasket({ disabled, sku }: { disabled: boolean; sku: string }
         addToBasket();
       }}
     >
-      add to basket
+      {children}
     </Button>
   );
 }

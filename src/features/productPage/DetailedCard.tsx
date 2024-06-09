@@ -1,5 +1,7 @@
-import { Box, Button, CardActions, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { Box, CardActions, List, ListItem, ListItemText, Typography } from '@mui/material';
 
+import ButtonAddToBasket from './ButtonAddToBasket';
+import ButtonChangeQuantity from './ButtonChangeQuantity';
 import DetailedCardSlider from './productCardSlider/DetailedCardSlider';
 
 type AtribListItem = {
@@ -10,6 +12,7 @@ type AtribListItem = {
 };
 
 type ProductProperties = {
+  isItemInBasket: boolean;
   productProps: {
     description: string;
     discount: number | undefined;
@@ -17,12 +20,14 @@ type ProductProperties = {
     listOfAtributes: Array<AtribListItem> | undefined;
     name: string;
     price: number;
+    sku: string;
   };
   setIsFullScreen: (isFullScreen: boolean) => void;
   setSlideNumber: (slideNumber: number) => void;
 };
 
 export default function DetailedCard({
+  isItemInBasket,
   productProps,
   setIsFullScreen,
   setSlideNumber,
@@ -78,8 +83,12 @@ export default function DetailedCard({
             )}
           </CardActions>
           <CardActions sx={{ mt: 'auto' }}>
-            <Button>add to basket</Button>
-            <Button>delete from basket</Button>
+            <ButtonAddToBasket disabled={isItemInBasket} sku={productProps.sku}>
+              {'add to basket'}
+            </ButtonAddToBasket>
+            <ButtonChangeQuantity disabled={!isItemInBasket} quantity={0} sku={productProps.sku}>
+              {'Remove from Cart'}
+            </ButtonChangeQuantity>
           </CardActions>
         </List>
       </Box>
