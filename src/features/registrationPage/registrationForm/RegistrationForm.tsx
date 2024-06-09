@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Controller, RegisterOptions, SubmitHandler, useForm } from 'react-hook-form';
 
-import { ClientResponse, CustomerSignInResult } from '@commercetools/platform-sdk';
+import { Cart, ClientResponse, CustomerSignInResult } from '@commercetools/platform-sdk';
 import { LoadingButton } from '@mui/lab';
 import { FormControlLabel } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
@@ -15,11 +15,18 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import 'dayjs/locale/de';
 
-import { createCustomer, getProject, loginUser, passwordFlowAuth } from '@/api/clientService';
+import {
+  createBasket,
+  createCustomer,
+  getProject,
+  loginUser,
+  passwordFlowAuth,
+} from '@/api/clientService';
 import ButtonToAnotherPage from '@/components/formComponents/ButtonToAnotherPage';
 import { FormInputText } from '@/components/formComponents/FormInputText';
 import FormSelect from '@/components/formComponents/FormSelect';
 import RulesValidation from '@/components/formComponents/rulesValidation';
+import { useUserStore } from '@/stores/userStore';
 import { RegistrationForm } from '@/types/interfaces';
 
 import registrationFormDataAdapter from './RegistrationFormDataAdapter';
@@ -78,6 +85,8 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
     shippingCountry,
   ]);
 
+  const { addBasketIDInStore, updateCurrentVersion } = useUserStore();
+
   const onSubmit: SubmitHandler<RegistrationForm> = (data: RegistrationForm): void => {
     setLoading(true);
     createCustomer(registrationFormDataAdapter(data))
@@ -92,6 +101,13 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
         );
         const root = passwordFlowAuth({ email: data.email, password: data.password });
         return getProject(root);
+      })
+      .then(() => {
+        return createBasket();
+      })
+      .then(({ body }: ClientResponse<Cart>) => {
+        addBasketIDInStore(body.id);
+        updateCurrentVersion(body.version);
       })
       .catch((error: Error) => {
         setLoading(false);
