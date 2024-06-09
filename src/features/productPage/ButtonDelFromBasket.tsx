@@ -45,7 +45,7 @@ function ButtonDelFromBasket({ disabled, sku }: { disabled: boolean; sku: string
         delFromBasket();
       }}
     >
-      del from basket
+      Remove from Cart
     </Button>
   );
 }

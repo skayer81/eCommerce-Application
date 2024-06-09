@@ -1,5 +1,6 @@
 import { Box, Card, CardContent, CardMedia, ListItem, Typography } from '@mui/material';
 
+import ButtonDelFromBasket from '../productPage/ButtonDelFromBasket';
 import { BasketDataList } from './basketTypes';
 
 export function BasketPageListItem({ listItem }: { listItem: BasketDataList }): JSX.Element {
@@ -29,6 +30,8 @@ export function BasketPageListItem({ listItem }: { listItem: BasketDataList }): 
         <Typography component="div" sx={{ lineHeight: '1.3' }} variant="h6">
           total price:{((listItem.quantity * listItem.price) / 1000).toFixed(2) + '$'}
         </Typography>
+        <ButtonDelFromBasket disabled={false} sku={''} />
+        {/* //<Button onClick={}>Remove from Cart</Button> */}
       </CardContent>
     </ListItem>
   );
