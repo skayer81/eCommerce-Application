@@ -3,4 +3,5 @@ export type BasketDataList = {
   name: string;
   price: number;
   quantity: number;
+  sku: string;
 };
