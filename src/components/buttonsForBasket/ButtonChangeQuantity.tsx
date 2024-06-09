@@ -18,14 +18,11 @@ function ButtonChangeQuantity({
   quantity: number;
   sku: string;
 }): JSX.Element {
-  const userId = useUserStore().userId;
-  const basketId = useUserStore().basketId;
-  const version = useUserStore().basketVersion;
-  const updateCurrentVersion = useUserStore().updateCurrentVersion;
+  const { updateCurrentVersion, basketId, basketVersion, userId } = useUserStore();
 
   const getBody = (listItemID: string): MyCartUpdate => {
     return {
-      version: version,
+      version: basketVersion,
       actions: [
         {
           action: 'changeLineItemQuantity',
@@ -56,16 +53,15 @@ function ButtonChangeQuantity({
       });
   };
 
+  const onClick = (): void => {
+    changeQuantity();
+    if (callback) {
+      callback();
+    }
+  };
+
   return (
-    <Button
-      disabled={disabled}
-      onClick={() => {
-        changeQuantity();
-        if (callback) {
-          callback();
-        }
-      }}
-    >
+    <Button disabled={disabled} onClick={onClick}>
       {children}
     </Button>
   );

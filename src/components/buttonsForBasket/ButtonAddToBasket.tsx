@@ -36,16 +36,15 @@ function ButtonAddToBasket({
       });
   };
 
+  const onClick = (): void => {
+    addToBasket();
+    if (callback) {
+      callback();
+    }
+  };
+
   return (
-    <Button
-      disabled={disabled}
-      onClick={() => {
-        addToBasket();
-        if (callback) {
-          callback();
-        }
-      }}
-    >
+    <Button disabled={disabled} onClick={onClick}>
       {children}
     </Button>
   );
