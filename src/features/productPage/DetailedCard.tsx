@@ -23,12 +23,14 @@ type ProductProperties = {
     sku: string;
   };
   setIsFullScreen: (isFullScreen: boolean) => void;
+  setIsItemInBasket: (isItemInBasket: boolean) => void;
   setSlideNumber: (slideNumber: number) => void;
 };
 
 export default function DetailedCard({
   isItemInBasket,
   productProps,
+  setIsItemInBasket,
   setIsFullScreen,
   setSlideNumber,
 }: ProductProperties): JSX.Element {
@@ -83,10 +85,23 @@ export default function DetailedCard({
             )}
           </CardActions>
           <CardActions sx={{ mt: 'auto' }}>
-            <ButtonAddToBasket disabled={isItemInBasket} sku={productProps.sku}>
+            <ButtonAddToBasket
+              callback={() => {
+                setIsItemInBasket(false);
+              }}
+              disabled={isItemInBasket}
+              sku={productProps.sku}
+            >
               {'add to basket'}
             </ButtonAddToBasket>
-            <ButtonChangeQuantity disabled={!isItemInBasket} quantity={0} sku={productProps.sku}>
+            <ButtonChangeQuantity
+              callback={() => {
+                setIsItemInBasket(false);
+              }}
+              disabled={!isItemInBasket}
+              quantity={0}
+              sku={productProps.sku}
+            >
               {'Remove from Cart'}
             </ButtonChangeQuantity>
           </CardActions>

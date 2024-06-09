@@ -4,26 +4,29 @@ import { Button } from '@mui/material';
 import { changeNumberItemInBasket } from '@/api/clientService';
 import { useUserStore } from '@/stores/userStore';
 
-// import { useQuery } from "@tanstack/react-query";
-
 function ButtonAddToBasket({
+  callback,
   children,
   disabled,
   sku,
 }: {
+  callback: () => void;
   children: JSX.Element | string;
   disabled: boolean;
   sku: string;
 }): JSX.Element {
-  const basketId = useUserStore().busketId;
+  const updateCurrentVersion = useUserStore().updateCurrentVersion;
+  const basketId = useUserStore().basketId;
+  const version = useUserStore().basketVersion;
 
   const addToBasket = (): void => {
     const testBady: MyCartUpdate = {
-      version: 22,
+      version: version,
       actions: [{ action: 'addLineItem', sku: sku, quantity: 1 }],
     };
     changeNumberItemInBasket(testBady, basketId)
       .then((data) => {
+        updateCurrentVersion(data.body.version);
         console.log('добавили', data);
       })
       .catch((error) => {
@@ -36,6 +39,7 @@ function ButtonAddToBasket({
       disabled={disabled}
       onClick={() => {
         addToBasket();
+        callback();
       }}
     >
       {children}

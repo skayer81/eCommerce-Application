@@ -6,27 +6,34 @@ import { findItemInBasket } from '@/components/findItemInBasket/findItemInBasket
 import { useUserStore } from '@/stores/userStore';
 
 function ButtonChangeQuantity({
+  callback,
   children,
   disabled = false,
   quantity,
   sku,
 }: {
+  callback: () => void;
   children: JSX.Element | string;
   disabled?: boolean;
   quantity: number;
   sku: string;
 }): JSX.Element {
   const userId = useUserStore().userId;
+  const basketId = useUserStore().basketId;
+  const version = useUserStore().basketVersion;
+  const updateCurrentVersion = useUserStore().updateCurrentVersion;
 
-  const testBody: MyCartUpdate = {
-    version: 13,
-    actions: [
-      {
-        action: 'changeLineItemQuantity',
-        lineItemId: '90e15b73-fcac-4aaf-80a7-71ef82e7af36',
-        quantity: quantity,
-      },
-    ],
+  const getBody = (listItemID: string): MyCartUpdate => {
+    return {
+      version: version,
+      actions: [
+        {
+          action: 'changeLineItemQuantity',
+          lineItemId: listItemID,
+          quantity: quantity,
+        },
+      ],
+    };
   };
 
   const delFromBasket = (): void => {
@@ -38,9 +45,10 @@ function ButtonChangeQuantity({
         if (!listItemID) {
           throw new Error('что то пошло не так');
         }
-        return changeNumberItemInBasket(testBody, listItemID);
+        return changeNumberItemInBasket(getBody(listItemID), basketId);
       })
       .then((data) => {
+        updateCurrentVersion(data.body.version);
         console.log('удалили', data);
       })
       .catch((error) => {
@@ -53,6 +61,7 @@ function ButtonChangeQuantity({
       disabled={disabled}
       onClick={() => {
         delFromBasket();
+        callback();
       }}
     >
       {children}

@@ -89,6 +89,7 @@ export default function ProductPage(): JSX.Element {
           isItemInBasket={isItemInBasket}
           productProps={data}
           setIsFullScreen={setIsFullScreen}
+          setIsItemInBasket={setIsItemInBasket}
           setSlideNumber={setFullScreenSlideNumber}
         />
       </Container>
