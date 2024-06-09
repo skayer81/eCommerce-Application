@@ -11,7 +11,6 @@ import { PROJECT_KEY } from './config/clientConfig.ts';
 import theme from './config/theme.ts';
 import AboutPage from './features/aboutPage/AboutPage.tsx';
 import { BasketPage } from './features/basketPage/basketPage.tsx';
-import CartPage from './features/cartPage/CartPage.tsx';
 import { CatalogPageLazy as CatalogPage } from './features/catalogPage/CatalogPageLazy.tsx';
 import { ErrorPageLazy as ErrorPage } from './features/errorPage/ErrorPageLazy.tsx';
 import Layout from './features/layout/Layout';
@@ -70,10 +69,6 @@ const router = createBrowserRouter([
             <ProfilePage />
           </RedirectToMain>
         ),
-      },
-      {
-        path: '/cart',
-        element: <CartPage />,
       },
       {
         path: '/about',

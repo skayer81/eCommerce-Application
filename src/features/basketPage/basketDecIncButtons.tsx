@@ -1,8 +1,8 @@
 import { AddBox, IndeterminateCheckBox } from '@mui/icons-material';
 import { Box, Container } from '@mui/material';
 
-import ButtonAddToBasket from '../productPage/ButtonAddToBasket';
-import ButtonDelFromBasket from '../productPage/ButtonDelFromBasket';
+//mport ButtonAddToBasket from '@/components/buttonsForBasket/ButtonAddToBasket';
+import ButtonChangeQuantity from '@/components/buttonsForBasket/ButtonChangeQuantity';
 
 export function BasketDecIncButtons({
   disabledDec,
@@ -17,11 +17,13 @@ export function BasketDecIncButtons({
 }): JSX.Element {
   return (
     <Container>
-      <ButtonDelFromBasket disabled={disabledDec} sku={sku}></ButtonDelFromBasket>
-      <AddBox></AddBox>
+      <ButtonChangeQuantity disabled={disabledDec} quantity={quantity - 1} sku={sku}>
+        {<AddBox />}
+      </ButtonChangeQuantity>
       <Box>{quantity}</Box>
-      <IndeterminateCheckBox></IndeterminateCheckBox>
-      <ButtonAddToBasket disabled={disabledInc} sku={sku}></ButtonAddToBasket>
+      <ButtonChangeQuantity disabled={disabledInc} quantity={quantity + 1} sku={sku}>
+        {<IndeterminateCheckBox />}
+      </ButtonChangeQuantity>
     </Container>
   );
 }

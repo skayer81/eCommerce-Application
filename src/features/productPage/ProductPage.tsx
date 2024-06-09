@@ -9,8 +9,6 @@ import { findItemInBasket } from '@/components/findItemInBasket/findItemInBasket
 import { useUserStore } from '@/stores/userStore';
 
 import { getProductByKey } from '../../api/clientService';
-import ButtonAddToBasket from './ButtonAddToBasket';
-import ButtonDelFromBasket from './ButtonDelFromBasket';
 import DetailedCard from './DetailedCard';
 import DetailedFullScreenSlider from './detailedFullScreenSlider/detailedFullScreenSlider';
 
@@ -88,8 +86,10 @@ export default function ProductPage(): JSX.Element {
     <>
       <Container sx={{ border: 1, padding: 2 }}>
         <DetailedCard
+          isItemInBasket={isItemInBasket}
           productProps={data}
           setIsFullScreen={setIsFullScreen}
+          setIsItemInBasket={setIsItemInBasket}
           setSlideNumber={setFullScreenSlideNumber}
         />
       </Container>
@@ -103,8 +103,6 @@ export default function ProductPage(): JSX.Element {
       ) : (
         <div style={{ display: 'none' }}></div>
       )}
-      <ButtonAddToBasket disabled={isItemInBasket} sku={data.sku} />
-      <ButtonDelFromBasket disabled={!isItemInBasket} sku={data.sku} />
     </>
   );
 }

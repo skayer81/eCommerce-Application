@@ -85,7 +85,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
     shippingCountry,
   ]);
 
-  const { addBasketIDInStore } = useUserStore();
+  const { addBasketIDInStore, updateCurrentVersion } = useUserStore();
 
   const onSubmit: SubmitHandler<RegistrationForm> = (data: RegistrationForm): void => {
     setLoading(true);
@@ -107,6 +107,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
       })
       .then(({ body }: ClientResponse<Cart>) => {
         addBasketIDInStore(body.id);
+        updateCurrentVersion(body.version);
       })
       .catch((error: Error) => {
         setLoading(false);

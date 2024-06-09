@@ -3,23 +3,26 @@ import { persist } from 'zustand/middleware';
 
 export interface UserStore {
   addBasketIDInStore: (id: string) => void;
-  busketId: string;
+  basketId: string;
+  basketVersion: number;
   isLogin: boolean;
   loginUserInStore: (id: string) => void;
   logoutUserInStore: () => void;
+  updateCurrentVersion: (id: number) => void;
   userId: string;
 }
 export const useUserStore = create<UserStore>()(
   persist(
     (set) => ({
-      busketId: '',
+      basketId: '',
+      basketVersion: 1,
       userId: '',
       isLogin: false,
 
       addBasketIDInStore: (id: string) => {
         set((state) => ({
           ...state,
-          busketId: id,
+          basketId: id,
         }));
       },
 
@@ -36,6 +39,13 @@ export const useUserStore = create<UserStore>()(
           ...state,
           userId: '',
           isLogin: false,
+        }));
+      },
+
+      updateCurrentVersion: (basketVersion: number) => {
+        set((state) => ({
+          ...state,
+          basketVersion: basketVersion,
         }));
       },
     }),
