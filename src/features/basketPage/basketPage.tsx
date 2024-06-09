@@ -5,6 +5,7 @@ import { useUserStore } from '@/stores/userStore';
 
 import { getCustomerBasket } from '../../api/clientService';
 import basketDataAdapter from './basketDataAdapter';
+import { BasketPageList } from './basketPageList';
 
 export function BasketPage(): JSX.Element {
   const userID = useUserStore().userId;
@@ -27,13 +28,10 @@ export function BasketPage(): JSX.Element {
 
   return (
     <Container sx={{ border: 1, padding: 2 }}>
-      {data.map((item, index) => {
-        return (
-          <Container key={index}>
-            <Typography>111</Typography>
-          </Container>
-        );
-      })}
+      <Typography align="center" component="h1" variant="h4">
+        Basket
+      </Typography>
+      <BasketPageList listData={data} />
     </Container>
   );
 }
