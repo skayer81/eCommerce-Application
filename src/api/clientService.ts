@@ -1,8 +1,10 @@
 import {
   ByProjectKeyRequestBuilder,
-  CartDraft,
+  Cart,
   ClientResponse,
   CustomerUpdate,
+  MyCartDraft,
+  MyCartUpdate,
   MyCustomerUpdate,
   createApiBuilderFromCtpClient,
 } from '@commercetools/platform-sdk';
@@ -204,35 +206,60 @@ export async function changeData(
 }
 
 export async function addOrChangeAddres(data: MyCustomerUpdate): Promise<ClientResponse> {
-  return (
-    apiRoot
-      .me()
-      //   .customers()
-      //   .withId({ ID: customerId })
-      .post({ body: data })
-      .execute()
-    // .then(console.log)
-    // .catch(console.error)
-  );
+  return apiRoot.me().post({ body: data }).execute();
 }
 
 export async function changePassword(data: PasswordChange): Promise<ClientResponse<Customer>> {
   return apiRoot.customers().password().post({ body: data }).execute();
 }
 
-export function addItemToBasket(body: RegistrationRequestBody): Promise<ClientResponse> {
+///////////////////// Basket
+
+export function changeNumberItemInBasket(
+  body: MyCartUpdate,
+  basketID: string,
+): Promise<ClientResponse<Cart>> {
+  /*
+  пример body для добавления
+  const body: MyCartUpdate =
+  {"version":1,
+    "actions":[
+      {"action":"addLineItem",
+        "sku": 'PL-37-S',
+        "quantity":1}
+    ]
+  }
+
+  пример body для удаления
+  const body: MyCartUpdate =
+  {"version":1,
+    "actions":[
+      {"action":"changeLineItemQuantity",
+        "lineItemId": "56238bbe-1b4d-455d-8619-7ac604f994a0" - ID айтема в корзине,
+        "quantity":1}
+    ]
+  }
+
+
+*/
   return apiRoot
-    .customers()
+    .me()
+    .carts()
+    .withId({ ID: basketID })
     .post({
       body: body,
     })
     .execute();
 }
 
-export function getCustomerBasket(customerId: string): Promise<ClientResponse> {
-  return apiRoot.carts().withCustomerId({ customerId: customerId }).get().execute(); // get().; // .customers().execute();
+export function getCustomerBasket(customerId: string): Promise<ClientResponse<Cart>> {
+  return apiRoot.carts().withCustomerId({ customerId: customerId }).get().execute();
 }
 
-export function createBasket(data: CartDraft): Promise<ClientResponse> {
-  return apiRoot.carts().post(data).execute();
+export function createBasket(): Promise<ClientResponse<Cart>> {
+  const body: MyCartDraft = {
+    country: 'RU',
+    currency: 'USD',
+  };
+  return apiRoot.me().carts().post({ body: body }).execute();
 }

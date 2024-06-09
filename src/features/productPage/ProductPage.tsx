@@ -5,10 +5,14 @@ import { ClientResponse, Product } from '@commercetools/platform-sdk';
 import { Container } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 
-import { getProductByKey } from '../../api/clientService'; //getCustomerBasket
+import { findItemInBasket } from '@/components/findItemInBasket/findItemInBasket';
+import { useUserStore } from '@/stores/userStore';
+
+import { getProductByKey } from '../../api/clientService';
+import ButtonAddToBasket from './ButtonAddToBasket';
+import ButtonDelFromBasket from './ButtonDelFromBasket';
 import DetailedCard from './DetailedCard';
 import DetailedFullScreenSlider from './detailedFullScreenSlider/detailedFullScreenSlider';
-// import { useUserStore } from '@/stores/userStore';
 
 type AtribListItem = {
   name: string;
@@ -24,11 +28,12 @@ type ProductProperties = {
   listOfAtributes: Array<AtribListItem>;
   name: string;
   price: number;
+  sku: string;
 };
 
-function productAdapter(data: ClientResponse): ProductProperties {
-  const product: Product = data.body as Product;
-  // console.log(product);
+function productAdapter(data: ClientResponse<Product>): ProductProperties {
+  const product: Product = data.body;
+  console.log('product', product);
   const prices = product.masterData.current.masterVariant.prices;
 
   const discount = prices ? prices[0].discounted?.value.centAmount : undefined; //product.masterData.current.masterVariant.
@@ -39,6 +44,7 @@ function productAdapter(data: ClientResponse): ProductProperties {
     listOfAtributes: product.masterData.current.masterVariant.attributes ?? [],
     price: prices ? prices[0]?.value.centAmount : 0,
     discount: discount,
+    sku: product.masterData.current.masterVariant.sku ?? '',
   };
 }
 
@@ -54,13 +60,9 @@ export default function ProductPage(): JSX.Element {
     select: productAdapter,
   });
 
-  //const userID = useUserStore().userId;
+  const [isItemInBasket, setIsItemInBasket] = useState(false);
 
-  // const { dataBasket, errorBasket, isPendingBasket } = useQuery({
-  //   queryKey: ['cart', userID],
-  //   queryFn: () =>  getCustomerBasket(userID),
-  //   select: productAdapter,
-  // });
+  const userID = useUserStore().userId;
 
   if (isPending) {
     return <Container>Loading...</Container>;
@@ -70,7 +72,17 @@ export default function ProductPage(): JSX.Element {
     return <Container> `An error has occurred: ${error.message}`</Container>;
   }
 
-  // console.log('dataBasket', dataBasket);
+  findItemInBasket(data.sku, userID)
+    .then((item) => {
+      if (item) {
+        setIsItemInBasket(true);
+        return;
+      }
+      setIsItemInBasket(false);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 
   return (
     <>
@@ -80,7 +92,6 @@ export default function ProductPage(): JSX.Element {
           setIsFullScreen={setIsFullScreen}
           setSlideNumber={setFullScreenSlideNumber}
         />
-        {/* // <DetailedFullScreenSlider/> */}
       </Container>
       {isFullScreen ? (
         <DetailedFullScreenSlider
@@ -92,6 +103,8 @@ export default function ProductPage(): JSX.Element {
       ) : (
         <div style={{ display: 'none' }}></div>
       )}
+      <ButtonAddToBasket disabled={isItemInBasket} sku={data.sku} />
+      <ButtonDelFromBasket disabled={!isItemInBasket} sku={data.sku} />
     </>
   );
 }
