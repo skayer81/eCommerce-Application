@@ -1,4 +1,4 @@
-import { Box, Button, CardActions, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { Box, CardActions, List, ListItem, ListItemText, Typography } from '@mui/material';
 
 import ButtonAddToBasket from '@/components/buttonsForBasket/ButtonAddToBasket';
 import ButtonChangeQuantity from '@/components/buttonsForBasket/ButtonChangeQuantity';
