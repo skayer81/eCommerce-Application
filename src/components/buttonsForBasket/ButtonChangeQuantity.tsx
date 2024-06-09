@@ -36,7 +36,7 @@ function ButtonChangeQuantity({
     };
   };
 
-  const delFromBasket = (): void => {
+  const changeQuantity = (): void => {
     findItemInBasket(sku, userId)
       .then((data) => {
         return data?.id;
@@ -60,7 +60,7 @@ function ButtonChangeQuantity({
     <Button
       disabled={disabled}
       onClick={() => {
-        delFromBasket();
+        changeQuantity();
         callback();
       }}
     >
