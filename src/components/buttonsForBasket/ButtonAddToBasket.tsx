@@ -8,11 +8,13 @@ function ButtonAddToBasket({
   callback,
   children,
   disabled,
+  quantity,
   sku,
 }: {
-  callback: () => void;
+  callback?: () => void;
   children: JSX.Element | string;
   disabled: boolean;
+  quantity?: number;
   sku: string;
 }): JSX.Element {
   const updateCurrentVersion = useUserStore().updateCurrentVersion;
@@ -22,7 +24,7 @@ function ButtonAddToBasket({
   const addToBasket = (): void => {
     const testBady: MyCartUpdate = {
       version: version,
-      actions: [{ action: 'addLineItem', sku: sku, quantity: 1 }],
+      actions: [{ action: 'addLineItem', sku: sku, quantity: quantity ?? 1 }],
     };
     changeNumberItemInBasket(testBady, basketId)
       .then((data) => {
@@ -39,7 +41,9 @@ function ButtonAddToBasket({
       disabled={disabled}
       onClick={() => {
         addToBasket();
-        callback();
+        if (callback) {
+          callback();
+        }
       }}
     >
       {children}

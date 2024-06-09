@@ -12,7 +12,7 @@ function ButtonChangeQuantity({
   quantity,
   sku,
 }: {
-  callback: () => void;
+  callback?: () => void;
   children: JSX.Element | string;
   disabled?: boolean;
   quantity: number;
@@ -61,7 +61,9 @@ function ButtonChangeQuantity({
       disabled={disabled}
       onClick={() => {
         changeQuantity();
-        callback();
+        if (callback) {
+          callback();
+        }
       }}
     >
       {children}
