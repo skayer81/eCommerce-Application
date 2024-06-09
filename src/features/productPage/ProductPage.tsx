@@ -88,8 +88,10 @@ export default function ProductPage(): JSX.Element {
     <>
       <Container sx={{ border: 1, padding: 2 }}>
         <DetailedCard
+          isItemInBasket={isItemInBasket}
           productProps={data}
           setIsFullScreen={setIsFullScreen}
+          setIsItemInBasket={setIsItemInBasket}
           setSlideNumber={setFullScreenSlideNumber}
         />
       </Container>
