@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import { AccountCircle, Close, Menu } from '@mui/icons-material';
+import ShoppingBasketTwoToneIcon from '@mui/icons-material/ShoppingBasketTwoTone';
 import { Box, Drawer, IconButton, List, ListItemButton, ListItemText } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -43,10 +44,10 @@ export default function Header(): JSX.Element {
   };
 
   const menuItems = [
-    { text: 'Main', path: '/' },
-    { text: 'Catalog', path: '/catalog' },
-    { text: 'About', path: '/about' },
-    { text: 'Basket', path: '/basket' },
+    { element: 'Main', path: '/' },
+    { element: 'Catalog', path: '/catalog' },
+    { element: 'About', path: '/about' },
+    { element: <ShoppingBasketTwoToneIcon htmlColor={'primary.main'} />, path: '/basket' },
   ];
 
   const DrawerList = (
@@ -85,7 +86,7 @@ export default function Header(): JSX.Element {
               }}
               to={item.path}
             >
-              <ListItemText primary={item.text} primaryTypographyProps={{ fontSize: '25px' }} />
+              <ListItemText primary={item.element} primaryTypographyProps={{ fontSize: '25px' }} />
             </ListItemButton>
           ))}
           {isLogin ? (
@@ -129,7 +130,7 @@ export default function Header(): JSX.Element {
                     to={item.path}
                   >
                     <ListItemText
-                      primary={item.text}
+                      primary={item.element}
                       primaryTypographyProps={{ fontSize: '18px', fontWeight: '500' }}
                     />
                   </ListItemButton>
