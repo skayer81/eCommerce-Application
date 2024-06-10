@@ -13,6 +13,7 @@ function basketDataAdapter(data: ClientResponse<Cart>): Array<BasketDataList> {
       name: lineItem.name.en,
       price: lineItem.price.value.centAmount,
       quantity: lineItem.quantity,
+      sku: lineItem.variant.sku ?? '',
     };
     result.push(listItem);
   });
