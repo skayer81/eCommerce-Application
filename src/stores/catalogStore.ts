@@ -4,20 +4,16 @@ interface CatalogState {
   attributes: Record<string, string>;
   categoryId: string;
   isAttributesEmpty: () => boolean;
-  page: number;
   parentId: string;
   resetAllAttributes: () => void;
   resetAttribute: (key: string) => void;
   searchValue: string;
   setAttributes: (newAttributes: Record<string, string>) => void;
   setCategory: (newCategory: { categoryId: string; parentId: string }) => void;
-  setPage: (newPage: number) => void;
+
   setSearchValue: (newSearchValue: string) => void;
   setSortValue: (newSortValue: string) => void;
-  setTotalProducts: (total: number) => void;
-
   sortValue: string;
-  totalProducts: number;
 }
 
 export const useCatalogStore = create<CatalogState>((set, get) => ({
@@ -26,16 +22,7 @@ export const useCatalogStore = create<CatalogState>((set, get) => ({
   sortValue: '',
   searchValue: '',
   attributes: {},
-  page: 1,
-  totalProducts: 0,
-  setTotalProducts: (total) =>
-    set({
-      totalProducts: total,
-    }),
-  setPage: (newPage) =>
-    set({
-      page: newPage,
-    }),
+
   setCategory: (newCategory) =>
     set({
       categoryId: newCategory.categoryId,

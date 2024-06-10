@@ -142,7 +142,7 @@ export function getProductByKey(key?: string): Promise<ClientResponse> {
 
 export async function getProducts(
   categoryId = '',
-  sortValue = '',
+  sortValue: string,
   attributes: Record<string, string>,
   searchValue = '',
   page: number,
