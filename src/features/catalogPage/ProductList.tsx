@@ -40,14 +40,6 @@ function ProductList(): JSX.Element {
     setPage(1);
   }, [categoryId, sortValue, attributes, searchValue]);
 
-  // useEffect(() => {
-  //   queryClient.invalidateQueries({
-  //     queryKey: ['products', categoryId, sortValue, attributes, searchValue, page],
-  //   });
-  // }, [page]);
-
-  console.log('products=', data);
-
   if (isLoading) {
     return <Loader />;
   }

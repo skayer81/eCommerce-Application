@@ -7,7 +7,6 @@ import Categories from './Categories';
 import ControlPanel from './ControlPanel';
 import ProductList from './ProductList';
 import Search from './Search';
-// import CatalogPagination from './Pagination';
 
 function CatalogPage(): JSX.Element {
   const theme = useTheme();

@@ -1,7 +1,6 @@
 import { Pagination, Stack } from '@mui/material';
 
 import { PRODUCTS_LIMIT } from '@/utils/constants';
-// import { useState } from 'react';
 
 interface PaginationProps {
   page: number;
@@ -9,17 +8,9 @@ interface PaginationProps {
   total: number;
 }
 export default function CatalogPagination({ total, page, setPage }: PaginationProps): JSX.Element {
-  // const setPage = useCatalogStore((state) => state.setPage);
-
-  // const { setPage } = useCatalogStore((state) => ({
-  //   setPage: state.setPage,
-  // }));
-
   const paginationCount = Math.ceil(total / PRODUCTS_LIMIT);
-  console.log('paginationcount=', paginationCount);
 
   const handleChange = (_: React.ChangeEvent<unknown>, value: number): void => {
-    console.log('page=', value);
     setPage(value);
   };
 
