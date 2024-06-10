@@ -6,6 +6,7 @@ import { useUserStore } from '@/stores/userStore';
 import { getCustomerBasket } from '../../api/clientService';
 import basketDataAdapter from './basketDataAdapter';
 import { BasketPageList } from './basketPageList';
+import { useBasketStore } from './useBasketStore';
 
 export function BasketPage(): JSX.Element {
   const userID = useUserStore().userId;
@@ -16,6 +17,8 @@ export function BasketPage(): JSX.Element {
     select: basketDataAdapter,
   });
 
+  const { quantityItemInBasket, updateQuantity } = useBasketStore();
+
   if (isPending) {
     return <Container>Loading...</Container>;
   }
@@ -24,14 +27,21 @@ export function BasketPage(): JSX.Element {
     return <Container> `An error has occurred: ${error.message}`</Container>;
   }
 
-  console.log(data);
+  updateQuantity(data.length);
+  //console.log(data);
 
   return (
     <Container sx={{ border: 1, padding: 2 }}>
       <Typography align="center" component="h1" variant="h4">
         Basket
       </Typography>
-      <BasketPageList listData={data} />
+      {quantityItemInBasket === 0 ? (
+        <Typography align="center" component="p" variant="h5">
+          this message indicating that the cart is empty
+        </Typography>
+      ) : (
+        <BasketPageList listData={data} />
+      )}
     </Container>
   );
 }
