@@ -1,4 +1,4 @@
-import { MyCartUpdate } from '@commercetools/platform-sdk';
+import { Cart, ClientResponse, MyCartUpdate } from '@commercetools/platform-sdk';
 import { Button } from '@mui/material';
 
 import { changeNumberItemInBasket } from '@/api/clientService';
@@ -12,7 +12,7 @@ function ButtonChangeQuantity({
   quantity,
   sku,
 }: {
-  callback?: () => void;
+  callback?: (data: ClientResponse<Cart>) => void;
   children: JSX.Element | string;
   disabled?: boolean;
   quantity: number;
@@ -47,6 +47,9 @@ function ButtonChangeQuantity({
       .then((data) => {
         updateCurrentVersion(data.body.version);
         console.log('поменяли', data);
+        if (callback) {
+          callback(data);
+        }
       })
       .catch((error) => {
         console.log('ошибка', error);
@@ -55,9 +58,9 @@ function ButtonChangeQuantity({
 
   const onClick = (): void => {
     changeQuantity();
-    if (callback) {
-      callback();
-    }
+    // if (callback) {
+    //   callback();
+    // }
   };
 
   return (

@@ -1,14 +1,17 @@
 import { useState } from 'react';
 
+import { Cart, ClientResponse } from '@commercetools/platform-sdk';
 import { Box, Card, CardContent, CardMedia, ListItem, Typography } from '@mui/material';
 
 import ButtonChangeQuantity from '@/components/buttonsForBasket/ButtonChangeQuantity';
 
 import { BasketDecIncButtons } from './basketDecIncButtons';
 import { BasketDataList } from './basketTypes';
+import { useBasketStore } from './useBasketStore';
 
 export function BasketPageListItem({ listItem }: { listItem: BasketDataList }): JSX.Element {
   const [isVisible, setIsVisible] = useState(true);
+  const { updateQuantity } = useBasketStore();
   return (
     <>
       {!isVisible ? (
@@ -46,8 +49,9 @@ export function BasketPageListItem({ listItem }: { listItem: BasketDataList }): 
               total price:{((listItem.quantity * listItem.price) / 1000).toFixed(2) + '$'}
             </Typography>
             <ButtonChangeQuantity
-              callback={() => {
+              callback={(data: ClientResponse<Cart>) => {
                 setIsVisible(false);
+                updateQuantity(data.body.lineItems.length);
               }}
               disabled={false}
               quantity={0}
