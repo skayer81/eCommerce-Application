@@ -4,19 +4,21 @@ import { Button } from '@mui/material';
 import { changeNumberItemInBasket } from '@/api/clientService';
 import { useUserStore } from '@/stores/userStore';
 
+type AddToBasketBtnProps = {
+  callback?: () => void;
+  children: JSX.Element | string;
+  disabled: boolean;
+  quantity?: number;
+  sku?: string;
+};
+
 function ButtonAddToBasket({
   callback,
   children,
   disabled,
   quantity,
   sku,
-}: {
-  callback?: () => void;
-  children: JSX.Element | string;
-  disabled: boolean;
-  quantity?: number;
-  sku: string;
-}): JSX.Element {
+}: AddToBasketBtnProps): JSX.Element {
   const updateCurrentVersion = useUserStore().updateCurrentVersion;
   const basketId = useUserStore().basketId;
   const version = useUserStore().basketVersion;
@@ -44,7 +46,16 @@ function ButtonAddToBasket({
   };
 
   return (
-    <Button disabled={disabled} onClick={onClick}>
+    <Button
+      disabled={disabled}
+      onClick={onClick}
+      sx={{
+        transition: 'background-color 0.3s',
+        '&:hover': {
+          backgroundColor: 'rgba(70, 163, 88, 0.3)',
+        },
+      }}
+    >
       {children}
     </Button>
   );

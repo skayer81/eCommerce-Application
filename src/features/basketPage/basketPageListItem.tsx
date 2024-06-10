@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 
 import { Box, Card, CardContent, CardMedia, ListItem, Typography } from '@mui/material';
