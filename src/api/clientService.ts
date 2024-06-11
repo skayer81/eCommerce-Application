@@ -263,3 +263,12 @@ export function createBasket(): Promise<ClientResponse<Cart>> {
   };
   return apiRoot.me().carts().post({ body: body }).execute();
 }
+
+export function createAnonymBasket(
+  root: ByProjectKeyRequestBuilder,
+): Promise<ClientResponse<Cart>> {
+  const body: MyCartDraft = {
+    currency: 'USD',
+  };
+  return root.carts().post({ body: body }).execute();
+}

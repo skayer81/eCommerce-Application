@@ -5,7 +5,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import { anonymFlowAuth, existingFlowAuth } from './api/clientService';
+import { anonymFlowAuth, createAnonymBasket, existingFlowAuth } from './api/clientService';
 import RequireMain from './components/requireMain/RequireMain';
 import { PROJECT_KEY } from './config/clientConfig.ts';
 import theme from './config/theme.ts';
@@ -30,7 +30,14 @@ if (token !== null) {
   const accessToken = 'Bearer ' + token;
   existingFlowAuth(accessToken);
 } else {
-  anonymFlowAuth();
+  const root = anonymFlowAuth();
+  createAnonymBasket(root)
+    .then((data) => {
+      console.log('basket=', data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 }
 
 const router = createBrowserRouter([
