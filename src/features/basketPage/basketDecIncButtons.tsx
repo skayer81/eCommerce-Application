@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { AddBox, IndeterminateCheckBox } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
 
-import ButtonAddToBasket from '@/components/buttonsForBasket/ButtonAddToBasket';
 import ButtonChangeQuantity from '@/components/buttonsForBasket/ButtonChangeQuantity';
 
 export function BasketDecIncButtons({
@@ -24,7 +23,7 @@ export function BasketDecIncButtons({
         callback={() => {
           setCurrentQuantity(currentQuantity - 1);
         }}
-        disabled={currentQuantity === 0}
+        disabled={currentQuantity === 1}
         quantity={currentQuantity - 1}
         sku={sku}
       >
@@ -33,28 +32,16 @@ export function BasketDecIncButtons({
       <Typography component="div" gutterBottom sx={{ lineHeight: '1.3' }} variant="h6">
         {currentQuantity}
       </Typography>
-      {currentQuantity > 0 ? (
-        <ButtonChangeQuantity
-          callback={() => {
-            setCurrentQuantity(currentQuantity + 1);
-          }}
-          disabled={false}
-          quantity={currentQuantity + 1}
-          sku={sku}
-        >
-          {<AddBox />}
-        </ButtonChangeQuantity>
-      ) : (
-        <ButtonAddToBasket
-          callback={() => {
-            setCurrentQuantity(currentQuantity + 1);
-          }}
-          disabled={false}
-          sku={sku}
-        >
-          {<AddBox />}
-        </ButtonAddToBasket>
-      )}
+      <ButtonChangeQuantity
+        callback={() => {
+          setCurrentQuantity(currentQuantity + 1);
+        }}
+        disabled={false}
+        quantity={currentQuantity + 1}
+        sku={sku}
+      >
+        {<AddBox />}
+      </ButtonChangeQuantity>
     </Box>
   );
 }

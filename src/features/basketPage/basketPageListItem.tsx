@@ -36,12 +36,7 @@ export function BasketPageListItem({ listItem }: { listItem: BasketDataList }): 
             <Typography component="div" sx={{ lineHeight: '1.3' }} variant="h6">
               price: {(listItem.price / 1000).toFixed(2) + '$'}
             </Typography>
-            {/* <Typography component="div" sx={{ lineHeight: '1.3' }} variant="h6">
-              quantity:{listItem.quantity}
-            </Typography> */}
             <BasketDecIncButtons
-              // disabledDec={listItem.quantity <= 0}
-              // disabledInc={false}
               quantity={listItem.quantity}
               sku={listItem.sku}
             ></BasketDecIncButtons>
