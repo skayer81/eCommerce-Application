@@ -2,7 +2,8 @@ import { MyCartUpdate } from '@commercetools/platform-sdk';
 import { Button } from '@mui/material';
 
 import { changeNumberItemInBasket } from '@/api/clientService';
-import { useUserStore } from '@/stores/userStore';
+// import { useUserStore } from '@/stores/userStore';
+import { useBasketStore } from '@/stores/basketStore';
 
 type AddToBasketBtnProps = {
   callback?: () => void;
@@ -19,13 +20,15 @@ function ButtonAddToBasket({
   quantity,
   sku,
 }: AddToBasketBtnProps): JSX.Element {
-  const updateCurrentVersion = useUserStore().updateCurrentVersion;
-  const basketId = useUserStore().basketId;
-  const version = useUserStore().basketVersion;
+  const { basketId, basketVersion, updateCurrentVersion } = useBasketStore((state) => ({
+    basketId: state.basketId,
+    basketVersion: state.basketVersion,
+    updateCurrentVersion: state.updateCurrentVersion,
+  }));
 
   const addToBasket = (): void => {
     const testBady: MyCartUpdate = {
-      version: version,
+      version: basketVersion,
       actions: [{ action: 'addLineItem', sku: sku, quantity: quantity ?? 1 }],
     };
     changeNumberItemInBasket(testBady, basketId)

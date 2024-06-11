@@ -3,6 +3,7 @@ import { Button } from '@mui/material';
 
 import { changeNumberItemInBasket } from '@/api/clientService';
 import { findItemInBasket } from '@/components/findItemInBasket/findItemInBasket';
+import { useBasketStore } from '@/stores/basketStore';
 import { useUserStore } from '@/stores/userStore';
 
 function ButtonChangeQuantity({
@@ -18,7 +19,8 @@ function ButtonChangeQuantity({
   quantity: number;
   sku: string;
 }): JSX.Element {
-  const { updateCurrentVersion, basketId, basketVersion, userId } = useUserStore();
+  const { updateCurrentVersion, basketId, basketVersion } = useBasketStore();
+  const { userId } = useUserStore();
 
   const getBody = (listItemID: string): MyCartUpdate => {
     return {

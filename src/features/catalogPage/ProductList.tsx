@@ -65,10 +65,10 @@ function ProductList(): JSX.Element {
     return <ErrorAlert />;
   }
 
-  const data1 = queries[0].data;
-  const data2 = queries[1].data;
-  console.log('products=', data1);
-  console.log('cart=', data2);
+  const productsData = queries[0].data;
+  const basketData = queries[1].data;
+  console.log('products=', productsData);
+  console.log('basketresponse=', basketData);
 
   return (
     <Grid
@@ -77,11 +77,12 @@ function ProductList(): JSX.Element {
       spacing={2}
       sx={{ mb: '50px' }}
     >
-      {data1?.length === 0 ? (
+      {productsData?.length === 0 ? (
         <Typography sx={{ p: '10px' }}>Nothing was found</Typography>
       ) : (
-        data1?.map((item: ProductProjection) => (
+        productsData?.map((item: ProductProjection) => (
           <ProductCard
+            basket={basketData}
             description={item.metaDescription?.en}
             discount={item.masterVariant.prices?.[0].discounted?.value.centAmount}
             discountId={item.masterVariant.prices?.[0].discounted?.discount.id}
