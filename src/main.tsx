@@ -20,6 +20,7 @@ import ProductPage from './features/productPage/ProductPage.tsx';
 import ProfilePage from './features/profilePage/ProfilePage.tsx';
 import RedirectToMain from './features/profilePage/RedirectToMain.tsx';
 import { RegistrationPageLazy as RegistrationPage } from './features/registrationPage/RegistrationPageLazy.tsx';
+import { addBasketIDInStore, updateCurrentVersion } from './stores/basketStore.ts';
 import getCookie from './utils/helpers/cookies.ts';
 
 import './assets/fonts/stylesheet.css';
@@ -34,6 +35,8 @@ if (token !== null) {
   createAnonymBasket(root)
     .then((data) => {
       console.log('basket=', data);
+      addBasketIDInStore(data.body.id);
+      updateCurrentVersion(data.body.version);
     })
     .catch((error) => {
       console.error(error);

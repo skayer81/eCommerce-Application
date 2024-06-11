@@ -11,7 +11,7 @@ export interface BasketStore {
 
   updateCurrentVersion: (id: number) => void;
 }
-export const useUserStore = create<BasketStore>()(
+export const useBasketStore = create<BasketStore>()(
   persist(
     (set) => ({
       basketId: '',
@@ -44,3 +44,5 @@ export const useUserStore = create<BasketStore>()(
     },
   ),
 );
+
+export const { addBasketIDInStore, updateCurrentVersion } = useBasketStore.getState();
