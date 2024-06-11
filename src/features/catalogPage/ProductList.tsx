@@ -1,4 +1,5 @@
 import {
+  Cart,
   ClientResponse,
   ProductProjection,
   ProductProjectionPagedQueryResponse,
@@ -6,11 +7,12 @@ import {
 import { Grid, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { useQuery } from '@tanstack/react-query';
+import { /*  useQuery, */ useQueries } from '@tanstack/react-query';
 
-import { getProducts } from '@/api/clientService';
+import { getAnonymBasket, getProducts /* getUserBasket  */ } from '@/api/clientService';
 import ErrorAlert from '@/components/errorAlert/ErrorAlert';
 import Loader from '@/components/loader/Loader';
+import { useBasketStore } from '@/stores/basketStore';
 import { useCatalogStore } from '@/stores/catalogStore';
 
 import ProductCard from './ProductCard/ProductCard';
@@ -26,22 +28,47 @@ function ProductList(): JSX.Element {
     searchValue: state.searchValue,
   }));
 
-  const { data, isError, error, isLoading } = useQuery({
-    queryKey: ['products', categoryId, sortValue, attributes, searchValue],
-    queryFn: () => getProducts(categoryId, sortValue, attributes, searchValue),
-    select: (data: ClientResponse<ProductProjectionPagedQueryResponse>) => data.body.results,
+  const { basketId } = useBasketStore((state) => ({
+    basketId: state.basketId,
+  }));
+
+  // const { data, isError, error, isLoading } = useQuery({
+  //   queryKey: ['products', categoryId, sortValue, attributes, searchValue],
+  //   queryFn: () => getProducts(categoryId, sortValue, attributes, searchValue),
+  //   select: (data: ClientResponse<ProductProjectionPagedQueryResponse>) => data.body.results,
+  // });
+
+  const queries = useQueries({
+    queries: [
+      {
+        queryKey: ['products', categoryId, sortValue, attributes, searchValue],
+        queryFn: () => getProducts(categoryId, sortValue, attributes, searchValue),
+        select: (data: ClientResponse<ProductProjectionPagedQueryResponse>) => data.body.results,
+      },
+      {
+        queryKey: ['cart', basketId],
+        queryFn: () => getAnonymBasket(basketId),
+        select: (data: ClientResponse<Cart>) => data.body,
+      },
+    ],
   });
 
-  console.log('products=', data);
+  const isLoading = queries.some((query) => query.isLoading);
+  const isError = queries.some((query) => query.isError);
 
   if (isLoading) {
     return <Loader />;
   }
 
   if (isError) {
-    console.error(error);
+    // console.error(error);
     return <ErrorAlert />;
   }
+
+  const data1 = queries[0].data;
+  const data2 = queries[1].data;
+  console.log('products=', data1);
+  console.log('cart=', data2);
 
   return (
     <Grid
@@ -50,10 +77,10 @@ function ProductList(): JSX.Element {
       spacing={2}
       sx={{ mb: '50px' }}
     >
-      {data?.length === 0 ? (
+      {data1?.length === 0 ? (
         <Typography sx={{ p: '10px' }}>Nothing was found</Typography>
       ) : (
-        data?.map((item: ProductProjection) => (
+        data1?.map((item: ProductProjection) => (
           <ProductCard
             description={item.metaDescription?.en}
             discount={item.masterVariant.prices?.[0].discounted?.value.centAmount}

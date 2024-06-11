@@ -1,6 +1,7 @@
 import {
   ByProjectKeyRequestBuilder,
   Cart,
+  CartDraft,
   ClientResponse,
   CustomerUpdate,
   MyCartDraft,
@@ -267,8 +268,18 @@ export function createBasket(): Promise<ClientResponse<Cart>> {
 export function createAnonymBasket(
   root: ByProjectKeyRequestBuilder,
 ): Promise<ClientResponse<Cart>> {
-  const body: MyCartDraft = {
+  const anonymId = crypto.randomUUID();
+  const body: CartDraft = {
     currency: 'USD',
+    anonymousId: anonymId,
   };
   return root.carts().post({ body: body }).execute();
+}
+
+export function getAnonymBasket(cartId: string): Promise<ClientResponse<Cart>> {
+  return apiRoot.carts().withId({ ID: cartId }).get().execute();
+}
+
+export function getUserBasket(cartId: string): Promise<ClientResponse<Cart>> {
+  return apiRoot.me().carts().withId({ ID: cartId }).get().execute();
 }
