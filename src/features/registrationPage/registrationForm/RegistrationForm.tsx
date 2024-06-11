@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Controller, RegisterOptions, SubmitHandler, useForm } from 'react-hook-form';
 
-import { Cart, ClientResponse, CustomerSignInResult } from '@commercetools/platform-sdk';
+import { ClientResponse, CustomerSignInResult } from '@commercetools/platform-sdk';
 import { LoadingButton } from '@mui/lab';
 import { FormControlLabel } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
@@ -15,18 +15,12 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import 'dayjs/locale/de';
 
-import {
-  createBasket,
-  createCustomer,
-  getProject,
-  loginUser,
-  passwordFlowAuth,
-} from '@/api/clientService';
+import { createCustomer, getCustomer, loginUser, passwordFlowAuth } from '@/api/clientService';
 import ButtonToAnotherPage from '@/components/formComponents/ButtonToAnotherPage';
 import { FormInputText } from '@/components/formComponents/FormInputText';
 import FormSelect from '@/components/formComponents/FormSelect';
 import RulesValidation from '@/components/formComponents/rulesValidation';
-import { useUserStore } from '@/stores/userStore';
+import { useBasketStore } from '@/stores/basketStore';
 import { RegistrationForm } from '@/types/interfaces';
 
 import registrationFormDataAdapter from './RegistrationFormDataAdapter';
@@ -85,7 +79,7 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
     shippingCountry,
   ]);
 
-  const { addBasketIDInStore, updateCurrentVersion } = useUserStore();
+  const { addBasketIDInStore, updateCurrentVersion } = useBasketStore();
 
   const onSubmit: SubmitHandler<RegistrationForm> = (data: RegistrationForm): void => {
     setLoading(true);
@@ -94,20 +88,18 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
         return loginUser({ email: data.email, password: data.password });
       })
       .then(({ body }: ClientResponse<CustomerSignInResult>) => {
+        console.log('loginbody=', body);
+        if (body.cart) {
+          addBasketIDInStore(body.cart.id);
+          updateCurrentVersion(body.cart.version);
+        }
         setLoading(false);
         resultOfSubmit(
           { hasError: false, message: 'You have successfully registered' },
           body.customer.id,
         );
         const root = passwordFlowAuth({ email: data.email, password: data.password });
-        return getProject(root);
-      })
-      .then(() => {
-        return createBasket();
-      })
-      .then(({ body }: ClientResponse<Cart>) => {
-        addBasketIDInStore(body.id);
-        updateCurrentVersion(body.version);
+        return getCustomer(root);
       })
       .catch((error: Error) => {
         setLoading(false);

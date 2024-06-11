@@ -9,7 +9,7 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { /*  useQuery, */ useQueries } from '@tanstack/react-query';
 
-import { getAnonymBasket, getProducts /* getUserBasket  */ } from '@/api/clientService';
+import { getProducts, getUserBasket } from '@/api/clientService';
 import ErrorAlert from '@/components/errorAlert/ErrorAlert';
 import Loader from '@/components/loader/Loader';
 import { useBasketStore } from '@/stores/basketStore';
@@ -47,7 +47,7 @@ function ProductList(): JSX.Element {
       },
       {
         queryKey: ['cart', basketId],
-        queryFn: () => getAnonymBasket(basketId),
+        queryFn: () => getUserBasket(basketId),
         select: (data: ClientResponse<Cart>) => data.body,
       },
     ],

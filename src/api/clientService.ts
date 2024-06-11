@@ -13,7 +13,7 @@ import { Client, ClientBuilder } from '@commercetools/sdk-client-v2';
 
 import { PROJECT_KEY } from '@/config/clientConfig';
 import { Customer } from '@/features/profilePage/Types';
-import { LoginForm, PasswordChange, RegistrationRequestBody } from '@/types/interfaces';
+import { LoginForm, PasswordChange, RegForm, RegistrationRequestBody } from '@/types/interfaces';
 import { PRODUCTS_LIMIT } from '@/utils/constants';
 
 import {
@@ -52,7 +52,7 @@ export function anonymFlowAuth(): ByProjectKeyRequestBuilder {
   return apiRoot;
 }
 
-export function passwordFlowAuth({ email, password }: LoginForm): ByProjectKeyRequestBuilder {
+export function passwordFlowAuth({ email, password }: RegForm): ByProjectKeyRequestBuilder {
   const ctpClient = new ClientBuilder()
     .withPasswordFlow(authUserMiddlewareOptions(email, password))
     .withHttpMiddleware(httpMiddlewareOptions)
@@ -101,8 +101,8 @@ export async function loginUser({ email, password }: LoginForm): Promise<ClientR
     .login()
     .post({
       body: {
-        email,
-        password,
+        email: email,
+        password: password,
       },
     })
     .execute();
@@ -130,8 +130,8 @@ export function createCustomer(body: RegistrationRequestBody): Promise<ClientRes
     .execute();
 }
 
-export async function getCustomer(root: ByProjectKeyRequestBuilder): Promise<void> {
-  return root.me().get().execute().then(console.log).catch(console.error);
+export function getCustomer(root: ByProjectKeyRequestBuilder): Promise<ClientResponse> {
+  return root.me().get().execute();
 }
 
 export function getProductByKey(key?: string): Promise<ClientResponse> {
@@ -273,13 +273,17 @@ export function createAnonymBasket(
     currency: 'USD',
     anonymousId: anonymId,
   };
-  return root.carts().post({ body: body }).execute();
+  return root.me().carts().post({ body: body }).execute();
 }
 
-export function getAnonymBasket(cartId: string): Promise<ClientResponse<Cart>> {
-  return apiRoot.carts().withId({ ID: cartId }).get().execute();
-}
+// export function getAnonymBasket(cartId: string): Promise<ClientResponse<Cart>> {
+//   return apiRoot.me().carts().withId({ ID: cartId }).get().execute();
+// }
 
 export function getUserBasket(cartId: string): Promise<ClientResponse<Cart>> {
   return apiRoot.me().carts().withId({ ID: cartId }).get().execute();
+}
+
+export function getBaskets(): Promise<ClientResponse> {
+  return apiRoot.me().carts().get().execute();
 }
