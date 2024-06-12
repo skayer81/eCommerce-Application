@@ -14,7 +14,7 @@ function CatalogPage(): JSX.Element {
 
   return (
     <>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{ mb: '50px' }}>
         <Search />
         {isTablet && (
           <Grid item sx={{ flexBasis: 200, flexShrink: 0 }}>
@@ -29,7 +29,7 @@ function CatalogPage(): JSX.Element {
               <CatalogBreadcrumbs />
               <ControlPanel />
             </Grid>
-            <Grid item>
+            <Grid item sx={{ width: '100%' }}>
               <ProductList />
             </Grid>
           </Grid>

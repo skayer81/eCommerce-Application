@@ -146,6 +146,7 @@ export async function getProducts(
   sortValue: string,
   attributes: Record<string, string>,
   searchValue = '',
+  page: number,
 ): Promise<ClientResponse> {
   const attrFilters = Object.entries(attributes)
     .filter(([attrkey, value]) => value !== '' && attrkey)
@@ -159,8 +160,9 @@ export async function getProducts(
     .get({
       queryArgs: {
         'filter.query': resFilters,
-        sort: sortValue === '' ? undefined : [sortValue],
+        sort: sortValue === '' ? ['createdAt asc'] : [sortValue],
         limit: PRODUCTS_LIMIT,
+        offset: PRODUCTS_LIMIT * (page - 1),
         markMatchingVariants: true,
         fuzzy: true,
         'text.en': searchValue,

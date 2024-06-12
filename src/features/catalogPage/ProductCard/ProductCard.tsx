@@ -22,7 +22,7 @@ import {
 } from '@mui/material';
 import { useQuery /* useMutation, */ /* useQueryClient  */ } from '@tanstack/react-query';
 
-import { getDiscountById /* changeNumberItemInBasket  */ } from '@/api/clientService';
+import { getDiscountById } from '@/api/clientService';
 import ButtonAddToBasket from '@/components/buttonsForBasket/ButtonAddToBasket.tsx';
 
 import { boxStyle, cardStyle, chipStyle, descriptionStyle, startPriceStyle } from './Styles.tsx';
