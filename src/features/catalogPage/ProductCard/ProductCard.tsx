@@ -1,5 +1,5 @@
 // import { useBasketStore } from '@/stores/basketStore.ts';
-import { useState } from 'react';
+
 import { Link as RouterLink } from 'react-router-dom';
 
 import {
@@ -63,9 +63,9 @@ function ProductCard({
   const prodDiscountId = discountId ? discountId : '';
   // const basketId = basket?.id as string;
   const basketVersion = basket?.version as number;
-  const isItemInBasketStart = !!basket?.lineItems.find((item) => item.variant.sku === sku);
+  const isItemInBasket = !!basket?.lineItems.find((item) => item.variant.sku === sku);
 
-  const [isItemInBasket, setStateInBasket] = useState(isItemInBasketStart);
+  // const [isItemInBasket, setStateInBasket] = useState(isItemInBasketStart);
 
   const { data: discountName } = useQuery({
     queryKey: ['discount', prodDiscountId],
@@ -138,11 +138,7 @@ function ProductCard({
             )}
           </Stack>
 
-          <ButtonAddToBasket
-            callback={() => setStateInBasket(true)}
-            disabled={isItemInBasket}
-            sku={sku}
-          >
+          <ButtonAddToBasket disabled={isItemInBasket} sku={sku}>
             <>
               <ShoppingCartOutlinedIcon fontSize="medium" fontWeight="400" />
               {isItemInBasket && (

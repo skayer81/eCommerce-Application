@@ -53,6 +53,7 @@ function ProductList(): JSX.Element {
         queryKey: ['cart', basketId],
         queryFn: () => getUserBasket(basketId),
         select: (data: ClientResponse<Cart>) => data.body,
+        enabled: !!basketId,
       },
     ],
   });

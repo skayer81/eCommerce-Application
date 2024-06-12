@@ -1,8 +1,8 @@
-import { MyCartUpdate } from '@commercetools/platform-sdk';
-import { Button } from '@mui/material';
+import { Cart, ClientResponse, MyCartUpdate } from '@commercetools/platform-sdk';
+import { Button, CircularProgress } from '@mui/material';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { changeNumberItemInBasket } from '@/api/clientService';
-// import { useUserStore } from '@/stores/userStore';
 import { useBasketStore } from '@/stores/basketStore';
 
 type AddToBasketBtnProps = {
@@ -20,6 +20,8 @@ function ButtonAddToBasket({
   quantity,
   sku,
 }: AddToBasketBtnProps): JSX.Element {
+  const queryClient = useQueryClient();
+
   const { basketId, basketVersion, updateCurrentVersion } = useBasketStore((state) => ({
     basketId: state.basketId,
     basketVersion: state.basketVersion,
@@ -27,19 +29,23 @@ function ButtonAddToBasket({
   }));
 
   const addToBasket = (): void => {
-    const testBady: MyCartUpdate = {
+    const itemBody: MyCartUpdate = {
       version: basketVersion,
       actions: [{ action: 'addLineItem', sku: sku, quantity: quantity ?? 1 }],
     };
-    changeNumberItemInBasket(testBady, basketId)
-      .then((data) => {
-        updateCurrentVersion(data.body.version);
-        console.log('добавили', data);
-      })
-      .catch((error) => {
-        console.log('ошибка', error);
-      });
+
+    mutate(itemBody);
   };
+
+  const { mutate, isPending } = useMutation<ClientResponse, Error, MyCartUpdate>({
+    mutationFn: (itemBody) => changeNumberItemInBasket(itemBody, basketId),
+    onSuccess: async ({ body }: ClientResponse<Cart>) => {
+      console.log('lastBasket=', body);
+      updateCurrentVersion(body.version);
+      await queryClient.invalidateQueries({ queryKey: ['cart'] });
+    },
+    onError: (error) => console.error(error),
+  });
 
   const onClick = (): void => {
     addToBasket();
@@ -59,7 +65,7 @@ function ButtonAddToBasket({
         },
       }}
     >
-      {children}
+      {isPending ? <CircularProgress size={20} /> : children}
     </Button>
   );
 }
