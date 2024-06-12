@@ -257,6 +257,6 @@ export function getUserBasket(cartId: string): Promise<ClientResponse<Cart>> {
   return apiRoot.me().carts().withId({ ID: cartId }).get().execute();
 }
 
-export function getBaskets(): Promise<ClientResponse> {
-  return apiRoot.me().carts().get().execute();
+export function getActiveBasket(root: ByProjectKeyRequestBuilder): Promise<ClientResponse<Cart>> {
+  return root.me().activeCart().get().execute();
 }

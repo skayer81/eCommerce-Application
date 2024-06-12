@@ -5,7 +5,12 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import { anonymFlowAuth, createAnonymBasket, existingFlowAuth } from './api/clientService';
+import {
+  anonymFlowAuth,
+  createAnonymBasket,
+  existingFlowAuth,
+  getActiveBasket,
+} from './api/clientService';
 import RequireMain from './components/requireMain/RequireMain';
 import { PROJECT_KEY } from './config/clientConfig.ts';
 import theme from './config/theme.ts';
@@ -29,7 +34,16 @@ import './index.css';
 const token = getCookie(PROJECT_KEY);
 if (token !== null) {
   const accessToken = 'Bearer ' + token;
-  existingFlowAuth(accessToken);
+  const root = existingFlowAuth(accessToken);
+  getActiveBasket(root)
+    .then((data) => {
+      console.log('activebasket=', data.body.id);
+      addBasketIDInStore(data.body.id);
+      updateCurrentVersion(data.body.version);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 } else {
   const root = anonymFlowAuth();
   createAnonymBasket(root)
