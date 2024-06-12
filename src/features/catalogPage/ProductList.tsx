@@ -36,6 +36,7 @@ function ProductList(): JSX.Element {
     select: (data: ClientResponse<ProductProjectionPagedQueryResponse>) => data.body,
   });
 
+  console.log('products=', data);
   useEffect(() => {
     setPage(1);
   }, [categoryId, sortValue, attributes, searchValue]);
@@ -65,6 +66,7 @@ function ProductList(): JSX.Element {
               name={item.name.en}
               price={item.masterVariant.prices?.[0].value.centAmount}
               productKey={item.key}
+              sku={item.masterVariant.sku}
             />
           ))
         )}
