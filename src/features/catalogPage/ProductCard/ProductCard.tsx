@@ -17,6 +17,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { getDiscountById } from '@/api/clientService';
 import ButtonAddToBasket from '@/components/buttonsForBasket/ButtonAddToBasket.tsx';
+import { CENTS_IN_UNIT } from '@/utils/constants.ts';
 
 import { boxStyle, cardStyle, chipStyle, descriptionStyle, startPriceStyle } from './Styles.tsx';
 
@@ -44,8 +45,8 @@ function ProductCard({
   basket,
 }: ProductCardProps): JSX.Element {
   const finalPrice = discount ? discount : price;
-  const formattedPrice = finalPrice ? (finalPrice / 1000).toFixed(2) + '$' : '';
-  const priceBeforeDiscount = price ? (price / 1000).toFixed(2) + '$' : '';
+  const formattedPrice = finalPrice ? (finalPrice / CENTS_IN_UNIT).toFixed(2) + '$' : '';
+  const priceBeforeDiscount = price ? (price / CENTS_IN_UNIT).toFixed(2) + '$' : '';
   const prodDiscountId = discountId ? discountId : '';
   const isItemInBasket = !!basket?.lineItems.find((item) => item.variant.sku === sku);
 
