@@ -46,7 +46,7 @@ function ButtonChangeQuantity({
       })
       .then((data) => {
         updateCurrentVersion(data.body.version);
-        console.log('удалили', data);
+        console.log('поменяли', data);
       })
       .catch((error) => {
         console.log('ошибка', error);

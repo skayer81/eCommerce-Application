@@ -4,6 +4,7 @@ import { Box, Card, CardContent, CardMedia, ListItem, Typography } from '@mui/ma
 
 import ButtonChangeQuantity from '@/components/buttonsForBasket/ButtonChangeQuantity';
 
+import { BasketDecIncButtons } from './basketDecIncButtons';
 import { BasketDataList } from './basketTypes';
 
 export function BasketPageListItem({ listItem }: { listItem: BasketDataList }): JSX.Element {
@@ -32,9 +33,10 @@ export function BasketPageListItem({ listItem }: { listItem: BasketDataList }): 
             <Typography component="div" sx={{ lineHeight: '1.3' }} variant="h6">
               price: {(listItem.price / 1000).toFixed(2) + '$'}
             </Typography>
-            <Typography component="div" sx={{ lineHeight: '1.3' }} variant="h6">
-              quantity:{listItem.quantity}
-            </Typography>
+            <BasketDecIncButtons
+              quantity={listItem.quantity}
+              sku={listItem.sku}
+            ></BasketDecIncButtons>
             <Typography component="div" sx={{ lineHeight: '1.3' }} variant="h6">
               total price:{((listItem.quantity * listItem.price) / 1000).toFixed(2) + '$'}
             </Typography>
