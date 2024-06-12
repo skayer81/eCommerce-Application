@@ -45,7 +45,7 @@ export const authAnonymMiddlewareOptions: AnonymousAuthMiddlewareOptions = {
   credentials: {
     clientId: CLIENT_ID,
     clientSecret: CLIENT_SECRET,
-    anonymousId: crypto.randomUUID(),
+    // anonymousId: crypto.randomUUID(),
   },
   scopes: SCOPES,
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

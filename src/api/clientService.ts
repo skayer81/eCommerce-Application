@@ -270,10 +270,10 @@ export function createBasket(): Promise<ClientResponse<Cart>> {
 export function createAnonymBasket(
   root: ByProjectKeyRequestBuilder,
 ): Promise<ClientResponse<Cart>> {
-  const anonymId = crypto.randomUUID();
+  // const anonymId = crypto.randomUUID();
   const body: CartDraft = {
     currency: 'USD',
-    anonymousId: anonymId,
+    // anonymousId: anonymId,
   };
   return root.me().carts().post({ body: body }).execute();
 }
