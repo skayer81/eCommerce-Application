@@ -137,12 +137,20 @@ function ProductCard({
               </Typography>
             )}
           </Stack>
+
           <ButtonAddToBasket
             callback={() => setStateInBasket(true)}
             disabled={isItemInBasket}
             sku={sku}
           >
-            <ShoppingCartOutlinedIcon fontSize="medium" fontWeight="400" />
+            <>
+              <ShoppingCartOutlinedIcon fontSize="medium" fontWeight="400" />
+              {isItemInBasket && (
+                <Typography sx={{ textTransform: 'capitalize' }} variant="body2">
+                  In Cart
+                </Typography>
+              )}
+            </>
           </ButtonAddToBasket>
           {/* <Button onClick={handleClick} disabled={isItemInBasketStart}>
             <ShoppingCartOutlinedIcon fontSize="medium" fontWeight="400" />
