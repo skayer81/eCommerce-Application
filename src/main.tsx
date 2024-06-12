@@ -34,7 +34,7 @@ if (token !== null) {
   const root = anonymFlowAuth();
   createAnonymBasket(root)
     .then((data) => {
-      console.log('basket=', data);
+      console.log('createbasket=', data.body.id);
       addBasketIDInStore(data.body.id);
       updateCurrentVersion(data.body.version);
     })

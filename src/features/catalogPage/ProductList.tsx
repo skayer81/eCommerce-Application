@@ -41,7 +41,7 @@ function ProductList(): JSX.Element {
   //   queryFn: () => getProducts(categoryId, sortValue, attributes, searchValue),
   //   select: (data: ClientResponse<ProductProjectionPagedQueryResponse>) => data.body.results,
   // });
-
+  console.log('incoming basket id=', basketId);
   const queries = useQueries({
     queries: [
       {

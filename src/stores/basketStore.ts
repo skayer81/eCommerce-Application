@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+// import { persist } from 'zustand/middleware';
 
 export interface BasketStore {
   addBasketIDInStore: (id: string) => void;
@@ -11,38 +11,31 @@ export interface BasketStore {
 
   updateCurrentVersion: (id: number) => void;
 }
-export const useBasketStore = create<BasketStore>()(
-  persist(
-    (set) => ({
-      basketId: '',
-      basketVersion: 1,
-      basketError: false,
+export const useBasketStore = create<BasketStore>((set) => ({
+  basketId: '',
+  basketVersion: 1,
+  basketError: false,
 
-      addBasketIDInStore: (id: string) => {
-        set((state) => ({
-          ...state,
-          basketId: id,
-        }));
-      },
+  addBasketIDInStore: (id: string) => {
+    set((state) => ({
+      ...state,
+      basketId: id,
+    }));
+  },
 
-      updateCurrentVersion: (basketVersion: number) => {
-        set((state) => ({
-          ...state,
-          basketVersion: basketVersion,
-        }));
-      },
+  updateCurrentVersion: (basketVersion: number) => {
+    set((state) => ({
+      ...state,
+      basketVersion: basketVersion,
+    }));
+  },
 
-      setBasketError: (errorState: boolean) => {
-        set((state) => ({
-          ...state,
-          basketError: errorState,
-        }));
-      },
-    }),
-    {
-      name: 'green-shop-basket',
-    },
-  ),
-);
+  setBasketError: (errorState: boolean) => {
+    set((state) => ({
+      ...state,
+      basketError: errorState,
+    }));
+  },
+}));
 
 export const { addBasketIDInStore, updateCurrentVersion } = useBasketStore.getState();
