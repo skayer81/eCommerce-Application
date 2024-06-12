@@ -13,7 +13,7 @@ import { Client, ClientBuilder } from '@commercetools/sdk-client-v2';
 
 import { PROJECT_KEY } from '@/config/clientConfig';
 import { Customer } from '@/features/profilePage/Types';
-import { LoginForm, PasswordChange, RegForm, RegistrationRequestBody } from '@/types/interfaces';
+import { LoginForm, PasswordChange, RegistrationRequestBody } from '@/types/interfaces';
 import { PRODUCTS_LIMIT } from '@/utils/constants';
 
 import {
@@ -52,7 +52,7 @@ export function anonymFlowAuth(): ByProjectKeyRequestBuilder {
   return apiRoot;
 }
 
-export function passwordFlowAuth({ email, password }: RegForm): ByProjectKeyRequestBuilder {
+export function passwordFlowAuth({ email, password }: LoginForm): ByProjectKeyRequestBuilder {
   const ctpClient = new ClientBuilder()
     .withPasswordFlow(authUserMiddlewareOptions(email, password))
     .withHttpMiddleware(httpMiddlewareOptions)
@@ -101,8 +101,8 @@ export async function loginUser({ email, password }: LoginForm): Promise<ClientR
     .login()
     .post({
       body: {
-        email: email,
-        password: password,
+        email,
+        password,
       },
     })
     .execute();
@@ -222,29 +222,6 @@ export function changeNumberItemInBasket(
   body: MyCartUpdate,
   basketID: string,
 ): Promise<ClientResponse<Cart>> {
-  /*
-  пример body для добавления
-  const body: MyCartUpdate =
-  {"version":1,
-    "actions":[
-      {"action":"addLineItem",
-        "sku": 'PL-37-S',
-        "quantity":1}
-    ]
-  }
-
-  пример body для удаления
-  const body: MyCartUpdate =
-  {"version":1,
-    "actions":[
-      {"action":"changeLineItemQuantity",
-        "lineItemId": "56238bbe-1b4d-455d-8619-7ac604f994a0" - ID айтема в корзине,
-        "quantity":1}
-    ]
-  }
-
-
-*/
   return apiRoot
     .me()
     .carts()
@@ -270,17 +247,11 @@ export function createBasket(): Promise<ClientResponse<Cart>> {
 export function createAnonymBasket(
   root: ByProjectKeyRequestBuilder,
 ): Promise<ClientResponse<Cart>> {
-  // const anonymId = crypto.randomUUID();
   const body: CartDraft = {
     currency: 'USD',
-    // anonymousId: anonymId,
   };
   return root.me().carts().post({ body: body }).execute();
 }
-
-// export function getAnonymBasket(cartId: string): Promise<ClientResponse<Cart>> {
-//   return apiRoot.me().carts().withId({ ID: cartId }).get().execute();
-// }
 
 export function getUserBasket(cartId: string): Promise<ClientResponse<Cart>> {
   return apiRoot.me().carts().withId({ ID: cartId }).get().execute();

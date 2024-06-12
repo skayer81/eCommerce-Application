@@ -1,14 +1,11 @@
 import { create } from 'zustand';
-// import { persist } from 'zustand/middleware';
 
 export interface BasketStore {
   addBasketIDInStore: (id: string) => void;
   basketError: boolean;
   basketId: string;
-
   basketVersion: number;
   setBasketError: (errorState: boolean) => void;
-
   updateCurrentVersion: (id: number) => void;
 }
 export const useBasketStore = create<BasketStore>((set) => ({

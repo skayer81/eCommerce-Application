@@ -9,7 +9,7 @@ import {
 import { Grid, Stack, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { /*  useQuery, */ useQueries } from '@tanstack/react-query';
+import { useQueries } from '@tanstack/react-query';
 
 import { getProducts, getUserBasket } from '@/api/clientService';
 import ErrorAlert from '@/components/errorAlert/ErrorAlert';
@@ -36,11 +36,6 @@ function ProductList(): JSX.Element {
     basketId: state.basketId,
   }));
 
-  // const { data, isError, error, isLoading } = useQuery({
-  //   queryKey: ['products', categoryId, sortValue, attributes, searchValue],
-  //   queryFn: () => getProducts(categoryId, sortValue, attributes, searchValue),
-  //   select: (data: ClientResponse<ProductProjectionPagedQueryResponse>) => data.body.results,
-  // });
   console.log('incoming basket id=', basketId);
   const queries = useQueries({
     queries: [
@@ -70,7 +65,6 @@ function ProductList(): JSX.Element {
   }
 
   if (isError) {
-    // console.error(error);
     return <ErrorAlert />;
   }
 

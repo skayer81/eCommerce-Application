@@ -25,11 +25,6 @@ export interface LoginForm {
   password: string;
 }
 
-export interface RegForm {
-  email: string;
-  password: string;
-}
-
 export type RegistrationAdress = {
   city: string;
   country: string;
