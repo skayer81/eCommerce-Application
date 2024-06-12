@@ -8,11 +8,12 @@ import { Box, Drawer, IconButton, List, ListItemButton, ListItemText } from '@mu
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import { anonymFlowAuth } from '@/api/clientService';
+import { anonymFlowAuth, createAnonymBasket } from '@/api/clientService';
 import { tokenCache } from '@/api/tokenCache';
 import AuthPanel from '@/components/authPanel/AuthPanel';
 import NoAuthPanel from '@/components/noAuthPanel/NoAuthPanel';
 import { useCustomerStore } from '@/features/profilePage/Types';
+import { useBasketStore } from '@/stores/basketStore';
 import { useUserStore } from '@/stores/userStore';
 
 import logo from '../../../assets/icons/Logo.svg';
@@ -25,6 +26,11 @@ export default function Header(): JSX.Element {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { deleteUserFromStore } = useCustomerStore();
   const location = useLocation();
+
+  const { addBasketIDInStore, updateCurrentVersion } = useBasketStore((state) => ({
+    updateCurrentVersion: state.updateCurrentVersion,
+    addBasketIDInStore: state.addBasketIDInStore,
+  }));
 
   useEffect(() => {
     if (!isTablet) {
@@ -39,8 +45,18 @@ export default function Header(): JSX.Element {
   const logout = (): void => {
     logoutUserInStore();
     deleteUserFromStore();
-    anonymFlowAuth();
+
     tokenCache.deleteToken();
+    const root = anonymFlowAuth();
+    createAnonymBasket(root)
+      .then((data) => {
+        console.log('createbasketafterlogout=', data.body.id);
+        addBasketIDInStore(data.body.id);
+        updateCurrentVersion(data.body.version);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const menuItems = [
