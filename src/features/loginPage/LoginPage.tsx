@@ -21,6 +21,7 @@ import {
 import { getProject, loginUser, passwordFlowAuth } from '@/api/clientService';
 import ButtonToAnotherPage from '@/components/formComponents/ButtonToAnotherPage';
 import RulesValidation from '@/components/formComponents/rulesValidation';
+import { useBasketStore } from '@/stores/basketStore';
 import { useUserStore } from '@/stores/userStore';
 import { LoginForm } from '@/types/interfaces';
 
@@ -32,6 +33,7 @@ export default function LoginPage(): JSX.Element {
   const navigation = useNavigate();
   const { loginUserInStore } = useUserStore();
   const { saveUserInStore } = useCustomerStore();
+  const { addBasketIDInStore, updateCurrentVersion } = useBasketStore();
   const {
     handleSubmit,
     formState: { errors },
@@ -48,6 +50,10 @@ export default function LoginPage(): JSX.Element {
     setLoading(true);
     loginUser(data)
       .then(({ body }: ClientResponse<CustomerSignInResult>) => {
+        if (body.cart) {
+          addBasketIDInStore(body.cart.id);
+          updateCurrentVersion(body.cart.version);
+        }
         navigation('/');
         loginUserInStore(body.customer.id);
         const root = passwordFlowAuth(data);

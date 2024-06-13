@@ -1,6 +1,7 @@
 import {
   ByProjectKeyRequestBuilder,
   Cart,
+  CartDraft,
   ClientResponse,
   CustomerUpdate,
   MyCartDraft,
@@ -129,8 +130,8 @@ export function createCustomer(body: RegistrationRequestBody): Promise<ClientRes
     .execute();
 }
 
-export async function getCustomer(root: ByProjectKeyRequestBuilder): Promise<void> {
-  return root.me().get().execute().then(console.log).catch(console.error);
+export function getCustomer(root: ByProjectKeyRequestBuilder): Promise<ClientResponse> {
+  return root.me().get().execute();
 }
 
 export function getProductByKey(key?: string): Promise<ClientResponse> {
@@ -145,6 +146,7 @@ export async function getProducts(
   sortValue: string,
   attributes: Record<string, string>,
   searchValue = '',
+  page: number,
 ): Promise<ClientResponse> {
   const attrFilters = Object.entries(attributes)
     .filter(([attrkey, value]) => value !== '' && attrkey)
@@ -158,8 +160,9 @@ export async function getProducts(
     .get({
       queryArgs: {
         'filter.query': resFilters,
-        sort: sortValue === '' ? undefined : [sortValue],
+        sort: sortValue === '' ? ['createdAt asc'] : [sortValue],
         limit: PRODUCTS_LIMIT,
+        offset: PRODUCTS_LIMIT * (page - 1),
         markMatchingVariants: true,
         fuzzy: true,
         'text.en': searchValue,
@@ -219,29 +222,6 @@ export function changeNumberItemInBasket(
   body: MyCartUpdate,
   basketID: string,
 ): Promise<ClientResponse<Cart>> {
-  /*
-  пример body для добавления
-  const body: MyCartUpdate =
-  {"version":1,
-    "actions":[
-      {"action":"addLineItem",
-        "sku": 'PL-37-S',
-        "quantity":1}
-    ]
-  }
-
-  пример body для удаления
-  const body: MyCartUpdate =
-  {"version":1,
-    "actions":[
-      {"action":"changeLineItemQuantity",
-        "lineItemId": "56238bbe-1b4d-455d-8619-7ac604f994a0" - ID айтема в корзине,
-        "quantity":1}
-    ]
-  }
-
-
-*/
   return apiRoot
     .me()
     .carts()
@@ -262,4 +242,21 @@ export function createBasket(): Promise<ClientResponse<Cart>> {
     currency: 'USD',
   };
   return apiRoot.me().carts().post({ body: body }).execute();
+}
+
+export function createAnonymBasket(
+  root: ByProjectKeyRequestBuilder,
+): Promise<ClientResponse<Cart>> {
+  const body: CartDraft = {
+    currency: 'USD',
+  };
+  return root.me().carts().post({ body: body }).execute();
+}
+
+export function getUserBasket(cartId: string): Promise<ClientResponse<Cart>> {
+  return apiRoot.me().carts().withId({ ID: cartId }).get().execute();
+}
+
+export function getActiveBasket(root: ByProjectKeyRequestBuilder): Promise<ClientResponse<Cart>> {
+  return root.me().activeCart().get().execute();
 }
