@@ -1,10 +1,10 @@
-import { Container, Typography } from '@mui/material';
+import DeveloperCard from './DeveloperCard';
 
 function AboutPage(): JSX.Element {
   return (
-    <Container component="section">
-      <Typography component="p">page under development</Typography>
-    </Container>
+    <>
+      <DeveloperCard />
+    </>
   );
 }
 
