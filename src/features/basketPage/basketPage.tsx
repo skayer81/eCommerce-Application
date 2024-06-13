@@ -6,8 +6,10 @@ import Loader from '@/components/loader/Loader';
 import { useBasketStore } from '@/stores/basketStore';
 
 import { getUserBasket } from '../../api/clientService';
+import { TotalItemsCost } from './TotalItemsCost';
 import basketDataAdapter from './basketDataAdapter';
 import { BasketPageList } from './basketPageList';
+import { getTotalCost } from './getTotalCost';
 
 export function BasketPage(): JSX.Element {
   const { basketId } = useBasketStore();
@@ -39,7 +41,10 @@ export function BasketPage(): JSX.Element {
           this message indicating that the cart is empty
         </Typography>
       ) : (
-        <BasketPageList listData={data} />
+        <>
+          <BasketPageList listData={data} />
+          <TotalItemsCost totalCost={getTotalCost(data)} />
+        </>
       )}
     </Container>
   );
