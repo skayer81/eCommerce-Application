@@ -5,14 +5,14 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import {
-  anonymFlowAuth,
-  createAnonymBasket,
-  existingFlowAuth,
-  getActiveBasket,
-} from './api/clientService';
+// import {
+//   anonymFlowAuth,
+//   createAnonymBasket,
+//   existingFlowAuth,
+//   getActiveBasket,
+// } from './api/clientService';
 import RequireMain from './components/requireMain/RequireMain';
-import { PROJECT_KEY } from './config/clientConfig.ts';
+// import { PROJECT_KEY } from './config/clientConfig.ts';
 import theme from './config/theme.ts';
 import AboutPage from './features/aboutPage/AboutPage.tsx';
 import { BasketPage } from './features/basketPage/basketPage.tsx';
@@ -25,37 +25,39 @@ import ProductPage from './features/productPage/ProductPage.tsx';
 import ProfilePage from './features/profilePage/ProfilePage.tsx';
 import RedirectToMain from './features/profilePage/RedirectToMain.tsx';
 import { RegistrationPageLazy as RegistrationPage } from './features/registrationPage/RegistrationPageLazy.tsx';
-import { addBasketIDInStore, updateCurrentVersion } from './stores/basketStore.ts';
-import getCookie from './utils/helpers/cookies.ts';
+// import { addBasketIDInStore, updateCurrentVersion } from './stores/basketStore.ts';
+// import getCookie from './utils/helpers/cookies.ts';
+import { createBasket } from '@/stores/basketStore';
 
 import './assets/fonts/stylesheet.css';
 import './index.css';
 
-const token = getCookie(PROJECT_KEY);
-if (token !== null) {
-  const accessToken = 'Bearer ' + token;
-  const root = existingFlowAuth(accessToken);
-  getActiveBasket(root)
-    .then((data) => {
-      console.log('activebasket=', data.body.id);
-      addBasketIDInStore(data.body.id);
-      updateCurrentVersion(data.body.version);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-} else {
-  const root = anonymFlowAuth();
-  createAnonymBasket(root)
-    .then((data) => {
-      console.log('createbasket=', data.body.id);
-      addBasketIDInStore(data.body.id);
-      updateCurrentVersion(data.body.version);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-}
+// const token = getCookie(PROJECT_KEY);
+// if (token !== null) {
+//   const accessToken = 'Bearer ' + token;
+//   const root = existingFlowAuth(accessToken);
+//   getActiveBasket(root)
+//     .then((data) => {
+//       console.log('activebasket=', data.body.id);
+//       addBasketIDInStore(data.body.id);
+//       updateCurrentVersion(data.body.version);
+//     })
+//     .catch((error) => {
+//       console.error(error);
+//     });
+// } else {
+//   const root = anonymFlowAuth();
+//   createAnonymBasket(root)
+//     .then((data) => {
+//       console.log('createbasket=', data.body.id);
+//       addBasketIDInStore(data.body.id);
+//       updateCurrentVersion(data.body.version);
+//     })
+//     .catch((error) => {
+//       console.error(error);
+//     });
+// }
+createBasket();
 
 const router = createBrowserRouter([
   {

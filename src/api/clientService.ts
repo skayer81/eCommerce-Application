@@ -260,3 +260,12 @@ export function getUserBasket(cartId: string): Promise<ClientResponse<Cart>> {
 export function getActiveBasket(root: ByProjectKeyRequestBuilder): Promise<ClientResponse<Cart>> {
   return root.me().activeCart().get().execute();
 }
+
+export function deleteBasket(basketID: string, version: number): Promise<ClientResponse<Cart>> {
+  return apiRoot
+    .me()
+    .carts()
+    .withId({ ID: basketID })
+    .delete({ queryArgs: { version: version } })
+    .execute();
+}
