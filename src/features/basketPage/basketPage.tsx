@@ -18,6 +18,7 @@ export function BasketPage(): JSX.Element {
     queryKey: ['basketList', basketId],
     queryFn: () => getUserBasket(basketId),
     select: basketDataAdapter,
+    enabled: !!basketId,
   });
 
   if (isPending) {
