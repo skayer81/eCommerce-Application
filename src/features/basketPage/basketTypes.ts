@@ -6,10 +6,11 @@ export type BasketDataItem = {
   price: number;
   quantity: number;
   sku: string;
-  // totalPrice: number;
 };
 
 export type BasketData = {
   basketItems: Array<BasketDataItem>;
+  discountCodes: Array<string>;
+  discountOnTotalPrice?: number;
   totalBasketPrice: number;
 };
