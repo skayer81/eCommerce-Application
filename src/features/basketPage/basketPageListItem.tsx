@@ -3,9 +3,9 @@ import { Box, Card, CardContent, CardMedia, ListItem, Typography } from '@mui/ma
 import ButtonChangeQuantity from '@/components/buttonsForBasket/ButtonChangeQuantity';
 
 import { BasketDecIncButtons } from './basketDecIncButtons';
-import { BasketDataList } from './basketTypes';
+import { BasketDataItem } from './basketTypes';
 
-export function BasketPageListItem({ listItem }: { listItem: BasketDataList }): JSX.Element {
+export function BasketPageListItem({ listItem }: { listItem: BasketDataItem }): JSX.Element {
   return (
     <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
       <Card>
