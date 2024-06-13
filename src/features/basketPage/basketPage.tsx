@@ -3,18 +3,18 @@ import { useQuery } from '@tanstack/react-query';
 
 import ErrorAlert from '@/components/errorAlert/ErrorAlert';
 import Loader from '@/components/loader/Loader';
-import { useUserStore } from '@/stores/userStore';
+import { useBasketStore } from '@/stores/basketStore';
 
-import { getCustomerBasket } from '../../api/clientService';
+import { getUserBasket } from '../../api/clientService';
 import basketDataAdapter from './basketDataAdapter';
 import { BasketPageList } from './basketPageList';
 
 export function BasketPage(): JSX.Element {
-  const userID = useUserStore().userId;
+  const { basketId } = useBasketStore();
 
   const { data, error, isPending } = useQuery({
-    queryKey: ['customer', userID],
-    queryFn: () => getCustomerBasket(userID),
+    queryKey: ['basketList', basketId],
+    queryFn: () => getUserBasket(basketId),
     select: basketDataAdapter,
   });
 
@@ -34,7 +34,13 @@ export function BasketPage(): JSX.Element {
       <Typography align="center" component="h1" variant="h4">
         Basket
       </Typography>
-      <BasketPageList listData={data} />
+      {data.length === 0 ? (
+        <Typography align="center" component="p" variant="h5">
+          this message indicating that the cart is empty
+        </Typography>
+      ) : (
+        <BasketPageList listData={data} />
+      )}
     </Container>
   );
 }
