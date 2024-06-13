@@ -1,5 +1,6 @@
-import { MyCartUpdate } from '@commercetools/platform-sdk';
+import { Cart, ClientResponse, MyCartUpdate } from '@commercetools/platform-sdk';
 import { Button } from '@mui/material';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { changeNumberItemInBasket } from '@/api/clientService';
 import { findItemInBasket } from '@/components/findItemInBasket/findItemInBasket';
@@ -21,6 +22,7 @@ function ButtonChangeQuantity({
 }): JSX.Element {
   const { updateCurrentVersion, basketId, basketVersion } = useBasketStore();
   const { userId } = useUserStore();
+  const queryClient = useQueryClient();
 
   const getBody = (listItemID: string): MyCartUpdate => {
     return {
@@ -35,28 +37,29 @@ function ButtonChangeQuantity({
     };
   };
 
-  const changeQuantity = (): void => {
-    findItemInBasket(sku, userId)
-      .then((data) => {
-        return data?.id;
-      })
-      .then((listItemID) => {
-        if (!listItemID) {
-          throw new Error('что то пошло не так');
-        }
-        return changeNumberItemInBasket(getBody(listItemID), basketId);
-      })
-      .then((data) => {
-        updateCurrentVersion(data.body.version);
-        console.log('поменяли', data);
-      })
-      .catch((error) => {
-        console.log('ошибка', error);
-      });
+  const changeQuantity = async (sku: string, userId: string): Promise<ClientResponse<Cart>> => {
+    const liineItem = await findItemInBasket(sku, userId);
+    if (!liineItem) {
+      throw new Error('что то пошло не так');
+    }
+    const result = await changeNumberItemInBasket(getBody(liineItem.id), basketId);
+    return result;
   };
 
+  const { mutate } = useMutation<ClientResponse>({
+    mutationFn: () => changeQuantity(sku, userId),
+    onSuccess: ({ body }: ClientResponse<Cart>) => {
+      console.log('lastBasket=', body);
+      updateCurrentVersion(body.version);
+      queryClient.invalidateQueries({ queryKey: ['basketList'] }).catch((error: Error) => {
+        throw new Error(error.message);
+      });
+    },
+    onError: (error) => console.error(error),
+  });
+
   const onClick = (): void => {
-    changeQuantity();
+    mutate();
     if (callback) {
       callback();
     }
