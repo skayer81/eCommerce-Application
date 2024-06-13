@@ -51,7 +51,9 @@ function ButtonChangeQuantity({
     onSuccess: ({ body }: ClientResponse<Cart>) => {
       console.log('lastBasket=', body);
       updateCurrentVersion(body.version);
-      queryClient.invalidateQueries({ queryKey: ['basketList'] }).catch(() => {});
+      queryClient.invalidateQueries({ queryKey: ['basketList'] }).catch((error: Error) => {
+        throw new Error(error.message);
+      });
     },
     onError: (error) => console.error(error),
   });
