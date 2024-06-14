@@ -26,11 +26,14 @@ export function BasketPageListItem({ listItem }: { listItem: BasketDataItem }): 
         <Typography component="div" sx={{ lineHeight: '1.3' }} variant="h6">
           price: {(listItem.price / 1000).toFixed(2) + '$'}
         </Typography>
-        <BasketDecIncButtons quantity={listItem.quantity} sku={listItem.sku}></BasketDecIncButtons>
+        <BasketDecIncButtons
+          ID={listItem.ID}
+          currentQuantity={listItem.quantity}
+        ></BasketDecIncButtons>
         <Typography component="div" sx={{ lineHeight: '1.3' }} variant="h6">
           total price:{((listItem.quantity * listItem.price) / 1000).toFixed(2) + '$'}
         </Typography>
-        <ButtonChangeQuantity disabled={false} quantity={0} sku={listItem.sku}>
+        <ButtonChangeQuantity ID={listItem.ID} disabled={false} quantity={0}>
           {'Remove from Cart'}
         </ButtonChangeQuantity>
       </CardContent>
