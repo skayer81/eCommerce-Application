@@ -1,10 +1,8 @@
 import { Cart, ClientResponse, Image, LineItem } from '@commercetools/platform-sdk';
-// import { LineItemDraft } from '@commercetools/platform-sdk';
 
 import { BasketData, BasketDataItem } from './basketTypes';
 
 function basketDataAdapter(data: ClientResponse<Cart>): BasketData {
-  console.log('пришло в адаптер', data);
   const cart: Array<LineItem> = data.body.lineItems;
   const basketItems: Array<BasketDataItem> = [];
   cart.forEach((lineItem) => {

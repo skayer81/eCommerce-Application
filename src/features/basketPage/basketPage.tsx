@@ -31,9 +31,6 @@ export function BasketPage(): JSX.Element {
     return <ErrorAlert />;
   }
 
-  // console.log(data);
-  console.log('данные из адаптера', data);
-
   return (
     <Container sx={{ border: 1, padding: 2 }}>
       <Typography align="center" component="h1" variant="h4">
