@@ -45,6 +45,13 @@ function Promocodes(): JSX.Element {
                 >
                   {promo.description}
                 </Typography>
+                <Typography
+                  sx={{ mt: '5px' }}
+                  textAlign="center"
+                  variant={isMobile ? 'body2' : 'body1'}
+                >
+                  {promo.comment}
+                </Typography>
               </Stack>
             </Grid>
           ))}
