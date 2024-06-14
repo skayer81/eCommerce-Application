@@ -6,7 +6,6 @@ export type BasketDataItem = {
   price: number;
   quantity: number;
   sku: string;
-  // discount: number | undefined;
   totalItem: number;
 };
 

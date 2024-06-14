@@ -45,13 +45,17 @@ export function BasketPage(): JSX.Element {
         <>
           <BasketPageList listData={data.basketItems} />
 
-          <Box sx={{ display: 'flex' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
             <PromocodeForm
               basketId={data.basketId}
               basketVersion={data.basketVersion}
               discountCodes={data.discountCodes}
             />
-            <TotalItemsCost totalCost={data.totalBasketPrice} />
+            <TotalItemsCost
+              discount={data.discountOnTotalPrice}
+              total={data.totalBasketPrice}
+              totalBefore={data.totalBeforeDiscount}
+            />
           </Box>
         </>
       )}
