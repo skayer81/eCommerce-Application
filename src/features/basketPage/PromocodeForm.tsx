@@ -33,8 +33,6 @@ export default function PromocodeForm({
   discountCodes,
 }: PromoProps): JSX.Element {
   const queryClient = useQueryClient();
-  // const userID = useUserStore().userId;
-
   const { updateCurrentVersion } = useBasketStore((state) => ({
     updateCurrentVersion: state.updateCurrentVersion,
   }));
@@ -50,7 +48,6 @@ export default function PromocodeForm({
     onSuccess: async ({ body }: ClientResponse<Cart>) => {
       updateCurrentVersion(body.version);
       await queryClient.invalidateQueries({ queryKey: ['basketList'] });
-      // await queryClient.invalidateQueries({ queryKey: ['cart'] });
     },
     onError: (error) => console.error(error),
   });
