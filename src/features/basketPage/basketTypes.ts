@@ -1,5 +1,6 @@
 export type BasketDataItem = {
   ID: string;
+  discountedPrice: number;
   img: string;
   name: string;
   price: number;
@@ -10,8 +11,11 @@ export type BasketDataItem = {
 };
 
 export type BasketData = {
+  basketId: string;
   basketItems: Array<BasketDataItem>;
+  basketVersion: number;
   discountCodes: Array<string>;
-  discountOnTotalPrice?: number;
+  discountOnTotalPrice: number;
   totalBasketPrice: number;
+  totalBeforeDiscount: number;
 };

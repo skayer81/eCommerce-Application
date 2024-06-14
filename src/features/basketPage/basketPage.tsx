@@ -1,4 +1,4 @@
-import { Container, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 
 import ErrorAlert from '@/components/errorAlert/ErrorAlert';
@@ -6,6 +6,7 @@ import Loader from '@/components/loader/Loader';
 import { useBasketStore } from '@/stores/basketStore';
 
 import { getUserBasket } from '../../api/clientService';
+import PromocodeForm from './PromocodeForm';
 import { TotalItemsCost } from './TotalItemsCost';
 import basketDataAdapter from './basketDataAdapter';
 import { BasketEmptyList } from './basketEmptyList';
@@ -31,7 +32,7 @@ export function BasketPage(): JSX.Element {
   }
 
   // console.log(data);
-  console.log('идет в баскетлист=', data.basketItems);
+  console.log('данные из адаптера', data);
 
   return (
     <Container sx={{ border: 1, padding: 2 }}>
@@ -43,7 +44,15 @@ export function BasketPage(): JSX.Element {
       ) : (
         <>
           <BasketPageList listData={data.basketItems} />
-          <TotalItemsCost totalCost={data.totalBasketPrice} />
+
+          <Box sx={{ display: 'flex' }}>
+            <PromocodeForm
+              basketId={data.basketId}
+              basketVersion={data.basketVersion}
+              discountCodes={data.discountCodes}
+            />
+            <TotalItemsCost totalCost={data.totalBasketPrice} />
+          </Box>
         </>
       )}
     </Container>

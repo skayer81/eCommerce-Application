@@ -1,4 +1,5 @@
 import { Cart, ClientResponse, Image, LineItem } from '@commercetools/platform-sdk';
+// import { LineItemDraft } from '@commercetools/platform-sdk';
 
 import { BasketData, BasketDataItem } from './basketTypes';
 
@@ -19,6 +20,10 @@ function basketDataAdapter(data: ClientResponse<Cart>): BasketData {
         : lineItem.price.value.centAmount,
       quantity: lineItem.quantity,
       sku: lineItem.variant.sku ?? '',
+      discountedPrice:
+        lineItem.discountedPricePerQuantity.length > 0
+          ? lineItem.discountedPricePerQuantity[0].discountedPrice.value.centAmount
+          : 0,
     };
     basketItems.push(basketItem);
   });
@@ -34,11 +39,18 @@ function basketDataAdapter(data: ClientResponse<Cart>): BasketData {
     basketItems: basketItems,
     discountCodes: discountCodes,
     totalBasketPrice: data.body.totalPrice.centAmount,
+    basketId: data.body.id,
+    basketVersion: data.body.version,
+    discountOnTotalPrice: data.body.discountOnTotalPrice
+      ? data.body.discountOnTotalPrice.discountedAmount.centAmount
+      : 0,
+    totalBeforeDiscount:
+      data.body.totalPrice.centAmount +
+      (data.body.discountOnTotalPrice
+        ? data.body.discountOnTotalPrice.discountedAmount.centAmount
+        : 0),
   };
-  const discountOnTotalPrice = data.body.discountOnTotalPrice?.discountedAmount.centAmount;
-  if (discountOnTotalPrice) {
-    result.discountOnTotalPrice = discountOnTotalPrice;
-  }
+
   return result;
 }
 

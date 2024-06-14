@@ -254,7 +254,16 @@ export function createAnonymBasket(
 }
 
 export function getUserBasket(cartId: string): Promise<ClientResponse<Cart>> {
-  return apiRoot.me().carts().withId({ ID: cartId }).get().execute();
+  return apiRoot
+    .me()
+    .carts()
+    .withId({ ID: cartId })
+    .get({
+      queryArgs: {
+        expand: ['discountCodes[*].discountCode'],
+      },
+    })
+    .execute();
 }
 
 export function getActiveBasket(root: ByProjectKeyRequestBuilder): Promise<ClientResponse<Cart>> {
