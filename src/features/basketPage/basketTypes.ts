@@ -1,11 +1,12 @@
 export type BasketDataItem = {
   ID: string;
-  discount: number | undefined;
   img: string;
   name: string;
   price: number;
   quantity: number;
   sku: string;
+  // discount: number | undefined;
+  totalItem: number;
 };
 
 export type BasketData = {

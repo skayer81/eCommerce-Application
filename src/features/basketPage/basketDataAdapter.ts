@@ -11,10 +11,12 @@ function basketDataAdapter(data: ClientResponse<Cart>): BasketData {
     const image: Image | undefined = images ? images[0] : undefined;
     const basketItem: BasketDataItem = {
       ID: lineItem.id,
-      discount: lineItem.totalPrice.centAmount,
+      totalItem: lineItem.totalPrice.centAmount,
       img: image?.url ?? '',
       name: lineItem.name.en,
-      price: lineItem.price.value.centAmount,
+      price: lineItem.price.discounted
+        ? lineItem.price.discounted.value.centAmount
+        : lineItem.price.value.centAmount,
       quantity: lineItem.quantity,
       sku: lineItem.variant.sku ?? '',
     };

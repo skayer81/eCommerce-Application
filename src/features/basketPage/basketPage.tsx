@@ -30,7 +30,8 @@ export function BasketPage(): JSX.Element {
     return <ErrorAlert />;
   }
 
-  console.log(data);
+  // console.log(data);
+  console.log('идет в баскетлист=', data.basketItems);
 
   return (
     <Container sx={{ border: 1, padding: 2 }}>
