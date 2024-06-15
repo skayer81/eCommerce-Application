@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 import { Cart, ClientResponse, MyCartUpdate } from '@commercetools/platform-sdk';
+import { HttpErrorType } from '@commercetools/sdk-client-v2';
 import {
+  Alert,
   Box,
   Button,
   List,
@@ -37,19 +40,32 @@ export default function PromocodeForm({
     updateCurrentVersion: state.updateCurrentVersion,
   }));
 
-  const { handleSubmit, control, reset } = useForm<PromoForm>({
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const {
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm<PromoForm>({
     defaultValues: {
       promo: '',
     },
   });
 
-  const { mutate } = useMutation<ClientResponse, Error, MyCartUpdate>({
+  const { mutate } = useMutation<ClientResponse, HttpErrorType, MyCartUpdate>({
     mutationFn: (itemBody) => changeNumberItemInBasket(itemBody, basketId),
     onSuccess: async ({ body }: ClientResponse<Cart>) => {
       updateCurrentVersion(body.version);
       await queryClient.invalidateQueries({ queryKey: ['basketList'] });
     },
-    onError: (error) => console.error(error),
+    onError: (error: HttpErrorType) => {
+      if (error.code === 400) {
+        setErrorMessage('There is no such promocode');
+      } else {
+        setErrorMessage(error.message);
+      }
+    },
   });
 
   const submit: SubmitHandler<PromoForm> = (data: PromoForm): void => {
@@ -67,6 +83,7 @@ export default function PromocodeForm({
     <Stack>
       <Box
         component="form"
+        onChange={() => setErrorMessage('')}
         onSubmit={(event) => void handleSubmit(submit)(event)}
         sx={{
           display: 'flex',
@@ -86,9 +103,22 @@ export default function PromocodeForm({
           control={control}
           name="promo"
           render={({ field }) => (
-            <TextField {...field} fullWidth sx={{ mb: 2 }} variant="outlined" />
+            <TextField
+              {...field}
+              error={!!errors.promo}
+              fullWidth
+              helperText={errors.promo ? 'Required field' : ''}
+              sx={{ mb: 2 }}
+              variant="outlined"
+            />
           )}
+          rules={{ required: true }}
         />
+        {errorMessage && (
+          <Alert onClose={() => setErrorMessage('')} severity="error" sx={{ mb: '10px' }}>
+            {errorMessage}
+          </Alert>
+        )}
         <Button color="primary" type="submit" variant="contained">
           Apply
         </Button>
