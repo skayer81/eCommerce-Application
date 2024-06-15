@@ -9,7 +9,7 @@ import { anonymFlowAuth, existingFlowAuth } from './api/clientService';
 import RequireMain from './components/requireMain/RequireMain';
 import { PROJECT_KEY } from './config/clientConfig.ts';
 import theme from './config/theme.ts';
-import AboutPage from './features/aboutPage/AboutPage.tsx';
+import { AboutPageLazy as AboutPage } from './features/aboutPage/AboutPageLazy.tsx';
 import { BasketPage } from './features/basketPage/basketPage.tsx';
 import { CatalogPageLazy as CatalogPage } from './features/catalogPage/CatalogPageLazy.tsx';
 import { ErrorPageLazy as ErrorPage } from './features/errorPage/ErrorPageLazy.tsx';
