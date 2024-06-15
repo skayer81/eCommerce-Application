@@ -1,11 +1,42 @@
-import { Container, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 
-export function TotalItemsCost({ totalCost }: { totalCost: number }): JSX.Element {
+interface TotalPrice {
+  discount: number;
+  total: number;
+  totalBefore: number;
+}
+
+export function TotalItemsCost({ total, totalBefore, discount }: TotalPrice): JSX.Element {
+  const totalView = (total / 1000).toFixed(2) + '$';
+  const totalBeforeView = (totalBefore / 1000).toFixed(2) + '$';
+
   return (
-    <Container>
-      <Typography component="div" sx={{ lineHeight: '1.3' }} textAlign="right" variant="h4">
-        total basket price:{(totalCost / 1000).toFixed(2) + '$'}
-      </Typography>
-    </Container>
+    <Grid container height={'200px'} spacing={2} sx={{ width: '40%' }}>
+      {discount ? (
+        <>
+          <Grid height={'100px'} item xs={6}>
+            <Typography lineHeight={1.2}>Total price without promocode</Typography>
+          </Grid>
+          <Grid height={'100px'} item xs={6}>
+            <Typography color={'grey'} sx={{ textDecoration: 'line-through' }} variant="h5">
+              {totalBeforeView}
+            </Typography>
+          </Grid>
+        </>
+      ) : (
+        <div></div>
+      )}
+
+      <Grid height={'100px'} item xs={6}>
+        <Typography lineHeight={1.2}>
+          {discount ? `Total price with promocode` : `Total price`}
+        </Typography>
+      </Grid>
+      <Grid height={'100px'} item xs={6}>
+        <Typography color={'primary'} variant="h5">
+          {totalView}
+        </Typography>
+      </Grid>
+    </Grid>
   );
 }

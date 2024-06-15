@@ -3,7 +3,6 @@ import { Cart, ClientResponse, Image, LineItem } from '@commercetools/platform-s
 import { BasketData, BasketDataItem } from './basketTypes';
 
 function basketDataAdapter(data: ClientResponse<Cart>): BasketData {
-  console.log('пришло в адаптер', data);
   const cart: Array<LineItem> = data.body.lineItems;
   const basketItems: Array<BasketDataItem> = [];
   cart.forEach((lineItem) => {
@@ -11,12 +10,18 @@ function basketDataAdapter(data: ClientResponse<Cart>): BasketData {
     const image: Image | undefined = images ? images[0] : undefined;
     const basketItem: BasketDataItem = {
       ID: lineItem.id,
-      discount: lineItem.totalPrice.centAmount,
+      totalItem: lineItem.totalPrice.centAmount,
       img: image?.url ?? '',
       name: lineItem.name.en,
-      price: lineItem.price.value.centAmount,
+      price: lineItem.price.discounted
+        ? lineItem.price.discounted.value.centAmount
+        : lineItem.price.value.centAmount,
       quantity: lineItem.quantity,
       sku: lineItem.variant.sku ?? '',
+      discountedPrice:
+        lineItem.discountedPricePerQuantity.length > 0
+          ? lineItem.discountedPricePerQuantity[0].discountedPrice.value.centAmount
+          : 0,
     };
     basketItems.push(basketItem);
   });
@@ -32,11 +37,18 @@ function basketDataAdapter(data: ClientResponse<Cart>): BasketData {
     basketItems: basketItems,
     discountCodes: discountCodes,
     totalBasketPrice: data.body.totalPrice.centAmount,
+    basketId: data.body.id,
+    basketVersion: data.body.version,
+    discountOnTotalPrice: data.body.discountOnTotalPrice
+      ? data.body.discountOnTotalPrice.discountedAmount.centAmount
+      : 0,
+    totalBeforeDiscount:
+      data.body.totalPrice.centAmount +
+      (data.body.discountOnTotalPrice
+        ? data.body.discountOnTotalPrice.discountedAmount.centAmount
+        : 0),
   };
-  const discountOnTotalPrice = data.body.discountOnTotalPrice?.discountedAmount.centAmount;
-  if (discountOnTotalPrice) {
-    result.discountOnTotalPrice = discountOnTotalPrice;
-  }
+
   return result;
 }
 
