@@ -5,18 +5,29 @@ export interface BasketStore {
   basketError: boolean;
   basketId: string;
   basketVersion: number;
+
+  numbOfItems: number;
   setBasketError: (errorState: boolean) => void;
   updateCurrentVersion: (id: number) => void;
+  updateNumbOfItems: (id: number) => void;
 }
 export const useBasketStore = create<BasketStore>((set) => ({
   basketId: '',
   basketVersion: 1,
   basketError: false,
+  numbOfItems: 0,
 
   addBasketIDInStore: (id: string) => {
     set((state) => ({
       ...state,
       basketId: id,
+    }));
+  },
+
+  updateNumbOfItems: (numbOfItems: number) => {
+    set((state) => ({
+      ...state,
+      numbOfItems: numbOfItems,
     }));
   },
 
@@ -35,4 +46,5 @@ export const useBasketStore = create<BasketStore>((set) => ({
   },
 }));
 
-export const { addBasketIDInStore, updateCurrentVersion } = useBasketStore.getState();
+export const { addBasketIDInStore, updateCurrentVersion, updateNumbOfItems } =
+  useBasketStore.getState();
