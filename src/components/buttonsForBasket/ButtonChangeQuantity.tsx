@@ -11,12 +11,14 @@ function ButtonChangeQuantity({
   children,
   disabled = false,
   quantity,
+  variant,
 }: {
   ID: string;
   callback?: () => void;
   children: JSX.Element | string;
   disabled?: boolean;
   quantity: number;
+  variant?: 'contained' | 'outlined' | 'text';
 }): JSX.Element {
   const { basketId, basketVersion, updateCurrentVersion, updateNumbOfItems } = useBasketStore(
     (state) => ({
@@ -65,7 +67,7 @@ function ButtonChangeQuantity({
   };
 
   return (
-    <Button disabled={disabled} onClick={onClick}>
+    <Button disabled={disabled} onClick={onClick} size="small" variant={variant}>
       {children}
     </Button>
   );

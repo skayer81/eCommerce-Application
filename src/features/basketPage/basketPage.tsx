@@ -38,17 +38,16 @@ export function BasketPage(): JSX.Element {
       direction={isTablet ? 'row' : 'column'}
       justifyContent={'space-between'}
       spacing={2}
-      sx={{ width: '100%', pt: 2, pb: 2 }}
+      sx={{ width: '100%' }}
     >
-      <Paper sx={{ flexGrow: 1 }}>
-        <Typography component="h1" variant="h5">
-          Cart
-        </Typography>
-
+      <Paper sx={{ flexGrow: 1, padding: '20px' }}>
         {data.basketItems.length === 0 ? (
           <BasketEmptyList />
         ) : (
           <>
+            <Typography component="h1" variant="h5">
+              Cart
+            </Typography>
             <BasketPageList listData={data.basketItems} />
           </>
         )}

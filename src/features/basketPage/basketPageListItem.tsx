@@ -1,4 +1,14 @@
-import { Box, Card, CardContent, CardMedia, ListItem, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
+  ListItem,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 
 import ButtonChangeQuantity from '@/components/buttonsForBasket/ButtonChangeQuantity';
 
@@ -11,26 +21,42 @@ export function BasketPageListItem({ listItem }: { listItem: BasketDataItem }): 
   const totalItem = (listItem.totalItem / 1000).toFixed(2) + '$';
   const totalItemBeforeDiscount = ((listItem.price * listItem.quantity) / 1000).toFixed(2) + '$';
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
-    <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
-      <Card>
+    <ListItem sx={{ display: 'flex', pl: 0, pr: 0 }}>
+      <Card sx={{ flex: 'none', alignSelf: 'flex-start' }}>
         <Box sx={{ width: '100%' }}>
           <CardMedia
             component="img"
-            height="200"
             image={listItem.img ?? 'https://placehold.co/1000x1000?text=No+Image'}
-            sx={{ objectFit: 'contain' }}
+            sx={{
+              objectFit: 'contain',
+              width: isMobile ? '100px' : '150px',
+              height: isMobile ? '100px' : '150px',
+            }}
             title={listItem.name}
           />
         </Box>
       </Card>
-      <CardContent>
-        <Typography component="div" gutterBottom sx={{ lineHeight: '1.3' }} variant="h6">
-          name: {listItem.name}
+      <CardContent sx={{ pr: 0, pt: 0 }}>
+        <Typography
+          component="div"
+          gutterBottom
+          sx={{ lineHeight: '1.3' }}
+          variant={isMobile ? 'body1' : 'h6'}
+        >
+          {listItem.name}
         </Typography>
-        <Stack direction={'row'} spacing={1}>
-          <Typography component="div" sx={{ lineHeight: '1.3' }} variant="h6">
-            price:
+
+        <Stack alignItems={'center'} direction={'row'} spacing={1}>
+          <Typography
+            component="div"
+            sx={{ lineHeight: '1.3' }}
+            variant={isMobile ? 'body2' : 'body1'}
+          >
+            Price:
           </Typography>
           {listItem.discountedPrice ? (
             <>
@@ -56,9 +82,13 @@ export function BasketPageListItem({ listItem }: { listItem: BasketDataItem }): 
           currentQuantity={listItem.quantity}
         ></BasketDecIncButtons>
 
-        <Stack direction={'row'} spacing={1}>
-          <Typography component="div" sx={{ lineHeight: '1.3' }} variant="h6">
-            total price:
+        <Stack alignItems={'center'} direction={'row'} spacing={1} sx={{ mb: '5px' }}>
+          <Typography
+            component="div"
+            sx={{ lineHeight: '1.3' }}
+            variant={isMobile ? 'body2' : 'body1'}
+          >
+            Total:
           </Typography>
           {listItem.discountedPrice ? (
             <>
@@ -79,7 +109,7 @@ export function BasketPageListItem({ listItem }: { listItem: BasketDataItem }): 
             </Typography>
           )}
         </Stack>
-        <ButtonChangeQuantity ID={listItem.ID} disabled={false} quantity={0}>
+        <ButtonChangeQuantity ID={listItem.ID} disabled={false} quantity={0} variant={'outlined'}>
           {'Remove from Cart'}
         </ButtonChangeQuantity>
       </CardContent>

@@ -5,6 +5,7 @@ import promoCodes from '@/config/promocodes';
 function Promocodes(): JSX.Element {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
     <Paper
       sx={{
