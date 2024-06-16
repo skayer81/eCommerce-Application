@@ -89,11 +89,8 @@ export default function PromocodeForm({
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          width: '300px',
+          width: '100%',
           margin: '0 auto',
-          padding: '20px',
-          border: '1px solid #ccc',
-          borderRadius: '10px',
         }}
       >
         <Typography sx={{ mb: 2 }} variant="h6">
@@ -108,7 +105,7 @@ export default function PromocodeForm({
               error={!!errors.promo}
               fullWidth
               helperText={errors.promo ? 'Required field' : ''}
-              sx={{ mb: 2 }}
+              sx={{ mb: 2, width: '100%' }}
               variant="outlined"
             />
           )}
@@ -124,11 +121,11 @@ export default function PromocodeForm({
         </Button>
       </Box>
       {discountCodes && discountCodes.length > 0 && (
-        <Box sx={{ mt: 3, textAlign: 'center' }}>
-          <Typography variant="h6">Promocodes applied:</Typography>
-          <List sx={{ mt: 1 }}>
+        <Box sx={{ mt: 2, textAlign: 'center' }}>
+          <Typography variant="body1">Promocodes applied:</Typography>
+          <List sx={{ padding: 0 }}>
             {discountCodes.map((code) => (
-              <ListItem key={code}>
+              <ListItem key={code} sx={{ pt: 0, pb: 0 }}>
                 <ListItemText primary={code} />
               </ListItem>
             ))}
