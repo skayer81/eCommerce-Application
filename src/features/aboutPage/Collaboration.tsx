@@ -6,7 +6,7 @@ function Collaboration(): JSX.Element {
       component="section"
       sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, mt: 2, mb: 6 }}
     >
-      <Typography sx={{ fontSize: '36px', color: 'green' }}>About us</Typography>
+      <Typography sx={{ fontSize: '36px', color: 'primary.main' }}>About us</Typography>
       <Typography sx={{ fontSize: '20px' }}>
         Through collaborative efforts, the team successfully developed an online store, highlighting
         their adeptness in overcoming technical challenges, implementing creative solutions, and

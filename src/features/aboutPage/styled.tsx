@@ -20,6 +20,7 @@ const developerCard = {
   gap: 2,
   borderRadius: '20px',
   boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.3)',
+  backgroundColor: 'white',
 
   '@media(max-width: 860px)': {
     flexDirection: 'column',
