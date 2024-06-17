@@ -18,7 +18,14 @@ function ButtonChangeQuantity({
   disabled?: boolean;
   quantity: number;
 }): JSX.Element {
-  const { updateCurrentVersion, basketId, basketVersion } = useBasketStore();
+  const { basketId, basketVersion, updateCurrentVersion, updateNumbOfItems } = useBasketStore(
+    (state) => ({
+      basketId: state.basketId,
+      basketVersion: state.basketVersion,
+      updateCurrentVersion: state.updateCurrentVersion,
+      updateNumbOfItems: state.updateNumbOfItems,
+    }),
+  );
   const queryClient = useQueryClient();
 
   const getBody = (listItemID: string): MyCartUpdate => {
@@ -38,6 +45,11 @@ function ButtonChangeQuantity({
     mutationFn: () => changeNumberItemInBasket(getBody(ID), basketId),
     onSuccess: ({ body }: ClientResponse<Cart>) => {
       updateCurrentVersion(body.version);
+      if (body.totalLineItemQuantity) {
+        updateNumbOfItems(body.totalLineItemQuantity);
+      } else {
+        updateNumbOfItems(0);
+      }
       queryClient.invalidateQueries({ queryKey: ['basketList'] }).catch((error: Error) => {
         throw new Error(error.message);
       });

@@ -33,7 +33,13 @@ export default function LoginPage(): JSX.Element {
   const navigation = useNavigate();
   const { loginUserInStore } = useUserStore();
   const { saveUserInStore } = useCustomerStore();
-  const { addBasketIDInStore, updateCurrentVersion } = useBasketStore();
+  const { addBasketIDInStore, updateCurrentVersion, updateNumbOfItems } = useBasketStore(
+    (state) => ({
+      addBasketIDInStore: state.addBasketIDInStore,
+      updateCurrentVersion: state.updateCurrentVersion,
+      updateNumbOfItems: state.updateNumbOfItems,
+    }),
+  );
   const {
     handleSubmit,
     formState: { errors },
@@ -53,6 +59,11 @@ export default function LoginPage(): JSX.Element {
         if (body.cart) {
           addBasketIDInStore(body.cart.id);
           updateCurrentVersion(body.cart.version);
+          if (body.cart.totalLineItemQuantity) {
+            updateNumbOfItems(body.cart.totalLineItemQuantity);
+          } else {
+            updateNumbOfItems(0);
+          }
         }
         navigation('/');
         loginUserInStore(body.customer.id);
