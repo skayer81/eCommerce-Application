@@ -13,7 +13,7 @@ type AtribListItem = {
 };
 
 type ProductProperties = {
-  isItemInBasket: boolean;
+  IDItemInBasket: string;
   productProps: {
     description: string;
     discount: number | undefined;
@@ -24,14 +24,12 @@ type ProductProperties = {
     sku: string;
   };
   setIsFullScreen: (isFullScreen: boolean) => void;
-  setIsItemInBasket: (isItemInBasket: boolean) => void;
   setSlideNumber: (slideNumber: number) => void;
 };
 
 export default function DetailedCard({
-  isItemInBasket,
+  IDItemInBasket,
   productProps,
-  setIsItemInBasket,
   setIsFullScreen,
   setSlideNumber,
 }: ProductProperties): JSX.Element {
@@ -86,23 +84,10 @@ export default function DetailedCard({
             )}
           </CardActions>
           <CardActions sx={{ mt: 'auto' }}>
-            <ButtonAddToBasket
-              callback={() => {
-                setIsItemInBasket(false);
-              }}
-              disabled={isItemInBasket}
-              sku={productProps.sku}
-            >
+            <ButtonAddToBasket disabled={!!IDItemInBasket} sku={productProps.sku}>
               {'add to basket'}
             </ButtonAddToBasket>
-            <ButtonChangeQuantity
-              callback={() => {
-                setIsItemInBasket(false);
-              }}
-              disabled={!isItemInBasket}
-              quantity={0}
-              sku={productProps.sku}
-            >
+            <ButtonChangeQuantity ID={IDItemInBasket} disabled={!IDItemInBasket} quantity={0}>
               {'Remove from Cart'}
             </ButtonChangeQuantity>
           </CardActions>

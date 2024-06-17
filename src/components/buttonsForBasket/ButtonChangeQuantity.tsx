@@ -17,6 +17,7 @@ function ButtonChangeQuantity({
   children: JSX.Element | string;
   disabled?: boolean;
   quantity: number;
+  sku?: string;
 }): JSX.Element {
   const { updateCurrentVersion, basketId, basketVersion } = useBasketStore();
   const queryClient = useQueryClient();
@@ -39,6 +40,9 @@ function ButtonChangeQuantity({
     onSuccess: ({ body }: ClientResponse<Cart>) => {
       updateCurrentVersion(body.version);
       queryClient.invalidateQueries({ queryKey: ['basketList'] }).catch((error: Error) => {
+        throw new Error(error.message);
+      });
+      queryClient.invalidateQueries({ queryKey: ['productInCart'] }).catch((error: Error) => {
         throw new Error(error.message);
       });
     },

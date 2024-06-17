@@ -43,6 +43,7 @@ function ButtonAddToBasket({
       console.log('lastBasket=', body);
       updateCurrentVersion(body.version);
       await queryClient.invalidateQueries({ queryKey: ['cart'] });
+      await queryClient.invalidateQueries({ queryKey: ['productInCart'] });
     },
     onError: (error) => console.error(error),
   });
