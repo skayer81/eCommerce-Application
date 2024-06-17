@@ -1,10 +1,14 @@
-import { Container, Typography } from '@mui/material';
+import Collaboration from './Collaboration';
+import DeveloperCard from './DeveloperCard';
+import Rsschool from './Rsscool';
 
 function AboutPage(): JSX.Element {
   return (
-    <Container component="section">
-      <Typography component="p">page under development</Typography>
-    </Container>
+    <>
+      <Collaboration />
+      <DeveloperCard />
+      <Rsschool />
+    </>
   );
 }
 

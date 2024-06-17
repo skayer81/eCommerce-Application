@@ -3,25 +3,31 @@ import { Button } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { changeNumberItemInBasket } from '@/api/clientService';
-import { findItemInBasket } from '@/components/findItemInBasket/findItemInBasket';
 import { useBasketStore } from '@/stores/basketStore';
-import { useUserStore } from '@/stores/userStore';
 
 function ButtonChangeQuantity({
+  ID,
   callback,
   children,
   disabled = false,
   quantity,
-  sku,
+  variant,
 }: {
+  ID: string;
   callback?: () => void;
   children: JSX.Element | string;
   disabled?: boolean;
   quantity: number;
-  sku: string;
+  variant?: 'contained' | 'outlined' | 'text';
 }): JSX.Element {
-  const { updateCurrentVersion, basketId, basketVersion } = useBasketStore();
-  const { userId } = useUserStore();
+  const { basketId, basketVersion, updateCurrentVersion, updateNumbOfItems } = useBasketStore(
+    (state) => ({
+      basketId: state.basketId,
+      basketVersion: state.basketVersion,
+      updateCurrentVersion: state.updateCurrentVersion,
+      updateNumbOfItems: state.updateNumbOfItems,
+    }),
+  );
   const queryClient = useQueryClient();
 
   const getBody = (listItemID: string): MyCartUpdate => {
@@ -37,21 +43,19 @@ function ButtonChangeQuantity({
     };
   };
 
-  const changeQuantity = async (sku: string, userId: string): Promise<ClientResponse<Cart>> => {
-    const liineItem = await findItemInBasket(sku, userId);
-    if (!liineItem) {
-      throw new Error('что то пошло не так');
-    }
-    const result = await changeNumberItemInBasket(getBody(liineItem.id), basketId);
-    return result;
-  };
-
   const { mutate } = useMutation<ClientResponse>({
-    mutationFn: () => changeQuantity(sku, userId),
+    mutationFn: () => changeNumberItemInBasket(getBody(ID), basketId),
     onSuccess: ({ body }: ClientResponse<Cart>) => {
-      console.log('lastBasket=', body);
       updateCurrentVersion(body.version);
+      if (body.totalLineItemQuantity) {
+        updateNumbOfItems(body.totalLineItemQuantity);
+      } else {
+        updateNumbOfItems(0);
+      }
       queryClient.invalidateQueries({ queryKey: ['basketList'] }).catch((error: Error) => {
+        throw new Error(error.message);
+      });
+      queryClient.invalidateQueries({ queryKey: ['productInCart'] }).catch((error: Error) => {
         throw new Error(error.message);
       });
     },
@@ -66,7 +70,7 @@ function ButtonChangeQuantity({
   };
 
   return (
-    <Button disabled={disabled} onClick={onClick}>
+    <Button disabled={disabled} onClick={onClick} size="small" variant={variant}>
       {children}
     </Button>
   );

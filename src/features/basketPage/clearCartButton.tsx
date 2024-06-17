@@ -11,12 +11,13 @@ import BasketDialog from './basketDialog';
 
 export function ClearCartButton(): JSX.Element {
   const [open, setOpen] = useState(false);
-  const { createBasket, updateCurrentVersion, basketId, basketVersion } = useBasketStore();
+  //const { createBasket, updateCurrentVersion, basketId, basketVersion } = useBasketStore();
+  const { updateCurrentVersion, basketId, basketVersion } = useBasketStore();
 
   const { mutate } = useMutation<ClientResponse>({
     mutationFn: () => deleteBasket(basketId, basketVersion),
     onSuccess: ({ body }: ClientResponse<Cart>) => {
-      createBasket();
+      // createBasket();
       updateCurrentVersion(body.version);
     },
     onError: (error) => console.error(error),

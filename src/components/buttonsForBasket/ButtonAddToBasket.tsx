@@ -22,11 +22,14 @@ function ButtonAddToBasket({
 }: AddToBasketBtnProps): JSX.Element {
   const queryClient = useQueryClient();
 
-  const { basketId, basketVersion, updateCurrentVersion } = useBasketStore((state) => ({
-    basketId: state.basketId,
-    basketVersion: state.basketVersion,
-    updateCurrentVersion: state.updateCurrentVersion,
-  }));
+  const { basketId, basketVersion, updateCurrentVersion, updateNumbOfItems } = useBasketStore(
+    (state) => ({
+      basketId: state.basketId,
+      basketVersion: state.basketVersion,
+      updateCurrentVersion: state.updateCurrentVersion,
+      updateNumbOfItems: state.updateNumbOfItems,
+    }),
+  );
 
   const addToBasket = (): void => {
     const itemBody: MyCartUpdate = {
@@ -40,9 +43,12 @@ function ButtonAddToBasket({
   const { mutate, isPending } = useMutation<ClientResponse, Error, MyCartUpdate>({
     mutationFn: (itemBody) => changeNumberItemInBasket(itemBody, basketId),
     onSuccess: async ({ body }: ClientResponse<Cart>) => {
-      console.log('lastBasket=', body);
       updateCurrentVersion(body.version);
+      if (body.totalLineItemQuantity) {
+        updateNumbOfItems(body.totalLineItemQuantity);
+      }
       await queryClient.invalidateQueries({ queryKey: ['cart'] });
+      await queryClient.invalidateQueries({ queryKey: ['productInCart'] });
     },
     onError: (error) => console.error(error),
   });
