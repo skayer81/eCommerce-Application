@@ -36,8 +36,9 @@ export default function PromocodeForm({
   discountCodes,
 }: PromoProps): JSX.Element {
   const queryClient = useQueryClient();
-  const { updateCurrentVersion } = useBasketStore((state) => ({
+  const { updateCurrentVersion, numbOfItems } = useBasketStore((state) => ({
     updateCurrentVersion: state.updateCurrentVersion,
+    numbOfItems: state.numbOfItems,
   }));
 
   const [errorMessage, setErrorMessage] = useState('');
@@ -69,7 +70,6 @@ export default function PromocodeForm({
   });
 
   const submit: SubmitHandler<PromoForm> = (data: PromoForm): void => {
-    console.log('formdata=', data);
     const promoBody: MyCartUpdate = {
       version: basketVersion,
       actions: [{ action: 'addDiscountCode', code: data.promo }],
@@ -89,11 +89,8 @@ export default function PromocodeForm({
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          width: '300px',
+          width: '100%',
           margin: '0 auto',
-          padding: '20px',
-          border: '1px solid #ccc',
-          borderRadius: '10px',
         }}
       >
         <Typography sx={{ mb: 2 }} variant="h6">
@@ -105,10 +102,12 @@ export default function PromocodeForm({
           render={({ field }) => (
             <TextField
               {...field}
+              disabled={!numbOfItems}
               error={!!errors.promo}
               fullWidth
               helperText={errors.promo ? 'Required field' : ''}
-              sx={{ mb: 2 }}
+              size="small"
+              sx={{ mb: 2, width: '100%' }}
               variant="outlined"
             />
           )}
@@ -119,16 +118,16 @@ export default function PromocodeForm({
             {errorMessage}
           </Alert>
         )}
-        <Button color="primary" type="submit" variant="contained">
+        <Button color="primary" disabled={!numbOfItems} type="submit" variant="contained">
           Apply
         </Button>
       </Box>
       {discountCodes && discountCodes.length > 0 && (
-        <Box sx={{ mt: 3, textAlign: 'center' }}>
-          <Typography variant="h6">Promocodes applied:</Typography>
-          <List sx={{ mt: 1 }}>
+        <Box sx={{ mt: 2, textAlign: 'center' }}>
+          <Typography variant="body1">Promocodes applied:</Typography>
+          <List sx={{ padding: 0 }}>
             {discountCodes.map((code) => (
-              <ListItem key={code}>
+              <ListItem key={code} sx={{ pt: 0, pb: 0 }}>
                 <ListItemText primary={code} />
               </ListItem>
             ))}
