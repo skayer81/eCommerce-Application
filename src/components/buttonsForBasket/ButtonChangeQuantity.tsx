@@ -17,7 +17,6 @@ function ButtonChangeQuantity({
   children: JSX.Element | string;
   disabled?: boolean;
   quantity: number;
-  sku?: string;
 }): JSX.Element {
   const { updateCurrentVersion, basketId, basketVersion } = useBasketStore();
   const queryClient = useQueryClient();
