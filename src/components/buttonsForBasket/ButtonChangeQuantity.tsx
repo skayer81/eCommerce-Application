@@ -55,6 +55,9 @@ function ButtonChangeQuantity({
       queryClient.invalidateQueries({ queryKey: ['basketList'] }).catch((error: Error) => {
         throw new Error(error.message);
       });
+      queryClient.invalidateQueries({ queryKey: ['productInCart'] }).catch((error: Error) => {
+        throw new Error(error.message);
+      });
     },
     onError: (error) => console.error(error),
   });

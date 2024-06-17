@@ -5,10 +5,10 @@ import { ClientResponse, Product } from '@commercetools/platform-sdk';
 import { Container } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 
-import { findItemInBasket } from '@/components/findItemInBasket/findItemInBasket';
-import { useUserStore } from '@/stores/userStore';
+import { findIDItemInBasket } from '@/components/findItemInBasket/findItemInBasket';
+import { useBasketStore } from '@/stores/basketStore';
 
-import { getProductByKey } from '../../api/clientService';
+import { getProductByKey, getUserBasket } from '../../api/clientService';
 import DetailedCard from './DetailedCard';
 import DetailedFullScreenSlider from './detailedFullScreenSlider/detailedFullScreenSlider';
 
@@ -33,8 +33,8 @@ function productAdapter(data: ClientResponse<Product>): ProductProperties {
   const product: Product = data.body;
   console.log('product', product);
   const prices = product.masterData.current.masterVariant.prices;
+  const discount = prices ? prices[0].discounted?.value.centAmount : undefined;
 
-  const discount = prices ? prices[0].discounted?.value.centAmount : undefined; //product.masterData.current.masterVariant.
   return {
     description: product.masterData.current.description?.en ?? '',
     imgList: product.masterData.current.masterVariant.images?.map((img) => img.url) ?? [''],
@@ -58,11 +58,14 @@ export default function ProductPage(): JSX.Element {
     select: productAdapter,
   });
 
-  const [isItemInBasket, setIsItemInBasket] = useState(false);
+  const { basketId } = useBasketStore();
+  const basketQuery = useQuery({
+    queryKey: ['productInCart', basketId],
+    queryFn: () => getUserBasket(basketId),
+    enabled: !!basketId,
+  });
 
-  const userID = useUserStore().userId;
-
-  if (isPending) {
+  if (isPending || basketQuery.isPending) {
     return <Container>Loading...</Container>;
   }
 
@@ -70,26 +73,20 @@ export default function ProductPage(): JSX.Element {
     return <Container> `An error has occurred: ${error.message}`</Container>;
   }
 
-  findItemInBasket(data.sku, userID)
-    .then((item) => {
-      if (item) {
-        setIsItemInBasket(true);
-        return;
-      }
-      setIsItemInBasket(false);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  if (basketQuery.error) {
+    return <Container> `An error has occurred: ${basketQuery.error.message}`</Container>;
+  }
+
+  const IDItemInBasket = findIDItemInBasket(basketQuery.data?.body.lineItems, data.sku);
+  //const lineItemID = basketQuery.data.body.lineItems.
 
   return (
     <>
       <Container sx={{ border: 1, padding: 2 }}>
         <DetailedCard
-          isItemInBasket={isItemInBasket}
+          IDItemInBasket={IDItemInBasket}
           productProps={data}
           setIsFullScreen={setIsFullScreen}
-          setIsItemInBasket={setIsItemInBasket}
           setSlideNumber={setFullScreenSlideNumber}
         />
       </Container>

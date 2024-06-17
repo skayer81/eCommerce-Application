@@ -48,6 +48,7 @@ function ButtonAddToBasket({
         updateNumbOfItems(body.totalLineItemQuantity);
       }
       await queryClient.invalidateQueries({ queryKey: ['cart'] });
+      await queryClient.invalidateQueries({ queryKey: ['productInCart'] });
     },
     onError: (error) => console.error(error),
   });
