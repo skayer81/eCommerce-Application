@@ -1,8 +1,17 @@
-import { MyCartUpdate } from '@commercetools/platform-sdk';
-import { Button } from '@mui/material';
+import { Cart, ClientResponse, MyCartUpdate } from '@commercetools/platform-sdk';
+import { Button, CircularProgress } from '@mui/material';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { changeNumberItemInBasket } from '@/api/clientService';
-import { useUserStore } from '@/stores/userStore';
+import { useBasketStore } from '@/stores/basketStore';
+
+type AddToBasketBtnProps = {
+  callback?: () => void;
+  children: JSX.Element | string;
+  disabled: boolean;
+  quantity?: number;
+  sku?: string;
+};
 
 function ButtonAddToBasket({
   callback,
@@ -10,31 +19,38 @@ function ButtonAddToBasket({
   disabled,
   quantity,
   sku,
-}: {
-  callback?: () => void;
-  children: JSX.Element | string;
-  disabled: boolean;
-  quantity?: number;
-  sku: string;
-}): JSX.Element {
-  const updateCurrentVersion = useUserStore().updateCurrentVersion;
-  const basketId = useUserStore().basketId;
-  const version = useUserStore().basketVersion;
+}: AddToBasketBtnProps): JSX.Element {
+  const queryClient = useQueryClient();
+
+  const { basketId, basketVersion, updateCurrentVersion, updateNumbOfItems } = useBasketStore(
+    (state) => ({
+      basketId: state.basketId,
+      basketVersion: state.basketVersion,
+      updateCurrentVersion: state.updateCurrentVersion,
+      updateNumbOfItems: state.updateNumbOfItems,
+    }),
+  );
 
   const addToBasket = (): void => {
-    const testBady: MyCartUpdate = {
-      version: version,
+    const itemBody: MyCartUpdate = {
+      version: basketVersion,
       actions: [{ action: 'addLineItem', sku: sku, quantity: quantity ?? 1 }],
     };
-    changeNumberItemInBasket(testBady, basketId)
-      .then((data) => {
-        updateCurrentVersion(data.body.version);
-        console.log('добавили', data);
-      })
-      .catch((error) => {
-        console.log('ошибка', error);
-      });
+
+    mutate(itemBody);
   };
+
+  const { mutate, isPending } = useMutation<ClientResponse, Error, MyCartUpdate>({
+    mutationFn: (itemBody) => changeNumberItemInBasket(itemBody, basketId),
+    onSuccess: async ({ body }: ClientResponse<Cart>) => {
+      updateCurrentVersion(body.version);
+      if (body.totalLineItemQuantity) {
+        updateNumbOfItems(body.totalLineItemQuantity);
+      }
+      await queryClient.invalidateQueries({ queryKey: ['cart'] });
+    },
+    onError: (error) => console.error(error),
+  });
 
   const onClick = (): void => {
     addToBasket();
@@ -44,8 +60,17 @@ function ButtonAddToBasket({
   };
 
   return (
-    <Button disabled={disabled} onClick={onClick}>
-      {children}
+    <Button
+      disabled={disabled}
+      onClick={onClick}
+      sx={{
+        transition: 'background-color 0.3s',
+        '&:hover': {
+          backgroundColor: 'rgba(70, 163, 88, 0.3)',
+        },
+      }}
+    >
+      {isPending ? <CircularProgress size={20} /> : children}
     </Button>
   );
 }

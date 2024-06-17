@@ -1,24 +1,34 @@
-import { MyCartUpdate } from '@commercetools/platform-sdk';
+import { Cart, ClientResponse, MyCartUpdate } from '@commercetools/platform-sdk';
 import { Button } from '@mui/material';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { changeNumberItemInBasket } from '@/api/clientService';
-import { findItemInBasket } from '@/components/findItemInBasket/findItemInBasket';
-import { useUserStore } from '@/stores/userStore';
+import { useBasketStore } from '@/stores/basketStore';
 
 function ButtonChangeQuantity({
+  ID,
   callback,
   children,
   disabled = false,
   quantity,
-  sku,
+  variant,
 }: {
+  ID: string;
   callback?: () => void;
   children: JSX.Element | string;
   disabled?: boolean;
   quantity: number;
-  sku: string;
+  variant?: 'contained' | 'outlined' | 'text';
 }): JSX.Element {
-  const { updateCurrentVersion, basketId, basketVersion, userId } = useUserStore();
+  const { basketId, basketVersion, updateCurrentVersion, updateNumbOfItems } = useBasketStore(
+    (state) => ({
+      basketId: state.basketId,
+      basketVersion: state.basketVersion,
+      updateCurrentVersion: state.updateCurrentVersion,
+      updateNumbOfItems: state.updateNumbOfItems,
+    }),
+  );
+  const queryClient = useQueryClient();
 
   const getBody = (listItemID: string): MyCartUpdate => {
     return {
@@ -33,35 +43,31 @@ function ButtonChangeQuantity({
     };
   };
 
-  const changeQuantity = (): void => {
-    findItemInBasket(sku, userId)
-      .then((data) => {
-        return data?.id;
-      })
-      .then((listItemID) => {
-        if (!listItemID) {
-          throw new Error('что то пошло не так');
-        }
-        return changeNumberItemInBasket(getBody(listItemID), basketId);
-      })
-      .then((data) => {
-        updateCurrentVersion(data.body.version);
-        console.log('удалили', data);
-      })
-      .catch((error) => {
-        console.log('ошибка', error);
+  const { mutate } = useMutation<ClientResponse>({
+    mutationFn: () => changeNumberItemInBasket(getBody(ID), basketId),
+    onSuccess: ({ body }: ClientResponse<Cart>) => {
+      updateCurrentVersion(body.version);
+      if (body.totalLineItemQuantity) {
+        updateNumbOfItems(body.totalLineItemQuantity);
+      } else {
+        updateNumbOfItems(0);
+      }
+      queryClient.invalidateQueries({ queryKey: ['basketList'] }).catch((error: Error) => {
+        throw new Error(error.message);
       });
-  };
+    },
+    onError: (error) => console.error(error),
+  });
 
   const onClick = (): void => {
-    changeQuantity();
+    mutate();
     if (callback) {
       callback();
     }
   };
 
   return (
-    <Button disabled={disabled} onClick={onClick}>
+    <Button disabled={disabled} onClick={onClick} size="small" variant={variant}>
       {children}
     </Button>
   );
