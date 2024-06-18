@@ -13,7 +13,7 @@ describe('AboutPage', () => {
       </MemoryRouter>,
     );
 
-    const text = screen.getByText('page under development');
+    const text = screen.getByText('About us');
     expect(text).toBeInTheDocument();
   });
 });
