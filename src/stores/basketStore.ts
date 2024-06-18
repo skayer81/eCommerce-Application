@@ -1,49 +1,12 @@
 import { create } from 'zustand';
 
-// import {
-//   anonymFlowAuth,
-//   createAnonymBasket,
-//   existingFlowAuth,
-//   getActiveBasket,
-// } from '../api/clientService';
-// import { PROJECT_KEY } from '../config/clientConfig.ts';
-// import getCookie from '../utils/helpers/cookies.ts';
-
-// const createNewBasket = (): void => {
-//   const token = getCookie(PROJECT_KEY);
-//   if (token !== null) {
-//     const accessToken = 'Bearer ' + token;
-//     const root = existingFlowAuth(accessToken);
-//     getActiveBasket(root)
-//       .then((data) => {
-//         console.log('activebasket=', data.body.id);
-//         addBasketIDInStore(data.body.id);
-//         updateCurrentVersion(data.body.version);
-//       })
-//       .catch((error) => {
-//         console.error(error);
-//       });
-//   } else {
-//     const root = anonymFlowAuth();
-//     createAnonymBasket(root)
-//       .then((data) => {
-//         console.log('createbasket=', data.body.id);
-//         addBasketIDInStore(data.body.id);
-//         updateCurrentVersion(data.body.version);
-//       })
-//       .catch((error) => {
-//         console.error(error);
-//       });
-//   }
-// };
-
 export interface BasketStore {
   addBasketIDInStore: (id: string) => void;
   basketError: boolean;
   basketId: string;
   basketVersion: number;
   numbOfItems: number;
-  // createBasket: () => void;
+
   setBasketError: (errorState: boolean) => void;
   updateCurrentVersion: (id: number) => void;
   updateNumbOfItems: (id: number) => void;
