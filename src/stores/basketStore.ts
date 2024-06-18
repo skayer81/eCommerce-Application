@@ -6,6 +6,7 @@ export interface BasketStore {
   basketId: string;
   basketVersion: number;
   numbOfItems: number;
+
   setBasketError: (errorState: boolean) => void;
   updateCurrentVersion: (id: number) => void;
   updateNumbOfItems: (id: number) => void;
