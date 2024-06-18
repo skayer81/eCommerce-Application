@@ -30,6 +30,7 @@ import {
   updateCurrentVersion,
   updateNumbOfItems,
 } from './stores/basketStore.ts';
+import { logoutUserInStore } from './stores/userStore.ts';
 import getCookie from './utils/helpers/cookies.ts';
 
 import './assets/fonts/stylesheet.css';
@@ -51,6 +52,7 @@ if (token !== null) {
       console.error(error);
     });
 } else {
+  logoutUserInStore();
   const root = anonymFlowAuth();
   createAnonymBasket(root)
     .then((data) => {
