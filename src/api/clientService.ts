@@ -4,7 +4,6 @@ import {
   CartDraft,
   ClientResponse,
   CustomerUpdate,
-  MyCartDraft,
   MyCartUpdate,
   MyCustomerUpdate,
   createApiBuilderFromCtpClient,
@@ -232,18 +231,6 @@ export function changeNumberItemInBasket(
     .execute();
 }
 
-export function getCustomerBasket(customerId: string): Promise<ClientResponse<Cart>> {
-  return apiRoot.carts().withCustomerId({ customerId: customerId }).get().execute();
-}
-
-export function createBasket(): Promise<ClientResponse<Cart>> {
-  const body: MyCartDraft = {
-    country: 'RU',
-    currency: 'USD',
-  };
-  return apiRoot.me().carts().post({ body: body }).execute();
-}
-
 export function createAnonymBasket(
   root: ByProjectKeyRequestBuilder,
 ): Promise<ClientResponse<Cart>> {
@@ -251,6 +238,13 @@ export function createAnonymBasket(
     currency: 'USD',
   };
   return root.me().carts().post({ body: body }).execute();
+}
+
+export function createNewBasket(): Promise<ClientResponse<Cart>> {
+  const body: CartDraft = {
+    currency: 'USD',
+  };
+  return apiRoot.me().carts().post({ body: body }).execute();
 }
 
 export function getUserBasket(cartId: string): Promise<ClientResponse<Cart>> {

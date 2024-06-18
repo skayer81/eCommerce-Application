@@ -21,8 +21,7 @@ export default function BasketDialog({
       <DialogTitle id="alert-dialog-title">{'the basket wants to ask this:'}</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          Are you sure that you want to remove from not everything that was added with such
-          difficulty?
+          Are you sure that you want to remove from everything that was added with such difficulty?
         </DialogContentText>
       </DialogContent>
       <DialogActions>

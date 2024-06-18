@@ -45,7 +45,7 @@ export function BasketPage(): JSX.Element {
           <BasketEmptyList />
         ) : (
           <>
-            <Typography component="h1" variant="h5">
+            <Typography color="primary.main" component="h1" variant="h5">
               Cart
             </Typography>
             <BasketPageList listData={data.basketItems} />
