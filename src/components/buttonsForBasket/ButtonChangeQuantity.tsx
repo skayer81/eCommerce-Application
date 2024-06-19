@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { Cart, ClientResponse, MyCartUpdate } from '@commercetools/platform-sdk';
-import { Alert, Button, Snackbar } from '@mui/material';
+import { Alert, Button, CircularProgress, Snackbar } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { changeNumberItemInBasket } from '@/api/clientService';
@@ -48,7 +48,7 @@ function ButtonChangeQuantity({
     };
   };
 
-  const { mutate } = useMutation<ClientResponse>({
+  const { mutate, isPending } = useMutation<ClientResponse>({
     mutationFn: () => changeNumberItemInBasket(getBody(ID), basketId),
     onSuccess: ({ body }: ClientResponse<Cart>) => {
       updateCurrentVersion(body.version);
@@ -82,6 +82,14 @@ function ButtonChangeQuantity({
       callback();
     }
   };
+
+  if (isPending) {
+    return (
+      <Button sx={{ width: '64px', height: '32px' }}>
+        <CircularProgress size={10} />
+      </Button>
+    );
+  }
 
   return (
     <>
