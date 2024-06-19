@@ -1,12 +1,12 @@
 import aleksPhoto from '../../assets/images/aleks.webp';
 import olgaPhoto from '../../assets/images/olga.webp';
-import sergeyPhoto from '../../assets/images/sergey.webp';
+import sergeyPhoto from '../../assets/images/sergey.jpeg';
 
 export const developers = [
   {
     name: 'Sergey Seleznev',
     role: 'Team Lead, Front-end junior-developer',
-    shortbio: '-',
+    shortbio: 'Сurrently supporting software products',
     linkGitHub: 'https://github.com/skayer81',
     contributionInProject: [
       'Registration page',
