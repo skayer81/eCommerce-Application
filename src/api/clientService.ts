@@ -1,7 +1,10 @@
 import {
   ByProjectKeyRequestBuilder,
+  Cart,
+  CartDraft,
   ClientResponse,
   CustomerUpdate,
+  MyCartUpdate,
   MyCustomerUpdate,
   createApiBuilderFromCtpClient,
 } from '@commercetools/platform-sdk';
@@ -126,8 +129,8 @@ export function createCustomer(body: RegistrationRequestBody): Promise<ClientRes
     .execute();
 }
 
-export async function getCustomer(root: ByProjectKeyRequestBuilder): Promise<void> {
-  return root.me().get().execute().then(console.log).catch(console.error);
+export function getCustomer(root: ByProjectKeyRequestBuilder): Promise<ClientResponse> {
+  return root.me().get().execute();
 }
 
 export function getProductByKey(key?: string): Promise<ClientResponse> {
@@ -142,6 +145,7 @@ export async function getProducts(
   sortValue: string,
   attributes: Record<string, string>,
   searchValue = '',
+  page: number,
 ): Promise<ClientResponse> {
   const attrFilters = Object.entries(attributes)
     .filter(([attrkey, value]) => value !== '' && attrkey)
@@ -155,8 +159,9 @@ export async function getProducts(
     .get({
       queryArgs: {
         'filter.query': resFilters,
-        sort: sortValue === '' ? undefined : [sortValue],
+        sort: sortValue === '' ? ['createdAt asc'] : [sortValue],
         limit: PRODUCTS_LIMIT,
+        offset: PRODUCTS_LIMIT * (page - 1),
         markMatchingVariants: true,
         fuzzy: true,
         'text.en': searchValue,
@@ -203,18 +208,67 @@ export async function changeData(
 }
 
 export async function addOrChangeAddres(data: MyCustomerUpdate): Promise<ClientResponse> {
-  return (
-    apiRoot
-      .me()
-      //   .customers()
-      //   .withId({ ID: customerId })
-      .post({ body: data })
-      .execute()
-    // .then(console.log)
-    // .catch(console.error)
-  );
+  return apiRoot.me().post({ body: data }).execute();
 }
 
 export async function changePassword(data: PasswordChange): Promise<ClientResponse<Customer>> {
   return apiRoot.customers().password().post({ body: data }).execute();
+}
+
+///////////////////// Basket
+
+export function changeNumberItemInBasket(
+  body: MyCartUpdate,
+  basketID: string,
+): Promise<ClientResponse<Cart>> {
+  return apiRoot
+    .me()
+    .carts()
+    .withId({ ID: basketID })
+    .post({
+      body: body,
+    })
+    .execute();
+}
+
+export function createAnonymBasket(
+  root: ByProjectKeyRequestBuilder,
+): Promise<ClientResponse<Cart>> {
+  const body: CartDraft = {
+    currency: 'USD',
+  };
+  return root.me().carts().post({ body: body }).execute();
+}
+
+export function createNewBasket(): Promise<ClientResponse<Cart>> {
+  const body: CartDraft = {
+    currency: 'USD',
+  };
+  return apiRoot.me().carts().post({ body: body }).execute();
+}
+
+export function getUserBasket(cartId: string): Promise<ClientResponse<Cart>> {
+  return apiRoot
+    .me()
+    .carts()
+    .withId({ ID: cartId })
+    .get({
+      queryArgs: {
+        expand: ['discountCodes[*].discountCode'],
+      },
+    })
+    .execute();
+}
+
+export function getActiveBasket(root: ByProjectKeyRequestBuilder): Promise<ClientResponse<Cart>> {
+  return root.me().activeCart().get().execute();
+}
+
+export function deleteBasket(basketID: string, version: number): Promise<ClientResponse<Cart>> {
+  return apiRoot
+    .me()
+    .carts()
+    .withId({ ID: basketID })
+    .delete({ queryArgs: { version: version } })
+    .execute();
 }

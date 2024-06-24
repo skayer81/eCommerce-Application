@@ -15,11 +15,12 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import 'dayjs/locale/de';
 
-import { createCustomer, getProject, loginUser, passwordFlowAuth } from '@/api/clientService';
+import { createCustomer, getCustomer, loginUser, passwordFlowAuth } from '@/api/clientService';
 import ButtonToAnotherPage from '@/components/formComponents/ButtonToAnotherPage';
 import { FormInputText } from '@/components/formComponents/FormInputText';
 import FormSelect from '@/components/formComponents/FormSelect';
 import RulesValidation from '@/components/formComponents/rulesValidation';
+import { useBasketStore } from '@/stores/basketStore';
 import { RegistrationForm } from '@/types/interfaces';
 
 import registrationFormDataAdapter from './RegistrationFormDataAdapter';
@@ -78,6 +79,8 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
     shippingCountry,
   ]);
 
+  const { addBasketIDInStore, updateCurrentVersion } = useBasketStore();
+
   const onSubmit: SubmitHandler<RegistrationForm> = (data: RegistrationForm): void => {
     setLoading(true);
     createCustomer(registrationFormDataAdapter(data))
@@ -85,13 +88,18 @@ export default function FormOfRegistration({ resultOfSubmit }: Props): JSX.Eleme
         return loginUser({ email: data.email, password: data.password });
       })
       .then(({ body }: ClientResponse<CustomerSignInResult>) => {
+        console.log('loginbody=', body);
+        if (body.cart) {
+          addBasketIDInStore(body.cart.id);
+          updateCurrentVersion(body.cart.version);
+        }
         setLoading(false);
         resultOfSubmit(
           { hasError: false, message: 'You have successfully registered' },
           body.customer.id,
         );
         const root = passwordFlowAuth({ email: data.email, password: data.password });
-        return getProject(root);
+        return getCustomer(root);
       })
       .catch((error: Error) => {
         setLoading(false);

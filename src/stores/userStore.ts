@@ -34,3 +34,5 @@ export const useUserStore = create<UserStore>()(
     },
   ),
 );
+
+export const { logoutUserInStore } = useUserStore.getState();

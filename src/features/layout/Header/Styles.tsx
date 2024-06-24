@@ -17,7 +17,7 @@ const main = {
 
 const buttons = {
   display: 'flex',
-  gap: '10px',
+  // gap: '10px',
 };
 
 const ul = {
@@ -39,6 +39,7 @@ const button = {
   width: 'max-content',
   borderRadius: 2,
   mt: '7px',
+  ml: '10px',
 };
 
 export { button, buttons, header, main, ul };

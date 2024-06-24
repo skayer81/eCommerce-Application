@@ -1,5 +1,4 @@
 const cardStyle = {
-  cursor: 'pointer',
   minHeight: '350px',
   position: 'relative',
   display: 'flex',

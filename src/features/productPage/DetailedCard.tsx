@@ -1,5 +1,8 @@
 import { Box, CardActions, List, ListItem, ListItemText, Typography } from '@mui/material';
 
+import ButtonAddToBasket from '@/components/buttonsForBasket/ButtonAddToBasket';
+import ButtonChangeQuantity from '@/components/buttonsForBasket/ButtonChangeQuantity';
+
 import DetailedCardSlider from './productCardSlider/DetailedCardSlider';
 
 type AtribListItem = {
@@ -10,6 +13,7 @@ type AtribListItem = {
 };
 
 type ProductProperties = {
+  IDItemInBasket: string;
   productProps: {
     description: string;
     discount: number | undefined;
@@ -17,12 +21,14 @@ type ProductProperties = {
     listOfAtributes: Array<AtribListItem> | undefined;
     name: string;
     price: number;
+    sku: string;
   };
   setIsFullScreen: (isFullScreen: boolean) => void;
   setSlideNumber: (slideNumber: number) => void;
 };
 
 export default function DetailedCard({
+  IDItemInBasket,
   productProps,
   setIsFullScreen,
   setSlideNumber,
@@ -77,9 +83,19 @@ export default function DetailedCard({
               </Typography>
             )}
           </CardActions>
+          <CardActions sx={{ mt: 'auto' }}>
+            <ButtonAddToBasket disabled={!!IDItemInBasket} sku={productProps.sku}>
+              {'add to basket'}
+            </ButtonAddToBasket>
+            <ButtonChangeQuantity ID={IDItemInBasket} disabled={!IDItemInBasket} quantity={0}>
+              {'Remove from Cart'}
+            </ButtonChangeQuantity>
+          </CardActions>
         </List>
       </Box>
       <Typography>{productProps.description}</Typography>
     </>
   );
 }
+
+//{useUserStore().userId}

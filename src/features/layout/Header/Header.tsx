@@ -7,14 +7,16 @@ import { Box, Drawer, IconButton, List, ListItemButton, ListItemText } from '@mu
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import { anonymFlowAuth } from '@/api/clientService';
+import { anonymFlowAuth, createAnonymBasket } from '@/api/clientService';
 import { tokenCache } from '@/api/tokenCache';
 import AuthPanel from '@/components/authPanel/AuthPanel';
 import NoAuthPanel from '@/components/noAuthPanel/NoAuthPanel';
 import { useCustomerStore } from '@/features/profilePage/Types';
+import { useBasketStore } from '@/stores/basketStore';
 import { useUserStore } from '@/stores/userStore';
 
 import logo from '../../../assets/icons/Logo.svg';
+import CartIcon from './CartIcon';
 import { buttons, header, ul } from './Styles';
 
 export default function Header(): JSX.Element {
@@ -24,6 +26,14 @@ export default function Header(): JSX.Element {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { deleteUserFromStore } = useCustomerStore();
   const location = useLocation();
+
+  const { addBasketIDInStore, updateCurrentVersion, updateNumbOfItems } = useBasketStore(
+    (state) => ({
+      updateCurrentVersion: state.updateCurrentVersion,
+      addBasketIDInStore: state.addBasketIDInStore,
+      updateNumbOfItems: state.updateNumbOfItems,
+    }),
+  );
 
   useEffect(() => {
     if (!isTablet) {
@@ -38,15 +48,25 @@ export default function Header(): JSX.Element {
   const logout = (): void => {
     logoutUserInStore();
     deleteUserFromStore();
-    anonymFlowAuth();
+
     tokenCache.deleteToken();
+    const root = anonymFlowAuth();
+    createAnonymBasket(root)
+      .then((data) => {
+        console.log('createbasketafterlogout=', data.body.id);
+        addBasketIDInStore(data.body.id);
+        updateCurrentVersion(data.body.version);
+        updateNumbOfItems(0);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const menuItems = [
-    { text: 'Main', path: '/' },
-    { text: 'Catalog', path: '/catalog' },
-    { text: 'About', path: '/about' },
-    { text: 'Cart', path: '/cart' },
+    { element: 'Main', path: '/' },
+    { element: 'Catalog', path: '/catalog' },
+    { element: 'About', path: '/about' },
   ];
 
   const DrawerList = (
@@ -85,7 +105,7 @@ export default function Header(): JSX.Element {
               }}
               to={item.path}
             >
-              <ListItemText primary={item.text} primaryTypographyProps={{ fontSize: '25px' }} />
+              <ListItemText primary={item.element} primaryTypographyProps={{ fontSize: '25px' }} />
             </ListItemButton>
           ))}
           {isLogin ? (
@@ -129,7 +149,7 @@ export default function Header(): JSX.Element {
                     to={item.path}
                   >
                     <ListItemText
-                      primary={item.text}
+                      primary={item.element}
                       primaryTypographyProps={{ fontSize: '18px', fontWeight: '500' }}
                     />
                   </ListItemButton>
@@ -137,11 +157,13 @@ export default function Header(): JSX.Element {
               </List>
             </Box>
             <Box component="div" sx={buttons}>
+              <CartIcon />
               {isLogin ? <AuthPanel logout={logout} /> : <NoAuthPanel />}
             </Box>
           </>
         ) : (
           <Box>
+            <CartIcon />
             {isLogin ? (
               <IconButton component={Link} to="/profile">
                 <AccountCircle color="primary" fontSize="large" />

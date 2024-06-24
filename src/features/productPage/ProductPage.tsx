@@ -5,7 +5,10 @@ import { ClientResponse, Product } from '@commercetools/platform-sdk';
 import { Container } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 
-import { getProductByKey } from '../../api/clientService';
+import { findIDItemInBasket } from '@/components/findItemInBasket/findItemInBasket';
+import { useBasketStore } from '@/stores/basketStore';
+
+import { getProductByKey, getUserBasket } from '../../api/clientService';
 import DetailedCard from './DetailedCard';
 import DetailedFullScreenSlider from './detailedFullScreenSlider/detailedFullScreenSlider';
 
@@ -23,14 +26,15 @@ type ProductProperties = {
   listOfAtributes: Array<AtribListItem>;
   name: string;
   price: number;
+  sku: string;
 };
 
-function productAdapter(data: ClientResponse): ProductProperties {
-  const product: Product = data.body as Product;
-  // console.log(product);
+function productAdapter(data: ClientResponse<Product>): ProductProperties {
+  const product: Product = data.body;
+  console.log('product', product);
   const prices = product.masterData.current.masterVariant.prices;
+  const discount = prices ? prices[0].discounted?.value.centAmount : undefined;
 
-  const discount = prices ? prices[0].discounted?.value.centAmount : undefined; //product.masterData.current.masterVariant.
   return {
     description: product.masterData.current.description?.en ?? '',
     imgList: product.masterData.current.masterVariant.images?.map((img) => img.url) ?? [''],
@@ -38,6 +42,7 @@ function productAdapter(data: ClientResponse): ProductProperties {
     listOfAtributes: product.masterData.current.masterVariant.attributes ?? [],
     price: prices ? prices[0]?.value.centAmount : 0,
     discount: discount,
+    sku: product.masterData.current.masterVariant.sku ?? '',
   };
 }
 
@@ -53,7 +58,14 @@ export default function ProductPage(): JSX.Element {
     select: productAdapter,
   });
 
-  if (isPending) {
+  const { basketId } = useBasketStore();
+  const basketQuery = useQuery({
+    queryKey: ['productInCart', basketId],
+    queryFn: () => getUserBasket(basketId),
+    enabled: !!basketId,
+  });
+
+  if (isPending || basketQuery.isPending) {
     return <Container>Loading...</Container>;
   }
 
@@ -61,15 +73,22 @@ export default function ProductPage(): JSX.Element {
     return <Container> `An error has occurred: ${error.message}`</Container>;
   }
 
+  if (basketQuery.error) {
+    return <Container> `An error has occurred: ${basketQuery.error.message}`</Container>;
+  }
+
+  const IDItemInBasket = findIDItemInBasket(basketQuery.data?.body.lineItems, data.sku);
+  //const lineItemID = basketQuery.data.body.lineItems.
+
   return (
     <>
       <Container sx={{ border: 1, padding: 2 }}>
         <DetailedCard
+          IDItemInBasket={IDItemInBasket}
           productProps={data}
           setIsFullScreen={setIsFullScreen}
           setSlideNumber={setFullScreenSlideNumber}
         />
-        {/* // <DetailedFullScreenSlider/> */}
       </Container>
       {isFullScreen ? (
         <DetailedFullScreenSlider
